@@ -100,7 +100,7 @@ namespace ft {
     template <class T>
     class myiterator {
 
-         public:
+        public:
             T   *_pointer;
             typedef typename iterator<std::random_access_iterator_tag, T>::difference_type    difference_type;
             typedef typename iterator<std::random_access_iterator_tag, T>::value_type         value_type;
@@ -114,21 +114,26 @@ namespace ft {
                 _pointer = NULL;
             }
 
-            myiterator( T *p  ) {
+            operator myiterator<const value_type> () const { return myiterator<const value_type>(_pointer); }
+    
+            myiterator( pointer p  ) {
 
                 _pointer = p;
             }
 
-            const myiterator     &operator=(const myiterator  &obj) {
+            myiterator     &operator=(const myiterator &obj) {
             
                 _pointer = obj._pointer;
                 return (*this);
             }
+            myiterator(const myiterator &obj) {
             
+                *this = obj;
+            }
             
             ~myiterator( void ) {}
-            myiterator& operator+=(difference_type rhs) {_pointer += rhs; return *this;}
-            myiterator& operator-=(difference_type rhs) {_pointer -= rhs; return *this;}
+            myiterator& operator+=(difference_type rhs)  {_pointer += rhs; return *this;}
+            myiterator& operator-=(difference_type rhs)  {_pointer -= rhs; return *this;}
             T& operator*() const {return *_pointer;}
             T* operator->() const {return _pointer;}
             T& operator[](difference_type rhs) const {return _pointer[rhs];}
@@ -137,14 +142,14 @@ namespace ft {
             myiterator& operator--() {--_pointer; return *this;}
             myiterator operator++(int)  {myiterator tmp(*this); ++_pointer; return tmp;}
             myiterator operator--(int)  {myiterator tmp(*this); --_pointer; return tmp;}
-            /* myiterator operator+(const myiterator& rhs) {return myiterator(_pointer+rhs._pointer);} */
+            // myiterator operator+(const myiterator& rhs) {return myiterator(_pointer+rhs._pointer);}
         
             difference_type operator-(const myiterator& rhs) const {return _pointer-rhs._pointer;}
             myiterator operator+(difference_type rhs) const {return myiterator(_pointer+rhs);}
             myiterator operator-(difference_type rhs) const {return myiterator(_pointer-rhs);}
         
-            // friend myiterator operator+(difference_type lhs, const myiterator& rhs) {return myiterator(lhs+rhs._pointer);}
-            // friend myiterator operator-(difference_type lhs, const myiterator& rhs) {return myiterator(lhs-rhs._pointer);}
+            friend myiterator operator+(difference_type lhs, const myiterator& rhs) {return myiterator(lhs+rhs._pointer);}
+            friend myiterator operator-(difference_type lhs, const myiterator& rhs) {return myiterator(lhs-rhs._pointer);}
             
             bool operator==(const myiterator& rhs) const {return _pointer == rhs._pointer;}
             bool operator!=(const myiterator& rhs) const {return _pointer != rhs._pointer;}

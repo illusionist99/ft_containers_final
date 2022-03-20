@@ -4,8 +4,16 @@
 
 #include <iostream>
 
+class A {
+public:
+
+  A() {}
+  ~A() {}
+};
+
 int main ()
 {
+
   // constructors used in the same order as described above:
   // ft::vector<int> first;                                // empty vector of ints
   // ft::vector<int> second (4,100);                       // four ints with value 100
@@ -59,21 +67,21 @@ int main ()
   // for (ft::vector<int>::iterator it = rever.begin(); it != rever.end(); ++it)
   //   std::cout << ' ' << *it;
   // std::cout << '\n';
- unsigned int i;
-  ft::vector<int> foo (3,100);   // three ints with a value of 100
-  ft::vector<int> bar (5,200);   // five ints with a value of 200
+//  unsigned int i;
+//   ft::vector<int> foo (3,100);   // three ints with a value of 100
+//   ft::vector<int> bar (5,200);   // five ints with a value of 200
 
-  foo.swap(bar);
+//   foo.swap(bar);
 
-  std::cout << "foo contains:";
-  for (ft::vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
+//   std::cout << "foo contains:";
+//   for (ft::vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
+//     std::cout << ' ' << *it;
+//   std::cout << '\n';
 
-  std::cout << "bar contains:";
-  for (ft::vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
-    std::cout << ' ' << *it;
-  std::cout << '\n';
-  system("leaks a.out");
+//   std::cout << "bar contains:";
+//   for (ft::vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
+//     std::cout << ' ' << *it;
+//   std::cout << '\n';
+//   system("leaks a.out");
   return 0;
 }
