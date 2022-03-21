@@ -166,20 +166,20 @@ namespace ft {
             }
 
             void resize (size_type n, value_type val = value_type()) {
-            
-            
+             
+                if (n > _capacity)
+                    reserve(n); 
                 if (n < _size) {
                 
-                    while (_size > n)
+                    while (_size - n >= 1)
                         pop_back();
 
                 }
                 else {
                 
-                    while (n > _size)
+                    while (n - _size >= 1)
                         push_back(val);
                 }
-                 
             }
             size_type capacity() const { return _capacity; }
             bool empty() const { return _size == 0; }
@@ -200,7 +200,7 @@ namespace ft {
                         _allocator.destroy(new_data + i);
                     }
                     _allocator.deallocate(new_data, _size);
-                }
+                } 
             }
     
     
@@ -287,14 +287,22 @@ namespace ft {
                 _size = 0;
                 _capacity = 0;
                 _c = NULL;
-        
             }
 
             void assign (size_type n, const value_type& val) {
 
-                if (_size > 0)
+                if (n > _capacity) {
                     clear();
-                reserve(n);
+                    reserve(n);
+                }
+                else {
+                   
+                    size_type tmp = _capacity;
+
+                    clear();
+                    reserve(tmp);
+                }
+                
                 for (size_type i = 0; i < n; i++) {
                 
                     _allocator.construct(_c + i, val);
@@ -313,7 +321,7 @@ namespace ft {
             void push_back (const value_type& val) {
             
                 if (_size + 1 > _capacity) {
-                    reserve(_capacity *2 );
+                    reserve((_capacity == 0 ? (float)1/2 : _capacity ) * 2);
                 }
                 _c[_size] = val;
                 _size++;
@@ -396,6 +404,7 @@ namespace ft {
                 std::swap(_c, x._c);
                 std::swap(_capacity, x._capacity);
                 std::swap(_size, x._size);
+                std::swap(_allocator, x._allocator);
             }
 
             iterator erase (iterator position) {
@@ -475,5 +484,6 @@ namespace ft {
         std::swap(x._capacity, y._capacity);
         std::swap(x._size, y._size);
         std::swap(x._c, y._c);
+        std::swap(x._allocator, y._allocator);
     };
 };
