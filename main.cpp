@@ -1,9 +1,9 @@
-#include "Vector/vector.hpp"
+# include "Vector/vector.hpp"
+# include "Utils/iterator.hpp"
+# include "Utils/reverse_iterator.hpp"
 
-
-
-#include <iostream>
-
+# include <iostream>
+# include <vector>
 class A {
 public:
 
@@ -14,6 +14,29 @@ public:
 int main ()
 {
 
+    std::vector<std::string> v1(10, "string2");
+    std::vector<std::string> v2;
+    std::vector<std::string> v3(v1.begin(), v1.end());
+    std::vector<std::string> v4(v1);
+    std::vector<std::string> v5(v1.rbegin(), v1.rend());
+    ft::Vector<std::string> ft_v1(10, "string2");
+    ft::Vector<std::string> ft_v2; 
+    ft::Vector<std::string> ft_v3(ft_v1.begin(), ft_v1.end());
+    ft::Vector<std::string> ft_v4(ft_v1);
+    ft::Vector<std::string> ft_v5(ft_v1.rbegin(), ft_v1.rend());
+
+
+    std::cout << "result\n";
+    std::cout << "v1 " << v1.capacity() << " | " <<  ft_v1.capacity() << std::endl;
+    std::cout << "v2 " << v2.capacity() << " | " <<  ft_v2.capacity() << std::endl;
+    std::cout << "v3 " << v3.capacity() << " | " <<  ft_v3.capacity() << std::endl;
+    std::cout << "v4 " << v4.capacity() << " | " <<  ft_v4.capacity() << std::endl;
+    std::cout << "v5 " << v5.capacity() << " | " <<  ft_v5.capacity() << std::endl;
+  // std::vector<int> k(5);
+  // std::reverse_iterator<ft::myiterator<int> > a;
+  // std::reverse_iterator<ft::myiterator<int> > b;
+  // a = k.rbegin();
+  // b = k.rend();
   // constructors used in the same order as described above:
   // ft::vector<int> first;                                // empty vector of ints
   // ft::vector<int> second (4,100);                       // four ints with value 100

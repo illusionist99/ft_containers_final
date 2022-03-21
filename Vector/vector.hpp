@@ -37,17 +37,17 @@ namespace ft {
             explicit Vector (const allocator_type& alloc = allocator_type()) {
             
                 _allocator = alloc;
-                _c = _allocator.allocate(2);
+                _c = NULL;
                 _size = 0;
-                _capacity = 2;
+                _capacity = 0;
             }
 
             explicit Vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) {
 
-                _allocator = alloc;
-                _c = _allocator.allocate(n * 2);
+                _allocator = alloc; 
+                _c = _allocator.allocate(n);
                 _size = 0;
-                _capacity = n * 2;
+                _capacity = n;
                 for (size_type i = 0; i < n; i++) {
                  
                     _allocator.construct(_c + i, val);
@@ -61,20 +61,20 @@ namespace ft {
                 _allocator = alloc;
                 difference_type size = std::distance(first, last);
 
-                _c = _allocator.allocate(size * 2);
+                _c = _allocator.allocate(size);
                 _size = 0;
-                _capacity = size * 2;
+                _capacity = size;
                 for (InputIterator it = first; it != last; it++) {
                 
                     _allocator.construct(_c + _size, *it);
-                    _size++;
+                    _size++; 
                 }
             }
 
             Vector (const Vector& x) {
             
                 _size = x.size();
-                _capacity = x.capacity() * 2;
+                _capacity = x.capacity();
                 _allocator = x.get_allocator();
                 _c = _allocator.allocate(_capacity);
                 for (size_type i = 0; i < _size; i++) {
@@ -104,7 +104,7 @@ namespace ft {
                 if (_size == 0) {
                 
                     _size = x.size();
-                    _capacity = x.capacity() * 2;
+                    _capacity = x.capacity();
                     _c = _allocator.allocate(_capacity);
                     for (size_type i = 0; i < _size; i++) {
                     
@@ -137,22 +137,22 @@ namespace ft {
 
             reverse_iterator rbegin() {
 
-                return (reverse_iterator(iterator(&_c[_size - 1])));
+                return (reverse_iterator(end()));
             }
 
             const_reverse_iterator rbegin() const {
 
-                return (reverse_iterator(iterator(&_c[_size - 1])));
+                return (const_reverse_iterator (end()));
             }
 
-            reverse_iterator rend() {
+            reverse_iterator rend() { 
 
-                return (reverse_iterator(iterator(&_c[ - 1])));
+                return (reverse_iterator(begin()));
             }
 
             const_reverse_iterator rend() const {
 
-                return (reverse_iterator(iterator(&_c[-1])));
+                return (const_reverse_iterator(begin()));
             }
 
             size_type size() const {
@@ -162,7 +162,7 @@ namespace ft {
 
             size_type max_size() const {
             
-                return _allocator.max_size() / sizeof(value_type);
+                return _allocator.max_size();
             }
 
             void resize (size_type n, value_type val = value_type()) {
@@ -174,26 +174,27 @@ namespace ft {
                         pop_back();
 
                 }
-                else if (n > _size) {
+                else {
                 
                     while (n > _size)
                         push_back(val);
                 }
-                
+                 
             }
             size_type capacity() const { return _capacity; }
             bool empty() const { return _size == 0; }
             void reserve (size_type n) {
             
                 if (n > _capacity) {
-                
+
                     pointer new_data = _allocator.allocate(n);
+                    
                     for (size_type i = 0; i < _size; i++) {
                     
                         _allocator.construct(new_data + i, _c[i]);
                     }
                     _capacity = n;
-                    std::swap(_c, new_data);
+                    std::swap(_c, new_data); 
                     for (size_type i = 0; i < _size; i++) {
                     
                         _allocator.destroy(new_data + i);
@@ -220,12 +221,18 @@ namespace ft {
             }
             reference at (size_type n) {
 
-                return _c[n];
+                if (n >=0 && n < _size) 
+                    return _c[n];
+                else 
+                    throw std::out_of_range(""); 
             }
 
             const_reference at (size_type n) const {
 
-                return _c[n];
+                if (n >= 0 && n < _size)
+                    return _c[n];
+                else 
+                    throw std::out_of_range("");
             }
 
             reference front() {
@@ -239,13 +246,19 @@ namespace ft {
             }
             reference back() {
 
-                return _c[_size - 1];
+                if ((_size - 1) >= 0)
+                    return _c[_size - 1];
+                else 
+                    throw std::out_of_range("");
             }
 
 
             const_reference back() const {
 
-                return _c[_size - 1];
+                if ((_size - 1) >= 0)
+                    return _c[_size - 1];
+                else 
+                    throw std::out_of_range("");
             }
 
 
@@ -254,7 +267,8 @@ namespace ft {
                 
                 size_type size = std::distance(first, last);
             
-                clear();
+                if (_size > 0)
+                    clear();
                 reserve(size);
                 for (size_type i = 0; i < size; i++) {
                 
@@ -272,14 +286,16 @@ namespace ft {
                 _allocator.deallocate(_c, _capacity);
                 _size = 0;
                 _capacity = 0;
+                _c = NULL;
         
             }
 
             void assign (size_type n, const value_type& val) {
 
-                clear();
+                if (_size > 0)
+                    clear();
                 reserve(n);
-                for (size_type i = 0; i< n; i++) {
+                for (size_type i = 0; i < n; i++) {
                 
                     _allocator.construct(_c + i, val);
                     _size++;
@@ -297,7 +313,7 @@ namespace ft {
             void push_back (const value_type& val) {
             
                 if (_size + 1 > _capacity) {
-                    reserve(_capacity * 2);
+                    reserve(_capacity *2 );
                 }
                 _c[_size] = val;
                 _size++;
