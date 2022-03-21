@@ -1,0 +1,39 @@
+# include <iostream>
+# include "avl.hpp"
+
+
+void preOrder(ft::Node<int, int, std::less<int>, std::allocator<ft::pair<const int ,int> > > *root)
+{
+    if(root != NULL)
+    {
+        std::cout << root->_key << " ";
+        preOrder(root->_left);
+        preOrder(root->_right);
+    }
+}
+int main()
+{
+    ft::Node<int, int > *root = NULL;
+     
+    /* Constructing tree given in
+    the above figure */
+    root = root->insert(root, 10);
+    root = root->insert(root, 20);
+    root = root->insert(root, 30);
+    root = root->insert(root, 40);
+    root = root->insert(root, 50);
+    root = root->insert(root, 25);
+     
+    /* The constructed AVL Tree would be
+                30
+            / \
+            20 40
+            / \ \
+        10 25 50
+    */
+    std::cout << "Preorder traversal of the "
+            "constructed AVL tree is \n";
+    preOrder(root);
+     
+    return 0;
+}
