@@ -414,23 +414,31 @@ namespace ft {
 
             iterator erase (iterator position) {
 
-               if (begin() != end()) {
+                size_type pos = std::distance(begin(), position);
+
+                _allocator.destroy(_c + pos);
+                for  ( size_t i = pos; i < _size - 1; i++) {
                 
-                   
-               }
-              
+                    _c[i] = _c[i + 1];
+                }
+                _size--;
+                return begin() + pos;
             }
 
             iterator erase (iterator first, iterator last) {
 
-                size_type pos = std::distance(first, last);
-
-                while (pos > 0)
+                iterator pos(first);
+                int i = 0;
+                while (last != end())
                 {
-                    first = erase(first);
-                    pos--;
+                    *first = *last;
+                    first++;
+                    last++;
                 }
-                return begin();
+                for (;first != last;first++)
+                    i++;
+                _size -= i;
+                return (pos);
             }
     };
 
