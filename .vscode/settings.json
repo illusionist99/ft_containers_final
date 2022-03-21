@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "__node_handle": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "__split_buffer": "cpp",
+        "algorithm": "cpp",
+        "array": "cpp",
+        "locale": "cpp",
+        "type_traits": "cpp",
+        "memory": "cpp",
+        "utility": "cpp"
+    }
+}
