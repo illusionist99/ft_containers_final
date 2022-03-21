@@ -13,80 +13,151 @@ public:
 
 int main ()
 {
+  {
+        /*
+         * strings to store the resutls
+         */
+        std::string str, ft_str;
+        /*
+         * var to store the size and the capacity
+         */
+        ft::Vector<std::string>::size_type s, ft_s;
+        ft::Vector<std::string>::size_type c, ft_c;
+        /*
+         * bool to store the comparison
+         */
+        bool cond;
 
-  // std::vector<int> k(5);
-  // std::reverse_iterator<ft::myiterator<int> > a;
-  // std::reverse_iterator<ft::myiterator<int> > b;
-  // a = k.rbegin();
-  // b = k.rend();
-  // constructors used in the same order as described above:
-  // ft::vector<int> first;                                // empty vector of ints
-  // ft::vector<int> second (4,100);                       // four ints with value 100
-  // ft::vector<int> third (second.begin(),second.end());  // iterating through second
-  // ft::vector<int> fourth (third);                       // a copy of third
+        /*------------------------------- test 1: empty vector ----------------------------------------*/
+        // insert at the begin
+        {
+            std::vector<std::string> v1(300, "string");
+            std::vector<std::string> v;
+            ft::Vector<std::string> ft_v;
+            v.insert(v.begin(), v1.begin(), v1.end());
+            ft_v.insert(ft_v.begin(), v1.begin(), v1.end());
+            ft_v.begin()->length();
 
-  // // the iterator constructor can also be used to construct from arrays:
-  // int myints[] = {16,2,77,29};
-  // ft::vector<int> fifth (myints, myints + sizeof(myints) / sizeof(int) );
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = ((str == ft_str) && (s == ft_s) && (c == ft_c));
+              std::cout << "v4 " << (str == ft_str) << std::endl;
+            std::cout << "v4 " <<  (s == ft_s) << std::endl;
+            std::cout << "v4 " <<  (c == ft_c) << std::endl;
+        }
+        // insert at the end
+        {
+            std::vector<std::string> v;
+            ft::Vector<std::string> v1(300, "string");
+            ft::Vector<std::string> ft_v;
 
-  // std::cout << "The contents of fifth are:";
-  // for (ft::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
-  //   std::cout << ' ' << *it;
-  // std::cout << '\n';
- 
-  // ft::vector<int> foo (3,0);
-  // ft::vector<int> bar (5,0);
+            v.insert(v.end(), v1.begin(), v1.end());
+            ft_v.insert(ft_v.end(), v1.begin(), v1.end());
+            ft_v.begin()->length();
 
-  // bar = foo;
-  // foo = ft::vector<int>();
+            str.clear();
+            ft_str.clear();
 
-  // std::cout << "Size of foo: " << int(foo.size()) << '\n';
-  // std::cout << "Size of bar: " << int(bar.size()) << '\n';
- 
-  // ft::vector<int> myvector;
-  // for (int i=1; i<=5; i++) myvector.push_back(i);
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c));
+            std::cout << "v3 " << (str == ft_str) << std::endl;
+            std::cout << "v3 " <<  (s == ft_s) << std::endl;
+            std::cout << "v3 " <<  (c == ft_c) << std::endl;
+        }
+        /*---------------------------------------------------------------------------------------------------*/
+        /*------------------------------- test 2: the vector capacity >= size + n ----------------------------------------*/
+        {
+            std::vector<std::string> v1(70, "hello");
+            std::vector<std::string> v(20, "string");
+            ft::Vector<std::string> ft_v(20, "string");
+            ft::Vector<std::string>::iterator valid_it;
 
-  // std::cout << "myvector contains:";
-  // for (ft::vector<int>::iterator it = myvector.begin() ; it != myvector.end(); ++it)
-  //   std::cout << ' ' << *it;
-  // std::cout << '\n';
- 
-  //  ft::vector<int> end;
-  // for (int i=1; i<=5; i++) end.push_back(i);
+            v.reserve(100);
+            ft_v.reserve(100);
+            valid_it = ft_v.begin();
+            v.insert(v.begin() + 15, v1.begin(), v1.end());
+            ft_v.insert(ft_v.begin() + 15, v1.begin(), v1.end());
 
-  // std::cout << "end contains:";
-  // for (ft::vector<int>::iterator it = end.begin() ; it != end.end(); ++it)
-  //   std::cout << ' ' << *it;
-  // std::cout << '\n';
- 
-  // ft::vector<int> rever (5);  // 5 default-constructed ints
-  // // rever.push_back(5);
-  // int i=0;
+            str.clear();
+            ft_str.clear();
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c) && (&(*valid_it) == &(*ft_v.begin())));
+            std::cout << "v2 " << (str == ft_str) << std::endl;
+            std::cout << "v2 " <<  (s == ft_s) << std::endl;
+            std::cout << "v2 " <<  (c == ft_c) << std::endl;
+            std::cout << "v2 " <<  (&(*valid_it) == &(*ft_v.begin())) << std::endl;
+        }
+        /*---------------------------------------------------------------------------------------------------*/
+        /*------------------------------- test 3: the vector capacity < size + n && n > size ----------------------------------------*/
+        {
+            ft::Vector<std::string> v1(100, "hello");
+            std::vector<std::string> v(20, "string");
+            ft::Vector<std::string> ft_v(20, "string");
 
-  // ft::vector<int>::reverse_iterator rit = rever.rbegin();
-  // // std::cout << *(rever.rbegin() + 4) << std::endl;
-  // for (; rit!= rever.rend(); ++rit)
-  //   *rit = ++i;
+            v.insert(v.begin() + 10, v1.begin(), v1.end());
+            ft_v.insert(ft_v.begin() + 10, v1.begin(), v1.end());
 
-  // std::cout << "rever contains:";
-  // for (ft::vector<int>::iterator it = rever.begin(); it != rever.end(); ++it)
-  //   std::cout << ' ' << *it;
-  // std::cout << '\n';
-//  unsigned int i;
-//   ft::vector<int> foo (3,100);   // three ints with a value of 100
-//   ft::vector<int> bar (5,200);   // five ints with a value of 200
+            str.clear();
+            ft_str.clear();
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c));
+        std::cout << "v1 " << (str == ft_str) << std::endl;
+        std::cout << "v1 " <<  (s == ft_s) << std::endl;
+        std::cout << "v1 " <<  (c == ft_c) << std::endl;
+        }
+        /*---------------------------------------------------------------------------------------------------*/
+        /*------------------------------- test 4: the vector capacity < size + n && n <= size ----------------------------------------*/
+        {
+            std::vector<std::string> v1(15, "hello");
+            std::vector<std::string> v(20, "string");
+            ft::Vector<std::string> ft_v(20, "string");
 
-//   foo.swap(bar);
+            v.insert(v.begin() + 10, v1.begin(), v1.end());
+            ft_v.insert(ft_v.begin() + 10, v1.begin(), v1.end());
 
-//   std::cout << "foo contains:";
-//   for (ft::vector<int>::iterator it = foo.begin(); it!=foo.end(); ++it)
-//     std::cout << ' ' << *it;
-//   std::cout << '\n';
+            str.clear();
+            ft_str.clear();
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c));
+        std::cout << "v0 " << (str == ft_str) << std::endl;
+        std::cout << "v0 " <<  (s == ft_s) << std::endl;
+        std::cout << "v0 " <<  (c == ft_c) << std::endl;
+        }
 
-//   std::cout << "bar contains:";
-//   for (ft::vector<int>::iterator it = bar.begin(); it!=bar.end(); ++it)
-//     std::cout << ' ' << *it;
-//   std::cout << '\n';
-//   system("leaks a.out");
+  }
   return 0;
 }
