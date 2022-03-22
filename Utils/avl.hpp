@@ -9,7 +9,7 @@ namespace ft {
     template < class Key,                           // map::key_type
     class T,                                       // map::mapped_type
     class Compare = std::less<Key>,               // map::key_compare
-    class Alloc = std::allocator<pair<const Key,T> > > 
+    class Alloc = std::allocator<T> > 
     struct Node
     {
             typename Alloc::template rebind<Node<Key, T> >::other rebind_allocator;
@@ -21,9 +21,28 @@ namespace ft {
             int _height;
             Node *_parrent;
             Node *_previous;
-         
 
 
+            Node *copy(Node *root) {
+            
+                Node *new_root;
+                if(root!=NULL) {
+                
+                    new_root = new_root->insert(root->_data);
+                    new_root->data = root->data;
+                    new_root->_left = copy(root->_left);
+                    new_root->_right = copy(root->_right);
+                }
+                else { return NULL; }
+                return new_root;
+            }
+
+
+            Node    *operator=(const Node &obj) {
+            
+                return obj->copy(obj);
+            }
+            Node* operator->() const {return _parrent;}
             // Node     &operator=(const Node &obj) {
             
                 
@@ -45,9 +64,9 @@ namespace ft {
             /* Helper function that allocates a
             new node with the given key and
             NULL left and right pointers. */
-            Node* newNode(pair<const Key, T> &data)
+            Node* newNode(pair<const Key, T> data)
             {
-                Node* node = _allocator.allocate(1);
+                Node* node = std::allocator<Node>().allocate(1);
                 node->_data = rebind_allocator.allocate(1);
                 node->_data = data;
                 node->_left = NULL;
@@ -138,7 +157,7 @@ namespace ft {
             // Recursive function to insert a key
             // in the subtree rooted with node and
             // returns the new root of the subtree.
-            Node* insert(Node* node, pair<const Key, T> &obj)
+            Node* insert(Node* node, const pair<const Key, T> &obj)
             {
                 /* 1. Perform the normal BST insertion */
                 if (node == NULL) {

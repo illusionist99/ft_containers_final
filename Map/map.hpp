@@ -2,7 +2,7 @@
 
 # include <iostream>
 # include "../Utils/pair.hpp"
-// # include "../Utils/iterator.hpp"
+# include "../Utils/iterator.hpp"
 # include "../Utils/reverse_iterator.hpp"
 # include "../Utils/avl.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
@@ -46,8 +46,8 @@ namespace ft {
             typedef const value_type& const_reference;
             typedef value_type* pointer;
             typedef const value_type* const_pointer;
-            typedef mapiterator<const Key, T, Compare, Alloc> iterator;
-            typedef mapiterator<const Key, T, Compare, Alloc> const_iterator;
+            typedef mapiterator<Key, T, Compare, Alloc> iterator;
+            typedef mapiterator<Key, T, Compare, Alloc> const_iterator;
             typedef ft::reverse_iterator<iterator> reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
@@ -98,12 +98,12 @@ namespace ft {
 
             iterator begin() {
 
-                return iterator(_root->_data);
+                return iterator(_root, &_root->_data);
             }
 
             const_iterator begin() const {
 
-                return iterator(_root->_data);
+                return iterator(_root, _root->_data);
             }
 
 
@@ -132,11 +132,11 @@ namespace ft {
             
             iterator end() {
 
-                return iterator(last(_root)->_data);
+                return iterator(_root, last(_root)->_data);
             }
             const_iterator end() const {
 
-                return iterator(last(_root)->_data);
+                return iterator(_root, last(_root)->_data);
             }
 
             reverse_iterator rbegin() {
@@ -162,9 +162,9 @@ namespace ft {
             
             iterator find (const key_type& k) {
                 
-                for (iterator it = begin(); it < end(); it++) {
+                for (iterator it = begin(); it != end(); it++) {
                     
-                    if (*it->first == k)
+                    if ((*it).first == k)
                         return it;
                 }
                 return end();

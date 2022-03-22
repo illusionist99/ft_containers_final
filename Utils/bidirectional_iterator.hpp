@@ -17,15 +17,16 @@ namespace ft {
 
         public:
 
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::difference_type    difference_type;
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::value_type         value_type;
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::pointer            pointer;
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::reference          reference;
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::iterator_category  iterator_category;
+            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::difference_type    difference_type;
+            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::value_type         value_type;
+            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::pointer            pointer;
+            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::reference          reference;
+            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::iterator_category  iterator_category;
             
-            typedef Node<Key, T, Compare, Alloc>    node; 
+            typedef Node<const Key, T, Compare, Alloc>    node; 
             typedef pair<const Key, T>              pair;
     
+            operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_current, &_data); }
             node *_root;
             node *_current;
             pair *_data;
@@ -40,25 +41,23 @@ namespace ft {
 
                 *this = obj;
             }
-
-            operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<const Key, T, Compare, Alloc>(_root, _data); }
     
             mapiterator(node * root, pair *data) {
 
-                _root = copy(root);
+                _root = _root->copy(root);
                 _data = &data;
                 _current = root;
             }
             mapiterator &operator=(const mapiterator& obj ) {
             
-                _root = copy(obj._root);
+                _root = _root->copy(obj._root);
                 _data = obj._data;
                 _current = obj._current;
                 return *this;
             }
 
-            T& operator*() const {return *_data;}
-            T* operator->() const {return _data;}
+            pair& operator*() const {return *_data;}
+            pair* operator->() const {return _data;}
             
             mapiterator& operator++() {
                 _current = _root->next(_current, 1);

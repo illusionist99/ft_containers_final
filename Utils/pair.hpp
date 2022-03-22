@@ -3,6 +3,9 @@
 
 namespace ft {
 
+
+
+
     template <class T1, class T2>
     struct pair {
 
@@ -20,9 +23,9 @@ namespace ft {
             }
 
             template<class U, class V>
-            pair (const pair<U,V>& pr) {
+            pair (const pair<U,V>& pr) : first(pr.first), second(pr.second) {
             
-                *this = pr;
+                // *this = pr;
             }
 
             pair (const first_type& a, const second_type& b) : first(a), second(b) {
@@ -31,11 +34,9 @@ namespace ft {
             }
 
             pair& operator= (const pair& pr) {
-                
-                
-                first = pr.first;
-                second = pr.second;
-                return *this;
+                // first = pr.first;
+                // second = pr.second;
+                return make_pair(pr.first, pr.second);
             }
     };
 
@@ -63,4 +64,9 @@ namespace ft {
     bool operator>= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
     { return !(lhs<rhs); }
 
+    template <class T1,class T2>
+    pair<T1,T2> make_pair (T1 x, T2 y)
+    {
+        return ( pair<T1,T2>(x,y) );
+    }
 }
