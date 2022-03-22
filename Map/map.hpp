@@ -12,12 +12,12 @@ namespace ft {
 
 
     // template <class Key, class T, class Compare, class Alloc>
-    // class map<Key,T,Compare,Alloc>::value_compare
+    // class Map<Key,T,Compare,Alloc>::value_compare
     // {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
-    //     friend class map;
+    //     friend class Map;
     //     protected:
     //     Compare comp;
-    //     value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+    //     value_compare (Compare c) : comp(c) {}  // constructed with Map's comparison object
     //     public:
     //     typedef bool result_type;
     //     typedef value_type first_argument_type;
@@ -28,11 +28,11 @@ namespace ft {
     //     }
     // };
 
-    template < class Key,                                     // map::key_type
-    class T,                                                 // map::mapped_type
-    class Compare = std::less<Key>,                         // map::key_compare
-    class Alloc = std::allocator<pair<const Key,T> > >     // map::allocator_type
-    class map {
+    template < class Key,                                     // Map::key_type
+    class T,                                                 // Map::mapped_type
+    class Compare = std::less<Key>,                         // Map::key_compare
+    class Alloc = std::allocator<pair<const Key,T> > >     // Map::allocator_type
+    class Map {
 
         public:
 
@@ -59,7 +59,7 @@ namespace ft {
             node            *_root;
             size_type       _size;
 
-            explicit map (const key_compare& comp = key_compare(),
+            explicit Map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
                 _allocator = alloc;
@@ -69,10 +69,12 @@ namespace ft {
             }
 
             template <class InputIterator>
-            map (InputIterator first, InputIterator last,
+            Map (InputIterator first, InputIterator last,
             const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
+                _keyc = comp;
+                _allocator = alloc;
                 for (iterator it = first; it < last; it++) {
 
                     _root = _root->insert(_root, *it);
@@ -80,12 +82,12 @@ namespace ft {
                 }
             }
 
-            map (const map& x) {
+            Map (const Map& x) {
             
                 *this = x;
             }
-            ~map() { clear(); }
-            map& operator= (const map& x) {
+            ~Map() { clear(); }
+            Map& operator= (const Map& x) {
             
                 if (_size > 0)
                     clear();
