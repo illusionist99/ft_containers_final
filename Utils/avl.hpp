@@ -10,20 +10,24 @@ namespace ft {
     class T,                                       // map::mapped_type
     class Compare = std::less<Key>,               // map::key_compare
     class Alloc = std::allocator<pair<const Key,T> > > 
-    class Node
+    struct Node
     {
-
-        
-        public:
             typename Alloc::template rebind<Node<Key, T> >::other rebind_allocator;
 
             Alloc _allocator;
-            Key _key;
-            T _data;
+            pair<const Key, T> _data;
             Node *_left;
             Node *_right;
             int _height;
             Node *_parrent;
+            Node *_previous;
+         
+
+
+            // Node     &operator=(const Node &obj) {
+            
+                
+            // }
             int height(Node *N)
             {
                 if (N == NULL)
@@ -41,14 +45,15 @@ namespace ft {
             /* Helper function that allocates a
             new node with the given key and
             NULL left and right pointers. */
-            Node* newNode(Key key)
+            Node* newNode(pair<const Key, T> &data)
             {
-                Node* node = rebind_allocator.allocate(1);
-                node->_key = key;
+                Node* node = _allocator.allocate(1);
+                node->_data = rebind_allocator.allocate(1);
+                node->_data = data;
                 node->_left = NULL;
                 node->_right = NULL;
-                node->_height = 1; // new node is initially
-                node->_parrent = this;               // added at leaf
+                node->_height = 1;
+                node->_parrent = this;
                 return(node);
             }
             
@@ -73,7 +78,33 @@ namespace ft {
                 // Return new root
                 return x;
             }
+            Node *next(Node *root, int n) {
             
+                if (root == NULL)
+                    return NULL;
+                if (n == 0)
+                    return root->_parrent;
+                if (root->_left || root->_right) {
+                
+                    if (root->_left && !root->_right) { return root->_left; }
+                    else if (root->right && !root->_left) { return root->_right; }
+                    else {
+                    
+                        if (root->_data.first < root->_left->_data.first) { return next(root->_left, n - 1); }
+                        else if (root->data.first > root->_right->_data.first) { return next(root->_right, n - 1); }
+                    }
+                }
+                return NULL;
+            }
+
+            Node *previous(Node *root, int n) {
+            
+                if (root == NULL)
+                    return NULL;
+                if (n == 0) return root->_parrent;
+                root = root->_previous;
+                return (previous(root, n - 1));
+            }
             // A utility function to left
             // rotate subtree rooted with x
             // See the diagram given above.
@@ -107,16 +138,21 @@ namespace ft {
             // Recursive function to insert a key
             // in the subtree rooted with node and
             // returns the new root of the subtree.
-            Node* insert(Node* node, Key key)
+            Node* insert(Node* node, pair<const Key, T> &obj)
             {
                 /* 1. Perform the normal BST insertion */
-                if (node == NULL)
-                    return(newNode(key));
-            
-                if (key < node->_key)
-                    node->_left = insert(node->_left, key);
-                else if (key > node->_key)
-                    node->_right = insert(node->_right, key);
+                if (node == NULL) {
+                    _previous = NULL;
+                    return(newNode(obj));
+                }
+                if (obj.first < node->_data.first) {
+                    node->_previous = node->_left;
+                    node->_left = insert(node->_left, obj);
+                }
+                else if (obj.first > node->_data.first) {
+                    node->_previous = node->_right;
+                    node->_right = insert(node->_right, obj);
+                }
                 else // Equal keys are not allowed in BST
                     return node;
             
@@ -133,22 +169,22 @@ namespace ft {
                 // there are 4 cases
             
                 // Left Left Case
-                if (balance > 1 && key < node->_left->_key)
+                if (balance > 1 && obj.first < node->_left->_data.first)
                     return rightRotate(node);
             
                 // Right Right Case
-                if (balance < -1 && key > node->_right->_key)
+                if (balance < -1 && obj.first > node->_right->_data.first)
                     return leftRotate(node);
             
                 // Left Right Case
-                if (balance > 1 && key > node->_left->_key)
+                if (balance > 1 && obj.first > node->_left->_data.first)
                 {
                     node->_left = leftRotate(node->_left);
                     return rightRotate(node);
                 }
             
                 // Right Left Case
-                if (balance < -1 && key < node->_right->_key)
+                if (balance < -1 && obj.first < node->_right->_data.first)
                 {
                     node->_right = rightRotate(node->_right);
                     return leftRotate(node);

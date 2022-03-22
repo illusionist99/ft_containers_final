@@ -12,13 +12,11 @@ namespace ft {
             typedef T1 first_type;
             typedef T2 second_type;
 
-            first_type _first;
-            second_type _second;
+            first_type first;
+            second_type second;
 
-            pair() {
+            pair() : first(first_type()), second(second_type()) {
 
-                _first = first_type();
-                _second = second_type();
             }
 
             template<class U, class V>
@@ -27,17 +25,16 @@ namespace ft {
                 *this = pr;
             }
 
-            pair (const first_type& a, const second_type& b) {
+            pair (const first_type& a, const second_type& b) : first(a), second(b) {
 
-                _first = a;
-                _second = b;
+
             }
 
             pair& operator= (const pair& pr) {
                 
                 
-                _first = pr._first;
-                _second = pr._second;
+                first = pr.first;
+                second = pr.second;
                 return *this;
             }
     };
