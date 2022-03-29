@@ -6,7 +6,7 @@
 # include "../Utils/reverse_iterator.hpp"
 // # include "../Utils/avl.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
-# include "../Utils/tree.hpp"
+# include "../Utils/avl.hpp"
 
 namespace ft {
 
@@ -53,23 +53,20 @@ namespace ft {
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
             typedef size_t size_type;
-            typedef node<key_type, mapped_type, key_compare ,allocator_type> node;
+            // typedef node<key_type, mapped_type, key_compare ,allocator_type> node;
 
             allocator_type  _allocator;
             key_compare     _keyc;
-            tree<key_type, mapped_type, key_compare ,allocator_type>    *_root;
-            node            *_current;
+            avl_tree<Key, T, Compare, Alloc>    _root;
+            avl<Key, T, Compare, Alloc>     *_rp;
             size_type       _size;
 
             explicit Map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
-                // node p();
-                tree<key_type, mapped_type, key_compare ,allocator_type> root;
                 _allocator = alloc;
                 _keyc = comp;
-                _root = &root;
-                // _current = _root;
+                _rp = NULL;
                 _size = 0;
             }
 
@@ -80,12 +77,12 @@ namespace ft {
             
                 _keyc = comp;
                 _allocator = alloc;
+                _rp = NULL;
                 for (iterator it = first; it < last; it++) {
 
-                    _root->insert(*it);
+                    _rp = _root.insert(_rp, *it);
                     _size++;
                 }
-                _current = _root->getRoot();
             }
 
             Map (const Map& x) {
@@ -101,60 +98,28 @@ namespace ft {
                     clear();
                 for (iterator it = x.begin(); it < x.end(); it++) {
 
-                    _root->insert(*it);
+                    _rp = _root.insert(_rp, *it);
                     _size++;
                 }
             }
 
             iterator begin() {
 
-                if (_root == NULL)
-                    return iterator(NULL);
-                return iterator(_root->leftMostNode());
+                return iterator(_root, _root.leftmostNode(_rp));
             }
 
             const_iterator begin() const {
         
-                if (_root == NULL)
-                    return iterator(NULL);
-                return iterator(_root->rightMostNode());
+                return iterator(_root, _root.leftmostNode(_rp));
             }
 
-
-            // size_type find_size(node *gua) {
-            
-            //     if (gua)
-            //         return (find_size(gua->_left) + 1 + find_size(gua->_right));
-            //     return 0;
-            // }
-
-            // node    *last( node *gua ) {
-            
-                
-            //     size_type size = find_size(gua);
-                
-            //     if (gua == NULL)
-            //         return NULL;
-            //     for (size_type i = 0; i < size ; i++) {
-                
-            //         if (gua->_left) { return last(gua->_left); }
-            //         else if (gua->_right) { return last(gua->_right); }
-            //         else { break ; }
-            //     }
-            //     return gua;
-            // }
-            
             iterator end() {
 
-                if (_root == NULL)
-                    return iterator(NULL);
-                return iterator(_root->rightMostNode());
+                return iterator(_root, _root.rightmostNode(_rp));
             }
             const_iterator end() const {
 
-                if (_root == NULL)
-                    return iterator(NULL, NULL);
-                return iterator(_root->rightMostNode());
+                return iterator(_root, _root.rightmostNode(_rp));
             }
 
             reverse_iterator rbegin() {
@@ -175,8 +140,8 @@ namespace ft {
                 return (reverse_iterator(begin()));
             }
             bool empty() const { return _size == 0; }
-            size_type size() const { return _root->getSize(); }
-            size_type max_size() const  {return node::_allocator.max_size(); }
+            size_type size() const { return _size; }
+            size_type max_size() const  {return _allocator.max_size(); }
             
             iterator find (const key_type& k) {
                 
@@ -201,7 +166,7 @@ namespace ft {
                 iterator it = find(k);
 
                 if (it == end()) {
-                    _root->insert(_root, make_pair<key_type, mapped_type>(k, mapped_type()));
+                    _root.insert(_root, make_pair<key_type, mapped_type>(k, mapped_type()));
                     return find(k)->second;
                 }
                 return (*it)->second;
@@ -218,8 +183,9 @@ namespace ft {
 
                 if (it != end()) { return pair<iterator, bool>(it, false); }
 
-                _root->insert(val);
-                // _size++;
+                _rp = _root.insert(_rp, val);
+                // _root.insert(val);
+                _size++;
                 return pair<iterator, bool>(find(val.first), true);
             }
 

@@ -124,7 +124,10 @@ namespace ft {
                 return root->_parent;
             if (root->_left || root->_right) {
             
-                if (root->_left && !root->_right) { return root->_left; }
+                if (root->_left && !root->_right)
+                {
+                    return root->_left;
+                }
                 else if (root->_right && !root->_left) { return root->_right; }
                 else {
                 
