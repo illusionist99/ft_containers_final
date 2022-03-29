@@ -7,8 +7,6 @@ namespace ft {
     template <class Iterator>
     class reverse_iterator : public iterator_traits<Iterator> {
 
-           
-
         public:
 
             Iterator _iter;

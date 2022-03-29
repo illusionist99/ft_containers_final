@@ -33,10 +33,10 @@ namespace ft {
 
             }
 
-            pair& operator= (const pair& pr) {
-                // first = pr.first;
-                // second = pr.second;
-                return make_pair(pr.first, pr.second);
+            pair& operator=(const pair& pr) {
+                first = pr.first;
+                second = pr.second;
+                return *this;
             }
     };
 

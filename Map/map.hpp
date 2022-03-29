@@ -4,8 +4,9 @@
 # include "../Utils/pair.hpp"
 # include "../Utils/iterator.hpp"
 # include "../Utils/reverse_iterator.hpp"
-# include "../Utils/avl.hpp"
+// # include "../Utils/avl.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
+# include "../Utils/tree.hpp"
 
 namespace ft {
 
@@ -52,19 +53,23 @@ namespace ft {
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
             typedef size_t size_type;
-            typedef  Node<key_type, mapped_type, key_compare ,allocator_type> node;
+            typedef node<key_type, mapped_type, key_compare ,allocator_type> node;
 
             allocator_type  _allocator;
             key_compare     _keyc;
-            node            *_root;
+            tree<key_type, mapped_type, key_compare ,allocator_type>    *_root;
+            node            *_current;
             size_type       _size;
 
             explicit Map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
+                // node p();
+                tree<key_type, mapped_type, key_compare ,allocator_type> root;
                 _allocator = alloc;
                 _keyc = comp;
-                _root = NULL;
+                _root = &root;
+                // _current = _root;
                 _size = 0;
             }
 
@@ -77,68 +82,79 @@ namespace ft {
                 _allocator = alloc;
                 for (iterator it = first; it < last; it++) {
 
-                    _root = _root->insert(_root, *it);
+                    _root->insert(*it);
                     _size++;
                 }
+                _current = _root->getRoot();
             }
 
             Map (const Map& x) {
             
                 *this = x;
             }
+
             ~Map() { clear(); }
+
             Map& operator= (const Map& x) {
             
                 if (_size > 0)
                     clear();
                 for (iterator it = x.begin(); it < x.end(); it++) {
 
-                    _root = _root->insert(_root, *it);
+                    _root->insert(*it);
                     _size++;
                 }
             }
 
             iterator begin() {
 
-                return iterator(_root, &_root->_data);
+                if (_root == NULL)
+                    return iterator(NULL);
+                return iterator(_root->leftMostNode());
             }
 
             const_iterator begin() const {
-
-                return iterator(_root, _root->_data);
+        
+                if (_root == NULL)
+                    return iterator(NULL);
+                return iterator(_root->rightMostNode());
             }
 
 
-            size_type find_size(node *gua) {
+            // size_type find_size(node *gua) {
             
-                if (gua)
-                    return (find_size(gua->_left) + 1 + find_size(gua->_right));
-                return 0;
-            }
+            //     if (gua)
+            //         return (find_size(gua->_left) + 1 + find_size(gua->_right));
+            //     return 0;
+            // }
 
-            node    *last( node *gua ) {
+            // node    *last( node *gua ) {
             
                 
-                size_type size = find_size(gua);
+            //     size_type size = find_size(gua);
                 
-                if (gua == NULL)
-                    return NULL;
-                for (size_type i = 0; i < size ; i++) {
+            //     if (gua == NULL)
+            //         return NULL;
+            //     for (size_type i = 0; i < size ; i++) {
                 
-                    if (gua->_left) { return last(gua->_left); }
-                    else if (gua->_right) { return last(gua->_right); }
-                    else { break ; }
-                }
-                return gua->_parrent;
-            }
+            //         if (gua->_left) { return last(gua->_left); }
+            //         else if (gua->_right) { return last(gua->_right); }
+            //         else { break ; }
+            //     }
+            //     return gua;
+            // }
             
             iterator end() {
 
-                return iterator(_root, last(_root)->_data);
+                if (_root == NULL)
+                    return iterator(NULL);
+                return iterator(_root->rightMostNode());
             }
             const_iterator end() const {
 
-                return iterator(_root, last(_root)->_data);
+                if (_root == NULL)
+                    return iterator(NULL, NULL);
+                return iterator(_root->rightMostNode());
             }
 
             reverse_iterator rbegin() {
@@ -159,7 +175,7 @@ namespace ft {
                 return (reverse_iterator(begin()));
             }
             bool empty() const { return _size == 0; }
-            size_type size() const { return _size; }
+            size_type size() const { return _root->getSize(); }
             size_type max_size() const  {return node::_allocator.max_size(); }
             
             iterator find (const key_type& k) {
@@ -172,8 +188,8 @@ namespace ft {
                 return end();
             }
             const_iterator find (const key_type& k) const {
-    
-                for (iterator it = begin(); it < end(); it++) {
+
+                for (iterator it = begin(); it != end(); it++) {
                     
                     if (*it->first == k)
                         return it;
@@ -185,7 +201,7 @@ namespace ft {
                 iterator it = find(k);
 
                 if (it == end()) {
-                    _root = _root->insert(_root, pair<key_type, mapped_type>(k, mapped_type()));
+                    _root->insert(_root, make_pair<key_type, mapped_type>(k, mapped_type()));
                     return find(k)->second;
                 }
                 return (*it)->second;
@@ -198,11 +214,12 @@ namespace ft {
 
             pair<iterator,bool> insert (const value_type& val) {
 
-                iterator it = find(val.first);
+                iterator it = find(val.first); 
 
                 if (it != end()) { return pair<iterator, bool>(it, false); }
 
-                _root = _root->insert(_root, val);
+                _root->insert(val);
+                // _size++;
                 return pair<iterator, bool>(find(val.first), true);
             }
 
