@@ -2,11 +2,11 @@
 
 # include <iostream>
 # include "pair.hpp"
-
+#include <functional>
 namespace ft {
 
     template < class T,
-    class Compare = std::less<typename T::first_type>,
+    class Compare = std::less<T>(),
     class Alloc = std::allocator<T> >
     class avl {
     
@@ -18,6 +18,12 @@ namespace ft {
             size_t          height;
             struct avl_node *parent;
         };
+
+        // template <typename A, typename B, typename U = Compare>
+        // bool _cmp(A a, B b, U u = U())
+        // {
+        //     return u(a, b);
+        // }
 
         public:
 
@@ -216,8 +222,9 @@ namespace ft {
                 inorder(t->right);
             }
 
-            avl()
+            avl(const Alloc& allocator = Alloc(), const Compare& compare = Compare())
             {
+                _cmp = compare;
                 root = NULL;
             }
             template <class Key>
