@@ -19,6 +19,15 @@ struct avl {
     int d;
     struct avl *l;
     struct avl *r;
+
+    avl &operator=(const avl& obj) {
+    
+        _height = obj._height;
+        _data = obj._data;
+        d = obj.d;
+        l = obj.l;
+        r = obj.r;
+    }
 };
 
 template < class Key,                           // map::key_type
@@ -51,17 +60,27 @@ class avl_tree {
         r = NULL;
     }
 
+    avl_tree(const avl_tree &ptr) {
+    
+        r = ptr.r;
+    }
+
+    avl_tree &operator=(const avl_tree &obj) {
+    
+        r = obj.r;
+        return *this;
+    }
     ~avl_tree( void ) {
 
     }
     avl *leftmostNode(avl *rr) {
     
         // if (r == NULL)
-        //     return NULL;
+        // //     return NULL;
         avl *tmp = rr;
     
-        while (tmp && tmp->l)
-            tmp = tmp->l;
+        // while (tmp && tmp->l)
+        //     tmp = tmp->l;
         return tmp;
     }
     
@@ -69,8 +88,8 @@ class avl_tree {
     
         avl *tmp = rr;
     
-        while (tmp && tmp->r)
-            tmp = tmp->r;
+        // while (tmp && tmp->r)
+        //     tmp = tmp->r;
         
         return tmp;
     }
@@ -122,11 +141,13 @@ class avl_tree {
         // cout<<"Left-Left Rotation";
         return t;
     }
-    avl* newNode(ft::pair<const Key, T> data)
+    avl* newNode(ft::pair<const Key, T> &data)
     {
         avl *Node = std::allocator<avl>().allocate(1);
         Node->_data = rebind_allocator.allocate(1);
         Node->_data = &data;
+        // Node->_data->first = data.first;
+        Node->_data->second = data.second;
         Node->l = NULL;
         Node->r = NULL;
         // Node->_height = 1;
@@ -168,7 +189,7 @@ class avl_tree {
         return t;
     }
 
-    avl *insert(avl *r, ft::pair<Key, T> v) {
+    avl *insert(avl *r, ft::pair<const Key, T> v) {
     
         if (r == NULL) {
         

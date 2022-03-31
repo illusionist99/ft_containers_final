@@ -166,10 +166,10 @@ namespace ft {
                 iterator it = find(k);
 
                 if (it == end()) {
-                    _root.insert(_root, make_pair<key_type, mapped_type>(k, mapped_type()));
+                    _rp = _root.insert(_rp, make_pair<key_type, mapped_type>(k, mapped_type()));
                     return find(k)->second;
                 }
-                return (*it)->second;
+                return (*it).second;
             }
 
             void clear() {
@@ -177,7 +177,7 @@ namespace ft {
                 _size = 0;
             }
 
-            pair<iterator,bool> insert (const value_type& val) {
+            const pair<iterator,bool> insert (const value_type& val) {
 
                 iterator it = find(val.first); 
 
@@ -186,7 +186,7 @@ namespace ft {
                 _rp = _root.insert(_rp, val);
                 // _root.insert(val);
                 _size++;
-                return pair<iterator, bool>(find(val.first), true);
+                return pair<const_iterator, bool>(begin(), true);
             }
 
             // iterator insert (iterator position, const value_type& val) {
