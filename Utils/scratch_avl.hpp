@@ -8,7 +8,7 @@ namespace ft {
 
     template < class Key,
     class T,
-    class Compare = std::less<T>,
+    class Compare = std::less<Key>,
     class Alloc = std::allocator<T> >
     class avl {
 
@@ -38,7 +38,7 @@ namespace ft {
 
             avl_node *root;
             _allocator _alloc;
-            Compare _cmp();
+            Compare _cmp;
             rebind_allocator _rebind_alloc;
         
             // avl() {}
@@ -59,7 +59,7 @@ namespace ft {
                     t->height = 0;
                     t->left = t->right = t->parent = NULL;
                 }
-                else if (std::less<Key>()(_data.first, t->data->first))
+                else if (_cmp(_data.first, t->data->first))
                 {
                     t->left = insert(_data, t->left);
                     t->left->parent = t;
@@ -71,13 +71,13 @@ namespace ft {
                             t = doubleRightRotate(t);
                     }
                 }
-                else if (!std::less<Key>()(_data.first, t->data->first))
+                else if (!_cmp(_data.first, t->data->first))
                 {
                     t->right = insert(_data, t->right);
                     t->right->parent = t;
                     if(height(t->right) - height(t->left) == 2)
                     {
-                        if(!std::less<Key>()(_data.first, t->right->data->first))
+                        if(!_cmp(_data.first, t->right->data->first))
                             t = singleLeftRotate(t);
                         else
                             t = doubleLeftRotate(t);
@@ -155,9 +155,9 @@ namespace ft {
                     return NULL;
 
                 // Searching for element
-                else if (std::less<Key>()(_data.first, t->data->first))
+                else if (_cmp(_data.first, t->data->first))
                     t->left = remove(_data, t->left);
-                else if (!std::less<Key>()(_data.first, t->data->first))
+                else if (!_cmp(_data.first, t->data->first))
                     t->right = remove(_data, t->right);
 
                 // Element found

@@ -180,7 +180,8 @@ namespace ft {
                 iterator it = find(val.first); 
 
                 std::cout << std::addressof(it) << " | " << std::addressof(*end()) << std::endl;
-                // if (it != end()) { return pair<iterator, bool>(it, false); }
+                std::cout << (it != end()) << std::endl;
+                if (it != end()) { return pair<iterator, bool>(it, false); }
 
                 _tree.insert(val);
                 // _root.insert(val);

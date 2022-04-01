@@ -27,7 +27,7 @@ int main ()
     // std::cout << (it).first << std::endl;
     a.insert(c);
     a.insert(d);
-
+    a._tree.remove(c);
     // std::cout << a.size() << std::endl;
     // // ft::node<int, int, std::__1::less<int>, std::__1::allocator<ft::pair<const int, int> > > *g = a._root->getRoot();
     // // std::cout << a._root << std::endl;
