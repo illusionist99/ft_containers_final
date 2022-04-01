@@ -240,9 +240,9 @@
 
 int main()
 {
-    ft::avl<int, int> t;
-    ft::pair<int , int> a0(60, 60);
-    ft::pair<int , int> a1(20, 20);
+    ft::avl<int, std::string> t;
+    ft::pair<int , std::string> a0(60, "dfdf60");
+    ft::pair<int , std::string> a1(20, "sdf20");
 
     ft::pair<int , int> a2(25, 25);
 
@@ -251,12 +251,12 @@ int main()
     ft::pair<int , int> a4(10, 10);
     ft::pair<int , int> a5(30, 30);
 
-    t.insert(a1);
-    t.insert(a3);
-    t.insert(a4);
-    t.insert(a5);
     t.insert(a0);
-    t.insert(a2);
+    t.insert(a1);
+    // t.insert(a4);
+    // t.insert(a5);
+    // t.insert(a0);
+    // t.insert(a2);
 
    //  t.insert(35);
    //  t.insert(67);
@@ -267,12 +267,12 @@ int main()
    //  t.insert(38);
    //  t.insert(69);
    //  t.display();
-   //  t.remove(5);
-   //  t.remove(35);
-   //  t.remove(65);
-   //  t.remove(89);
-   //  t.remove(43);
-   //  t.remove(88);
+    // t.remove(a1);
+    // t.remove(a3);
+    // t.remove(a4);
+    // t.remove(a0);
+    t.remove(a0);
+    t.remove(a1);
    //  t.remove(20);
    //  t.remove(38);
     t.display();

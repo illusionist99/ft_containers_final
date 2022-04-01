@@ -4,9 +4,9 @@
 # include "../Utils/pair.hpp"
 # include "../Utils/iterator.hpp"
 # include "../Utils/reverse_iterator.hpp"
-// # include "../Utils/avl.hpp"
+# include "../Utils/scratch_avl.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
-# include "../Utils/avl.hpp"
+// # include "../Utils/avl.hpp"
 
 namespace ft {
 
@@ -57,16 +57,14 @@ namespace ft {
 
             allocator_type  _allocator;
             key_compare     _keyc;
-            avl_tree<Key, T, Compare, Alloc>    _root;
-            avl<Key, T, Compare, Alloc>     *_rp;
+            avl<Key, Compare, Alloc> _tree;
             size_type       _size;
 
             explicit Map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
-                _allocator = alloc;
-                _keyc = comp;
-                _rp = NULL;
+                // _allocator = alloc;
+                // _keyc = comp;
                 _size = 0;
             }
 
@@ -77,10 +75,10 @@ namespace ft {
             
                 _keyc = comp;
                 _allocator = alloc;
-                _rp = NULL;
+                // _rp = NULL;
                 for (iterator it = first; it < last; it++) {
 
-                    _rp = _root.insert(_rp, *it);
+                    _tree.insert(*it);
                     _size++;
                 }
             }
@@ -98,14 +96,14 @@ namespace ft {
                     clear();
                 for (iterator it = x.begin(); it < x.end(); it++) {
 
-                    _rp = _root.insert(_rp, *it);
+                    _tree.insert(*it);
                     _size++;
                 }
             }
 
             iterator begin() {
 
-                return iterator(_root, _root.leftmostNode(_rp));
+                return iterator();
             }
 
             const_iterator begin() const {

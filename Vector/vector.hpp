@@ -25,14 +25,12 @@ namespace ft {
             typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
             typedef size_t size_type;            
         
-        public:
 
             pointer         _c;
             allocator_type  _allocator;
             size_type       _size;
             size_type       _capacity;
 
-        public:
 
             explicit Vector (const allocator_type& alloc = allocator_type()) {
             

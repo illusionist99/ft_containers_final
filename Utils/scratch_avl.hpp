@@ -5,14 +5,16 @@
 #include <functional>
 namespace ft {
 
-    template < class T,
-    class Compare = std::less<T>(),
+    template < class Key,
+    class T,
+    class Compare = std::less<T>,
     class Alloc = std::allocator<T> >
     class avl {
     
         struct avl_node {
 
-            T               *data;
+            // T               *data;
+            pair<Key, T>    *data;
             struct avl_node *left;
             struct avl_node *right;
             size_t          height;
@@ -28,11 +30,12 @@ namespace ft {
         public:
 
             typedef typename Alloc::template rebind<avl_node>::other rebind_allocator;
+            typedef typename Alloc::template rebind<pair<Key, T> >::other _allocator;
 
 
             avl_node *root;
-            Alloc _alloc;
-            Compare _cmp;
+            _allocator _alloc;
+            Compare _cmp();
             rebind_allocator _rebind_alloc;
         
             // avl() {}
@@ -43,7 +46,7 @@ namespace ft {
                 return (left >= right) ? left : right;
             }
 
-            avl_node* insert(T _data, avl_node* t) {
+            avl_node* insert(pair<Key, T> _data, avl_node* t) {
             
                 if (t == NULL)
                 {
@@ -51,22 +54,24 @@ namespace ft {
                     t->data = _alloc.allocate(1);
                     _alloc.construct(t->data, _data);
                     t->height = 0;
-                    t->left = t->right = NULL;
+                    t->left = t->right = t->parent = NULL;
                 }
-                else if (_cmp(_data, *t->data))
+                else if (std::less<Key>()(_data.first, t->data->first))
                 {
                     t->left = insert(_data, t->left);
+                    t->left->parent = t;
                     if(height(t->left) - height(t->right) == 2)
                     {
-                        if(_data < *t->left->data)
+                        if(_data.first < t->left->data->first)
                             t = singleRightRotate(t);
                         else
                             t = doubleRightRotate(t);
                     }
                 }
-                else if (!_cmp(_data, *t->data))
+                else if (!std::less<Key>()(_data.first, t->data->first))
                 {
                     t->right = insert(_data, t->right);
+                    t->right->parent = t;
                     if(height(t->right) - height(t->left) == 2)
                     {
                         if(_data > *t->right->data)
@@ -75,7 +80,6 @@ namespace ft {
                             t = doubleLeftRotate(t);
                     }
                 }
-
                 t->height = max(height(t->left), height(t->right))+1;
                 return t;
             }
@@ -119,7 +123,7 @@ namespace ft {
                 return singleRightRotate(t);
             }
 
-            avl_node* &findMin(avl_node* t)
+            avl_node* findMin(avl_node* t)
             {
                 if (t == NULL)
                     return NULL;
@@ -129,7 +133,7 @@ namespace ft {
                     return findMin(t->left);
             }
 
-            avl_node* &findMax(avl_node* t)
+            avl_node* findMax(avl_node* t)
             {
                 if (t == NULL)
                     return NULL;
@@ -139,7 +143,7 @@ namespace ft {
                     return findMax(t->right);
             }
 
-            avl_node* remove(T _data, avl_node* t)
+            avl_node* remove(pair<Key, T> _data, avl_node* t)
             {
                 avl_node* temp;
 
@@ -148,10 +152,10 @@ namespace ft {
                     return NULL;
 
                 // Searching for element
-                else if (_data < t->data)
-                    t->left = remove(_data->first, t->left);
-                else if (_data > t->data)
-                    t->right = remove(_data->first, t->right);
+                else if (std::less<Key>()(_data.first, t->data->first))
+                    t->left = remove(_data, t->left);
+                else if (!std::less<Key>()(_data.first, t->data->first))
+                    t->right = remove(_data, t->right);
 
                 // Element found
                 // With 2 children
@@ -159,7 +163,7 @@ namespace ft {
                 {
                     temp = findMin(t->right);
                     t->data = temp->data;
-                    t->right = remove(t->data, t->right);
+                    t->right = remove(*t->data, t->right);
                 }
                 // With one or zero child
                 else
@@ -169,7 +173,12 @@ namespace ft {
                         t = t->right;
                     else if (t->right == NULL)
                         t = t->left;
-                    delete temp;
+                    // delete temp;
+                    t->data = NULL;
+                    _alloc.destroy(t->data);
+                    _rebind_alloc.destroy(t);
+                    t = NULL;
+
                 }
                 if (t == NULL)
                     return t;
@@ -218,24 +227,39 @@ namespace ft {
                 if(t == NULL)
                     return;
                 inorder(t->left);
-                std::cout << *t->data << " ";
+                std::cout << t->data->first << "|";
+                std::cout << " " << t->data->second << " " << "parent : " << t->parent << std::endl;
                 inorder(t->right);
             }
-
-            avl(const Alloc& allocator = Alloc(), const Compare& compare = Compare())
+            avl_node *leftMostNode( void ) {
+            
+                avl_node *tmp = root;
+            
+                while (tmp != NULL) 
+                    tmp = tmp->left;
+                return tmp;                
+            }
+            avl_node *rightMostNode( void ) {
+            
+                avl_node *tmp = root;
+            
+                while (tmp != NULL) 
+                    tmp = tmp->right;
+                return tmp;                
+            }
+            avl()
             {
-                _cmp = compare;
                 root = NULL;
             }
-            template <class Key>
+
             void insert(pair< Key, T> x)
             {
-                root = insert(x.first, root);
+                root = insert(x, root);
             }
-            template <class Key>
+
             void remove(pair< Key, T> x)
             {
-                root = remove(x.first, root);
+                root = remove(x, root);
             }
 
             void display()

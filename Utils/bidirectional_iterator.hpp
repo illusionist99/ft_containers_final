@@ -2,7 +2,7 @@
 
 # include <iostream>
 # include "pair.hpp"
-# include "avl.hpp"
+# include "scratch_avl.hpp"
 # include "iterator.hpp"
 
 namespace ft {
@@ -23,12 +23,11 @@ namespace ft {
             typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::reference          reference;
             typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::iterator_category  iterator_category;
             
-            typedef avl< Key, T, Compare, Alloc>    node;
-            typedef avl_tree< Key, T, Compare, Alloc> avl_tree;
+            avl<>     tree;
             typedef pair<const Key, T>              pair;
     
             operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<const Key, T, Compare, Alloc>(_tree, _current); }
-            node *_root;
+            avl_node *_root;
             avl_tree _tree;
             node *_current;
             pair *_data;
