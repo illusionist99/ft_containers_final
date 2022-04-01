@@ -1,48 +1,49 @@
-// # include "Vector/vector.hpp"
-// # include "Utils/iterator.hpp"
-// # include "Utils/reverse_iterator.hpp"
-// # include "Utils/pair.hpp"
-// # include "Map/map.hpp"
-// # include <iostream>
-// # include <vector>
-// # include <map>
+# include "Vector/vector.hpp"
+# include "Utils/iterator.hpp"
+# include "Utils/reverse_iterator.hpp"
+# include "Utils/pair.hpp"
+# include "Map/map.hpp"
+# include <iostream>
+# include <vector>
+# include <map>
 
 
-// int main ()
-// {
+int main ()
+{
 
-//     ft::Map<int, int> a;
+    ft::Map<int, int> a;
 
-//     ft::pair<int , int > b,c, d;
-//     c.first = 1;
-//     c.second = 1;
+    ft::pair<int , int > b,c, d;
+    c.first = 1;
+    c.second = 1;
 
-//     d.second = 2;
-//     d.first = 2;
+    d.second = 2;
+    d.first = 2;
     
-//     b.first = 3;
-//     b.second = 3;
+    b.first = 3;
+    b.second = 3;
     
-//     ft::pair<ft::Map<int, int>::iterator, bool> it = a.insert(b);
-//     std::cout << (it).first << std::endl;
-//     // a.insert(c);
-//     // a.insert(d);
+    // ft::pair<ft::Map<int, int>::iterator, bool> it = a.insert(b);
+    // std::cout << (it).first << std::endl;
+    a.insert(c);
+    a.insert(d);
 
-//     // std::cout << a.size() << std::endl;
-//     // // ft::node<int, int, std::__1::less<int>, std::__1::allocator<ft::pair<const int, int> > > *g = a._root->getRoot();
-//     // // std::cout << a._root << std::endl;
-//     // // std::cout  << a._root->_root << std::endl;
-//     // // // std::cout << g << std::endl;
-//     // ft::Map<int, int>::iterator u = a.begin();
-//     // ft::Map<int, int>::iterator y = a.end();
+    // std::cout << a.size() << std::endl;
+    // // ft::node<int, int, std::__1::less<int>, std::__1::allocator<ft::pair<const int, int> > > *g = a._root->getRoot();
+    // // std::cout << a._root << std::endl;
+    // // std::cout  << a._root->_root << std::endl;
+    // // // std::cout << g << std::endl;
+    // ft::Map<int, int>::iterator u = a.begin();
+    // ft::Map<int, int>::iterator y = a.end();
 
-//     // std::cout << ( u == y ) << std::endl;
-//     // for (ft::Map<int, int>::iterator it = a.begin(); it != a.end(); it++) {
+    // std::cout << ( u == y ) << std::endl;
+    // for (ft::Map<int, int>::iterator it = a.begin(); it != a.end(); it++) {
     
-//     //   std::cout << it->first << " ";
-//     // }
-//     return 0;
-// }
+    //   std::cout << it->first << " ";
+    // }
+    a._tree.display();
+    return 0;
+}
 
 // #include<iostream>
 // #include<cstdio>
@@ -238,42 +239,42 @@
 // }
 
 
-int main()
-{
-    ft::avl<int, std::string> t;
-    ft::pair<int , std::string> a0(60, "dfdf60");
-    ft::pair<int , std::string> a1(20, "sdf20");
+// int main()
+// {
+//     ft::avl<int, std::string> t;
+//     ft::pair<int , std::string> a0(60, "dfdf60");
+//     ft::pair<int , std::string> a1(20, "sdf20");
 
-    ft::pair<int , int> a2(25, 25);
+//     ft::pair<int , int> a2(25, 25);
 
-    ft::pair<int , int> a3(15, 15);
+//     ft::pair<int , int> a3(15, 15);
 
-    ft::pair<int , int> a4(10, 10);
-    ft::pair<int , int> a5(30, 30);
+//     ft::pair<int , int> a4(10, 10);
+//     ft::pair<int , int> a5(30, 30);
 
-    t.insert(a0);
-    t.insert(a1);
-    // t.insert(a4);
-    // t.insert(a5);
-    // t.insert(a0);
-    // t.insert(a2);
+//     t.insert(a0);
+//     t.insert(a1);
+//     // t.insert(a4);
+//     // t.insert(a5);
+//     // t.insert(a0);
+//     // t.insert(a2);
 
-   //  t.insert(35);
-   //  t.insert(67);
-   //  t.insert(43);
-   //  t.insert(21);
-   //  t.insert(10);
-   //  t.insert(89);
-   //  t.insert(38);
-   //  t.insert(69);
-   //  t.display();
-    // t.remove(a1);
-    // t.remove(a3);
-    // t.remove(a4);
-    // t.remove(a0);
-    t.remove(a0);
-    t.remove(a1);
-   //  t.remove(20);
-   //  t.remove(38);
-    t.display();
-}
+//    //  t.insert(35);
+//    //  t.insert(67);
+//    //  t.insert(43);
+//    //  t.insert(21);
+//    //  t.insert(10);
+//    //  t.insert(89);
+//    //  t.insert(38);
+//    //  t.insert(69);
+//    //  t.display();
+//     // t.remove(a1);
+//     // t.remove(a3);
+//     // t.remove(a4);
+//     // t.remove(a0);
+//     t.remove(a0);
+//     t.remove(a1);
+//    //  t.remove(20);
+//    //  t.remove(38);
+//     t.display();
+// }

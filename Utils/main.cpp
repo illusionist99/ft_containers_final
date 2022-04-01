@@ -219,7 +219,7 @@ int main()
    //  t.insert(89);
    //  t.insert(38);
    //  t.insert(69);
-    t.display();
+    // t.display();
    //  t.remove(5);
    //  t.remove(35);
    //  t.remove(65);

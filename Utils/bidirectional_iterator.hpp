@@ -23,69 +23,53 @@ namespace ft {
             typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::reference          reference;
             typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::iterator_category  iterator_category;
             
-            avl<>     tree;
+            
             typedef pair<const Key, T>              pair;
     
-            operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<const Key, T, Compare, Alloc>(_tree, _current); }
-            avl_node *_root;
-            avl_tree _tree;
+            operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<const Key, T, Compare, Alloc>(_current); }
+
+            typedef typename avl<const Key, T, Compare, Alloc>::avl_node node;
             node *_current;
-            pair *_data;
 
-            mapiterator( void ) {
+            mapiterator( node * current ) : _current(current) {
 
-                _root = NULL;
-                _current = _root;
-
+                if (_current == NULL) {
+                    
+                    node tmp;
+                    _current = &tmp;
+                } 
             }
             mapiterator( const mapiterator& obj ) {
 
-                _root = obj._root;
-                _current = _root;
-                _tree = obj._tree;
-                _data = NULL;
-                if (_root != NULL)
-                    _data = _root->_data;
-
+                _current = obj._current;
             }
     
-            mapiterator(avl_tree tree, node * root) {
-
-                _root = root;
-                _data = NULL;
-                _current = _root;
-                _tree = tree;
-                if (_root != NULL)
-                    _data = _root->_data;
-
-            }
- 
             mapiterator &operator=(const mapiterator& obj ) {
 
-                _root = obj._root;
-                _tree = obj._tree;
                 _current = obj._current;
                 return *this;
             }
 
-            pair& operator*() const {return *_data;}
-            pair* operator->() const {return _data;}
+            pair& operator*() const {return *_current->data;}
+            pair* operator->() const {return _current->data;}
             
             mapiterator& operator++() {
-                
-                _tree.next();
+
+                node *tmp = _current->parent;
+                _current = tmp->right;
                 return *this;
             }
             
             mapiterator& operator--() {
-                _tree.prevoius();
+               node *tmp = _current->parent;
+                _current = tmp->left;
                 return *this;
             }
-            mapiterator operator++(int)  {mapiterator tmp(_tree, _root); _root = _tree.next(_root, 1); return tmp;}
-            mapiterator operator--(int)  {mapiterator tmp(_tree, _root); _root = _tree.previous(_root, 1); return tmp;}
+            mapiterator operator++(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->right; return tmp;}
+            mapiterator operator--(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->left; return tmp;}
             // mapiterator operator+(const mapiterator& rhs) {return mapiterator(_root+rhs._root);}
-            bool operator==(const mapiterator& rhs) const {return _data == rhs._data;}
-            bool operator!=(const mapiterator& rhs) const {return _data != rhs._data;}
+            bool operator==(const mapiterator& rhs) const {return _current->data == rhs._current->data;}
+            bool operator!=(const mapiterator& rhs) const {return _current->data != rhs._current->data;}
 
     };
 }

@@ -5,21 +5,24 @@
 #include <functional>
 namespace ft {
 
+
     template < class Key,
     class T,
     class Compare = std::less<T>,
     class Alloc = std::allocator<T> >
     class avl {
-    
-        struct avl_node {
 
-            // T               *data;
-            pair<Key, T>    *data;
-            struct avl_node *left;
-            struct avl_node *right;
-            size_t          height;
-            struct avl_node *parent;
-        };
+        public:
+        
+            struct avl_node {
+
+                // T               *data;
+                pair<const Key, T>    *data;
+                struct avl_node *left;
+                struct avl_node *right;
+                size_t          height;
+                struct avl_node *parent;
+            };
 
         // template <typename A, typename B, typename U = Compare>
         // bool _cmp(A a, B b, U u = U())
@@ -27,10 +30,10 @@ namespace ft {
         //     return u(a, b);
         // }
 
-        public:
+        // public:
 
             typedef typename Alloc::template rebind<avl_node>::other rebind_allocator;
-            typedef typename Alloc::template rebind<pair<Key, T> >::other _allocator;
+            typedef typename Alloc::template rebind<pair<const Key, T> >::other _allocator;
 
 
             avl_node *root;
@@ -46,7 +49,7 @@ namespace ft {
                 return (left >= right) ? left : right;
             }
 
-            avl_node* insert(pair<Key, T> _data, avl_node* t) {
+            avl_node* insert(pair<const Key, T> _data, avl_node* t) {
             
                 if (t == NULL)
                 {
@@ -74,7 +77,7 @@ namespace ft {
                     t->right->parent = t;
                     if(height(t->right) - height(t->left) == 2)
                     {
-                        if(_data > *t->right->data)
+                        if(!std::less<Key>()(_data.first, t->right->data->first))
                             t = singleLeftRotate(t);
                         else
                             t = doubleLeftRotate(t);
@@ -231,7 +234,7 @@ namespace ft {
                 std::cout << " " << t->data->second << " " << "parent : " << t->parent << std::endl;
                 inorder(t->right);
             }
-            avl_node *leftMostNode( void ) {
+            avl_node *leftMostNode( void ) const  {
             
                 avl_node *tmp = root;
             
@@ -239,7 +242,7 @@ namespace ft {
                     tmp = tmp->left;
                 return tmp;                
             }
-            avl_node *rightMostNode( void ) {
+            avl_node *rightMostNode( void ) const  {
             
                 avl_node *tmp = root;
             

@@ -47,8 +47,8 @@ namespace ft {
             typedef const value_type& const_reference;
             typedef value_type* pointer;
             typedef const value_type* const_pointer;
-            typedef mapiterator<Key, T, Compare, Alloc> iterator;
-            typedef mapiterator<Key, T, Compare, Alloc> const_iterator;
+            typedef mapiterator< Key, T, Compare, Alloc> iterator;
+            typedef mapiterator< Key, T, Compare, Alloc> const_iterator;
             typedef ft::reverse_iterator<iterator> reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
@@ -57,7 +57,7 @@ namespace ft {
 
             allocator_type  _allocator;
             key_compare     _keyc;
-            avl<Key, Compare, Alloc> _tree;
+            avl<const Key, T, Compare, Alloc> _tree;
             size_type       _size;
 
             explicit Map (const key_compare& comp = key_compare(),
@@ -103,21 +103,21 @@ namespace ft {
 
             iterator begin() {
 
-                return iterator();
+                return iterator(_tree.leftMostNode());
             }
 
             const_iterator begin() const {
         
-                return iterator(_root, _root.leftmostNode(_rp));
+                return iterator(_tree.leftMostNode());
             }
 
             iterator end() {
 
-                return iterator(_root, _root.rightmostNode(_rp));
+                return iterator(_tree.rightMostNode());
             }
             const_iterator end() const {
 
-                return iterator(_root, _root.rightmostNode(_rp));
+                return iterator(_tree.rightMostNode());
             }
 
             reverse_iterator rbegin() {
@@ -164,7 +164,7 @@ namespace ft {
                 iterator it = find(k);
 
                 if (it == end()) {
-                    _rp = _root.insert(_rp, make_pair<key_type, mapped_type>(k, mapped_type()));
+                    _tree.insert(make_pair< key_type, mapped_type>(k, mapped_type()));
                     return find(k)->second;
                 }
                 return (*it).second;
@@ -175,13 +175,14 @@ namespace ft {
                 _size = 0;
             }
 
-            const pair<iterator,bool> insert (const value_type& val) {
+            pair<iterator,bool> insert (const value_type& val) {
 
                 iterator it = find(val.first); 
 
-                if (it != end()) { return pair<iterator, bool>(it, false); }
+                std::cout << std::addressof(it) << " | " << std::addressof(*end()) << std::endl;
+                // if (it != end()) { return pair<iterator, bool>(it, false); }
 
-                _rp = _root.insert(_rp, val);
+                _tree.insert(val);
                 // _root.insert(val);
                 _size++;
                 return pair<const_iterator, bool>(begin(), true);
