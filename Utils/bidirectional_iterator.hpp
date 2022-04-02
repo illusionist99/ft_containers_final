@@ -65,7 +65,18 @@ namespace ft {
                 _current = tmp->left;
                 return *this;
             }
-            mapiterator operator++(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->right; return tmp;}
+            mapiterator operator++(int)  {
+            
+                mapiterator tmp(_current);
+                node *tmpo;
+                if (_current && _current->parent)
+                    tmpo = _current->parent;
+                else
+                    tmpo = _current;
+                // node *tmpo = _current->parent;
+                // _current = tmpo->right;
+                return tmp;
+            }
             mapiterator operator--(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->left; return tmp;}
             // mapiterator operator+(const mapiterator& rhs) {return mapiterator(_root+rhs._root);}
             bool operator==(const mapiterator& rhs) const {return _current->data == rhs._current->data;}

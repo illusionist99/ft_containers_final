@@ -27,20 +27,26 @@ int main ()
     // std::cout << (it).first << std::endl;
     a.insert(c);
     a.insert(d);
-    a._tree.remove(c);
+    // a.ins
+    // a._tree.remove(c);
     // std::cout << a.size() << std::endl;
     // // ft::node<int, int, std::__1::less<int>, std::__1::allocator<ft::pair<const int, int> > > *g = a._root->getRoot();
     // // std::cout << a._root << std::endl;
     // // std::cout  << a._root->_root << std::endl;
     // // // std::cout << g << std::endl;
-    // ft::Map<int, int>::iterator u = a.begin();
-    // ft::Map<int, int>::iterator y = a.end();
+    std::cout << a._tree.root << "\n" << "Left " << a._tree.root->left << "\n" << "Right " << a._tree.root->right << std::endl;
+    std::cout << "Iterators" << std::endl;
+    ft::Map<int, int>::iterator u = a.begin();
+    ft::Map<int, int>::iterator y = a.end();
 
-    // std::cout << ( u == y ) << std::endl;
-    // for (ft::Map<int, int>::iterator it = a.begin(); it != a.end(); it++) {
+    std::cout << ( u == y ) << std::endl;
+    std::cout << u->first <<  "  " << y->first;
+    for (ft::Map<int, int>::iterator it = a.begin(); it != a.end(); it++) {
     
-    //   std::cout << it->first << " ";
-    // }
+      std::cout << it->first << " \n";
+    //   y++;
+      std::cout << ( u == y ) << std::endl;
+    }
     a._tree.display();
     return 0;
 }

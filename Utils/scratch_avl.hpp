@@ -22,6 +22,15 @@ namespace ft {
                 struct avl_node *right;
                 size_t          height;
                 struct avl_node *parent;
+
+                avl_node() {
+                
+                    data = NULL;
+                    left = NULL;
+                    right = NULL;
+                    height = 0;
+                    parent = NULL;
+                }
             };
 
         // template <typename A, typename B, typename U = Compare>
@@ -168,7 +177,6 @@ namespace ft {
                     t->data = temp->data;
                     t->right = remove(*t->data, t->right);
                 }
-                // With one or zero child
                 else
                 {
                     temp = t;
@@ -238,6 +246,8 @@ namespace ft {
             
                 avl_node *tmp = root;
             
+                if (tmp && tmp->left == NULL)
+                    return tmp;
                 while (tmp != NULL) 
                     tmp = tmp->left;
                 return tmp;                
@@ -246,6 +256,8 @@ namespace ft {
             
                 avl_node *tmp = root;
             
+                if (tmp && tmp->right == NULL)
+                    return tmp;
                 while (tmp != NULL) 
                     tmp = tmp->right;
                 return tmp;                
