@@ -67,14 +67,26 @@ namespace ft {
             }
             mapiterator operator++(int)  {
             
+                if (_current) {
+                
+                    if (_current->parent == NULL) {
+                    
+                        if (_current->right)
+                            return mapiterator(_current->right);
+                     
+                        return mapiterator(_current);
+                    }
+                    
+                }
                 mapiterator tmp(_current);
-                node *tmpo;
-                if (_current && _current->parent)
-                    tmpo = _current->parent;
-                else
-                    tmpo = _current;
-                // node *tmpo = _current->parent;
-                // _current = tmpo->right;
+                if (_current) {
+                
+                    if (_current->right)
+                        _current = _current->right;
+                    else
+                        _current = _current->parent;
+                }
+                
                 return tmp;
             }
             mapiterator operator--(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->left; return tmp;}

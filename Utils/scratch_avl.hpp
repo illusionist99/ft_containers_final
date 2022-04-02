@@ -246,9 +246,9 @@ namespace ft {
             
                 avl_node *tmp = root;
             
-                if (tmp && tmp->left == NULL)
-                    return tmp;
-                while (tmp != NULL) 
+                // if (tmp && tmp->left == NULL)
+                //     return tmp;
+                while (tmp != NULL && tmp->left) 
                     tmp = tmp->left;
                 return tmp;                
             }
@@ -256,9 +256,9 @@ namespace ft {
             
                 avl_node *tmp = root;
             
-                if (tmp && tmp->right == NULL)
-                    return tmp;
-                while (tmp != NULL) 
+                // if (tmp && tmp->right == NULL)
+                //     return tmp;
+                while (tmp != NULL && tmp->right) 
                     tmp = tmp->right;
                 return tmp;                
             }

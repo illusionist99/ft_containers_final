@@ -39,13 +39,17 @@ int main ()
     ft::Map<int, int>::iterator u = a.begin();
     ft::Map<int, int>::iterator y = a.end();
 
-    std::cout << ( u == y ) << std::endl;
-    std::cout << u->first <<  "  " << y->first;
+    // std::cout << ( u == y ) << std::endl;
+    // std::cout << u->first <<  "  " << y->first << std::endl;
+    // u++;
+    // std::cout << u->first << std::endl;
+    // return 0;
     for (ft::Map<int, int>::iterator it = a.begin(); it != a.end(); it++) {
     
-      std::cout << it->first << " \n";
+      std::cout << ( it == a.end() ) << std::endl;
+      std::cout  << "fi " << it->first << " \n";
     //   y++;
-      std::cout << ( u == y ) << std::endl;
+      // std::cout << ( u == y ) << std::endl;
     }
     a._tree.display();
     return 0;
