@@ -113,11 +113,11 @@ namespace ft {
 
             iterator end() {
 
-                return iterator(_tree.rightMostNode());
+                return iterator(NULL);
             }
             const_iterator end() const {
 
-                return iterator(_tree.rightMostNode());
+                return iterator(NULL);
             }
 
             reverse_iterator rbegin() {
@@ -142,7 +142,8 @@ namespace ft {
             size_type max_size() const  {return _allocator.max_size(); }
             
             iterator find (const key_type& k) {
-                
+                if (_size == 0)
+                    return end();
                 for (iterator it = begin(); it != end(); it++) {
                     
                     if ((*it).first == k)
@@ -151,7 +152,8 @@ namespace ft {
                 return end();
             }
             const_iterator find (const key_type& k) const {
-
+                if (_size == 0)
+                    return end();
                 for (iterator it = begin(); it != end(); it++) {
                     
                     if (*it->first == k)

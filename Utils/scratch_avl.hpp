@@ -66,7 +66,9 @@ namespace ft {
                     t->data = _alloc.allocate(1);
                     _alloc.construct(t->data, _data);
                     t->height = 0;
-                    t->left = t->right = t->parent = NULL;
+                    t->left = NULL;
+                    t->right = NULL;
+                    t->parent = NULL;
                 }
                 else if (_cmp(_data.first, t->data->first))
                 {
@@ -245,6 +247,9 @@ namespace ft {
             avl_node *leftMostNode( void ) const  {
             
                 avl_node *tmp = root;
+
+                if (tmp->parent == NULL)
+                    return tmp;
             
                 // if (tmp && tmp->left == NULL)
                 //     return tmp;
@@ -258,7 +263,8 @@ namespace ft {
             
                 // if (tmp && tmp->right == NULL)
                 //     return tmp;
-                while (tmp != NULL && tmp->right) 
+                // if ()
+                while (tmp != NULL && tmp->right != NULL) 
                     tmp = tmp->right;
                 return tmp;                
             }
