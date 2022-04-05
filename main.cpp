@@ -11,10 +11,10 @@
 int main ()
 {
     std::map<int, int > h;
-    *h.end();
     ft::Map<int, int> a;
 
     ft::pair<int , int > b,c, d;
+    std::pair<int , int > b0,c0, d0;
     c.first = 1;
     c.second = 1;
 
@@ -23,6 +23,15 @@ int main ()
     
     b.first = 3;
     b.second = 3;
+
+    c0.first = 1;
+    c0.second = 1;
+
+    d0.second = 2;
+    d0.first = 2;
+    
+    b0.first = 3;
+    b0.second = 3;
     ft::Map<int, int>::iterator u(NULL);
     ft::Map<int, int>::iterator u2(NULL);
 
@@ -33,6 +42,9 @@ int main ()
     a.insert(c);
     a.insert(d);
     a.insert(b);
+    h.insert(c0);
+    h.insert(d0);
+    h.insert(b0); 
     // a.ins
     // a._tree.remove(c);
     // std::cout << a.size() << std::endl;
@@ -40,7 +52,7 @@ int main ()
     // // std::cout << a._root << std::endl;
     // // std::cout  << a._root->_root << std::endl;
     // // // std::cout << g << std::endl;
-    std::cout << a._tree.root << "\n" << "Left " << a._tree.root->left << "\n" << "Right " << a._tree.root->right << std::endl;
+    std::cout << "root  " << a._tree.root << "\n" << "Left  " << a._tree.root->left << "\n" << "Right " << a._tree.root->right << std::endl;
     // std::cout << "Iterators" << std::endl;
     // ft::Map<int, int>::iterator u = a.begin();
     // ft::Map<int, int>::iterator y = a.end();
@@ -53,12 +65,17 @@ int main ()
     for (ft::Map<int, int>::iterator it = a.begin(); it != a.end(); it++) {
     
       // std::cout << "|" << a[z++] << "|" << std::endl;
-      std::cout << ( it == a.end() ) << std::endl;
-      std::cout  << "fi " << it->first << " \n";
+      // std::cout << ( it == a.end() ) << std::endl;
+      std::cout  << it->first << " ";
     //   y++;
       // std::cout << ( u == y ) << std::endl;
     }
-    a._tree.display();
+    std::cout << std::endl;
+    for (std::map<int, int>::iterator it = h.begin(); it != h.end(); it++) {
+    
+       std::cout  << it->first << " ";
+    }
+    // a._tree.display();
     return 0;
 }
 
