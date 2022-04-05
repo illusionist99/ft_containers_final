@@ -29,13 +29,17 @@ namespace ft {
             operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<const Key, T, Compare, Alloc>(_current); }
 
             typedef typename avl<const Key, T, Compare, Alloc>::avl_node node;
+            typedef avl<const Key, T, Compare, Alloc> tree;
             node *_current;
+            tree root;
             pair *_safe;
             Alloc _alloc;
             typedef typename Alloc::template rebind<node>::other rebind_allocator;
             rebind_allocator _alloc_rebind;
+            mapiterator( ) { _current = NULL;}
             mapiterator( node * current ) : _current(current) {
 
+                root.root = current;
                 if (_current == NULL) {
                     
                     // pair *_safe;
@@ -63,32 +67,7 @@ namespace ft {
             }
 
             pair& operator*() const { if (_current == NULL) {return *_safe;} return *_current->data;}
-            pair* operator->() const {return _current->data;}
-            
-            mapiterator& operator++() {
-
-                if (_current) {
-                
-                    if (_current->parent == NULL) {
-                    
-                        if (_current->right)
-                            return mapiterator(_current->right);
-                     
-                        return mapiterator(_current);
-                    }
-                    
-                }
-                mapiterator tmp(_current);
-                if (_current) {
-                
-                    if (_current->right)
-                        _current = _current->right;
-                    else
-                        _current = _current->parent;
-                }
-                
-                return tmp;
-            }
+            pair* operator->() const { if (_current) {return _current->data;} return NULL;}
             
             mapiterator& operator--() {
                node *tmp = _current->parent;
@@ -96,56 +75,56 @@ namespace ft {
                 return *this;
             }
             mapiterator operator++(int)  {
-            
-                node *p;
+
+                _current = root.treeSuccessor(_current);
+                // node *p;
                 
-                if (_current == nullptr)
-                    {
-                    // ++ from end(). get the root of the tree
-                    // _current = tree->root;
+                // if (_current == nullptr)
+                //     {
+                //     // ++ from end(). get the root of the tree
+                //     // _current = tree->root;
                     
-                    // error! ++ requested for an empty tree
-                    // if (_current == nullptr)
-                    //     throw UnderflowException { };
+                //     // error! ++ requested for an empty tree
+                //     // if (_current == nullptr)
+                //     //     throw UnderflowException { };
                     
-                    // move to the smallest value in the tree,
-                    // which is the first node inorder
-                        while (_current->left != nullptr) {
-                            _current = _current->left;
-                        }
-                    }
-                    else
-                    if (_current->right != nullptr)
-                    {
-                        // successor is the farthest left node of
-                        // right subtree
-                        _current = _current->right;
+                //     // move to the smallest value in the tree,
+                //     // which is the first node inorder
+                //         while (_current->left != nullptr) {
+                //             _current = _current->left;
+                //         }
+                //     }
+                //     else if (_current->right != nullptr)
+                //     {
+                //         // successor is the farthest left node of
+                //         // right subtree
+                //         _current = _current->right;
                         
-                        while (_current->left != nullptr) {
-                        _current = _current->left;
-                        }
-                    }
-                    else
-                    {
-                        // have already processed the left subtree, and
-                        // there is no right subtree. move up the tree,
-                        // looking for a parent for which _current is a left child,
-                        // stopping if the parent becomes NULL. a non-NULL parent
-                        // is the successor. if parent is NULL, the original node
-                        // was the last node inorder, and its successor
-                        // is the end of the list
-                        p = _current->parent;
-                        while (p != nullptr && _current == p->right)
-                        {
-                            _current = p;
-                            p = p->parent;
-                        }
+                //         while (_current->left != nullptr) {
+                //          _current = _current->left;
+                //         }
+                //     }
+                //     else
+                //     {
+                //         // have already processed the left subtree, and
+                //         // there is no right subtree. move up the tree,
+                //         // looking for a parent for which _current is a left child,
+                //         // stopping if the parent becomes NULL. a non-NULL parent
+                //         // is the successor. if parent is NULL, the original node
+                //         // was the last node inorder, and its successor
+                //         // is the end of the list
+                //         p = _current->parent;
+                //         while (p != nullptr && _current == p->right)
+                //         {
+                //             _current = p;
+                //             p = p->parent;
+                //         }
                         
-                        // if we were previously at the right-most node in
-                        // the tree, _current = nullptr, and the iterator specifies
-                        // the end of the list
-                        _current = p;
-                    }
+                //         // if we were previously at the right-most node in
+                //         // the tree, _current = nullptr, and the iterator specifies
+                //         // the end of the list
+                //         _current = p;
+                //     }
                 
                 return *this;
             }

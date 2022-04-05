@@ -40,7 +40,7 @@ namespace ft {
             typedef Key key_type;
             typedef T mapped_type;
             typedef pair<const key_type, mapped_type> value_type;
-            typedef std::less<key_type> key_compare;
+            typedef Compare key_compare;
             // typedef typename Compare value_compare;
             typedef Alloc allocator_type;
             typedef value_type& reference;
@@ -63,8 +63,8 @@ namespace ft {
             explicit Map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
-                // _allocator = alloc;
-                // _keyc = comp;
+                _allocator = alloc;
+                _keyc = comp;
                 _size = 0;
             }
 
@@ -72,11 +72,12 @@ namespace ft {
             Map (InputIterator first, InputIterator last,
             const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
+            // typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type = InputIterator(_tree.root)) {
             
                 _keyc = comp;
                 _allocator = alloc;
                 // _rp = NULL;
-                for (iterator it = first; it < last; it++) {
+                for (iterator it = first; it != last; it++) {
 
                     _tree.insert(*it);
                     _size++;
@@ -94,21 +95,22 @@ namespace ft {
             
                 if (_size > 0)
                     clear();
-                for (iterator it = x.begin(); it < x.end(); it++) {
+                for (iterator it = x.begin(); it != x.end(); it++) {
 
                     _tree.insert(*it);
                     _size++;
                 }
+                return *this;
             }
 
             iterator begin() {
 
-                return iterator(_tree.root);
+                return iterator(_tree.treeMinimum(_tree.root));
             }
 
             const_iterator begin() const {
         
-                return iterator(_tree.root);
+                return iterator(_tree.treeMinimum(_tree.root));
             }
 
             iterator end() {
@@ -142,8 +144,7 @@ namespace ft {
             size_type max_size() const  {return _allocator.max_size(); }
             
             iterator find (const key_type& k) {
-                if (_size == 0)
-                    return end();
+
                 for (iterator it = begin(); it != end(); it++) {
                     
                     if ((*it).first == k)

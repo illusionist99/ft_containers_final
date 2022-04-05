@@ -125,6 +125,48 @@ namespace ft {
                 return u;
             }
 
+            avl_node *treeMaximum(avl_node *x) const {
+            
+                if (x == NULL)
+                    return x;
+                while (x->right != NULL)
+                    x = x->right;
+                return x;
+            }
+            avl_node *treeMinimum(avl_node *x) const {
+            
+                if (x == NULL)
+                    return x;
+                while (x->left != NULL)
+                    x = x->left;
+                return x;
+            }
+            avl_node *treeSuccessor(avl_node *x) {
+            
+                if (x->right != NULL)
+                    return treeMinimum(x->right);
+                avl_node *y = x->parent;
+                while (y != NULL && (x == y->right)) {
+                
+                    x = y;
+                    y = y->parent;
+                }
+                return y;
+            }
+            avl_node *treePredecessor(avl_node *x) {
+
+            
+                if (x->left != NULL)
+                    return treeMaximum(x->left);
+                avl_node *y = x->parent;
+                while (y != NULL && (x = y->left)) {
+                
+                    x = y;
+                    y = y->parent;
+                }
+                return y;
+            }
+
             avl_node* doubleLeftRotate(avl_node* &t)
             {
                 t->right = singleRightRotate(t->right);
@@ -248,8 +290,8 @@ namespace ft {
             
                 avl_node *tmp = root;
 
-                if (tmp->parent == NULL)
-                    return tmp;
+                // if (tmp->parent == NULL)
+                //     return tmp;
             
                 // if (tmp && tmp->left == NULL)
                 //     return tmp;
