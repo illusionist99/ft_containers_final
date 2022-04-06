@@ -58,72 +58,163 @@ namespace ft {
                 return (left >= right) ? left : right;
             }
 
-            avl_node* insert(pair<const Key, T> _data, avl_node* t) {
+            avl_node *newNode(pair<const Key, T> _data) {
             
-                if (t == NULL)
-                {
-                    t = _rebind_alloc.allocate(1);
-                    t->data = _alloc.allocate(1);
-                    _alloc.construct(t->data, _data);
-                    t->height = 0;
-                    t->left = NULL;
-                    t->right = NULL;
-                    t->parent = NULL;
-                }
-                else if (_cmp(_data.first, t->data->first))
-                {
-                    t->left = insert(_data, t->left);
-                    t->left->parent = t;
-                    if(height(t->left) - height(t->right) == 2)
-                    {
-                        if(_data.first < t->left->data->first)
-                            t = singleRightRotate(t);
-                        else
-                            t = doubleRightRotate(t);
-                    }
-                }
-                else if (!_cmp(_data.first, t->data->first))
-                {
-                    t->right = insert(_data, t->right);
-                    t->right->parent = t;
-                    if(height(t->right) - height(t->left) == 2)
-                    {
-                        if(!_cmp(_data.first, t->right->data->first))
-                            t = singleLeftRotate(t);
-                        else
-                            t = doubleLeftRotate(t);
-                    }
-                }
-                t->height = max(height(t->left), height(t->right))+1;
+                avl_node *t = _rebind_alloc.allocate(1);
+                t->data = _alloc.allocate(1);
+                _alloc.construct(t->data, _data);
+                t->height = 0;
+                t->left = NULL;
+                t->right = NULL;
+                t->parent = NULL;
                 return t;
             }
-            avl_node* singleRightRotate(avl_node* &t)
-            {
-                if (t == NULL)
-                    return t;
-                avl_node* u = t->left;
-                if (u == NULL)
-                    return t;
-                t->left = u->right;
-                u->right = t;
-                t->height = max(height(t->left), height(t->right))+1;
-                u->height = max(height(u->left), t->height)+1;
-                return u;
+            int getBalanceFactor(avl_node *N) {
+            
+                if (N == NULL)
+                    return 0;
+                return height(N->left) - height(N->right);
+            }
+            avl_node* insert(pair<const Key, T> _data, avl_node* node) {
+            
+                if (node == NULL)
+                    return (newNode(_data));
+                if (_cmp(_data.first, node->data->first))
+                    node->left = insert(_data, node->left);
+                else if (!_cmp(_data.first, node->data->first))
+                    node->right = insert(_data, node->right);
+                else
+                    return node;
+
+                // Update the balance factor of each node and
+                // balance the tree
+                node->height = 1 + max(height(node->left),
+                height(node->right));
+                // int balanceFactor = getBalanceFactor(node);
+                // if (balanceFactor > 1) {
+                //     if (_cmp(_data.first, node->left->data->first)) {
+
+                //         return rightRotate(node);
+                //     }
+                //     else if (!_cmp(_data.first, node->left->data->first)) {
+
+                //         node->left = leftRotate(node->left);
+                //         return rightRotate(node);
+                //     }
+                // }
+                int balance = getBalance(node);
+                if (balance > 1 && _data.first < node->left->data->first)
+                    return rightRotate(node);
+            
+                // Right Right Case
+                if (balance < -1 && _data.first > node->right->data->first)
+                    return leftRotate(node);
+            
+                // Left Right Case
+                if (balance > 1 && _data.first > node->left->data->first)
+                {
+                    node->left = leftRotate(node->left);
+                    return rightRotate(node);
+                }
+            
+                // Right Left Case
+                if (balance < -1 && _data.first < node->right->data->first)
+                {
+                    node->right = rightRotate(node->right);
+                    return leftRotate(node);
+                }
+            
+                /* return the (unchanged) node pointer */
+                return node;
+                // avl_node *y = NULL;
+                // avl_node *x = t;
+
+                // while (x != NULL)
+                // {
+                //     y = x;
+                //     if (_cmp(t->data->first, x->data->first))
+                //         x = x->left;
+                //     else
+                //         x = x->right;
+                // }
+                // if (t)
+                //     t->parent = y;
+                // if (y == NULL)
+                //     t = newNode(_data);
+                // else if (_cmp(t->data->first, y->data->first))
+                //     y->left = newNode(_data);
+                // else
+                //     y->right = newNode(_data);
+                // return t;
+                // if (t == NULL)
+                // {
+                //     t = _rebind_alloc.allocate(1);
+                //     t->data = _alloc.allocate(1);
+                //     _alloc.construct(t->data, _data);
+                //     t->height = 0;
+                //     t->left = NULL;
+                //     t->right = NULL;
+                //     t->parent = NULL;
+                // }
+                // else if (_cmp(_data.first, t->data->first))
+                // {
+                //     t->left = insert(_data, t->left);
+                //     t->left->parent = t;
+                //     if(height(t->left) - height(t->right) == 2)
+                //     {
+                //         if(_data.first < t->left->data->first)
+                //             t = singleRightRotate(t);
+                //         else
+                //             t = doubleRightRotate(t);
+                //     }
+                // }
+                // else if (!_cmp(_data.first, t->data->first))
+                // {
+                //     t->right = insert(_data, t->right);
+                //     t->right->parent = t;
+                //     if(height(t->right) - height(t->left) == 2)
+                //     {
+                //         if(!_cmp(_data.first, t->right->data->first))
+                //             t = singleLeftRotate(t);
+                //         else
+                //             t = doubleLeftRotate(t);
+                //     }
+                // }
+                // t->height = max(height(t->left), height(t->right))+1;
+                // return t;
+            }
+            // Rotate right
+            avl_node *rightRotate(avl_node *y) {
+            
+                if (y) {
+
+                    avl_node *x = y->left;
+                    avl_node *T2 = x->right;
+                    x->right = y;
+                    y->left = T2;
+                    y->height = max(height(y->left), height(y->right)) + 1;
+                    x->height = max(height(x->left), height(x->right)) + 1;
+                    return x;
+                }
+                return y;
             }
 
-            avl_node* singleLeftRotate(avl_node* &t)
-            {
-                if (t == NULL)
-                    return t;
-                avl_node* u = t->right;
-                if (u == NULL)
-                    return t;
-                t->right = u->left;
-                u->left = t;
-                t->height = max(height(t->left), height(t->right))+1;
-                u->height = max(height(t->right), t->height)+1 ;
-                return u;
+            // Rotate left
+            avl_node *leftRotate(avl_node *x) {
+
+                if (x) {
+                    avl_node *y = x->right;
+                    avl_node *T2 = y->left;
+                
+                    y->left = x;
+                    x->right = T2;
+                    x->height = max(height(x->left), height(x->right)) + 1;
+                    y->height = max(height(y->left), height(y->right)) + 1;
+                    return y;
+                }
+                return x;
             }
+
 
             avl_node *treeMaximum(avl_node *x) const {
             
@@ -285,30 +376,6 @@ namespace ft {
                 std::cout << t->data->first << "|";
                 std::cout << " " << t->data->second << " " << "parent : " << t->parent << std::endl;
                 inorder(t->right);
-            }
-            avl_node *leftMostNode( void ) const  {
-            
-                avl_node *tmp = root;
-
-                // if (tmp->parent == NULL)
-                //     return tmp;
-            
-                // if (tmp && tmp->left == NULL)
-                //     return tmp;
-                while (tmp != NULL && tmp->left) 
-                    tmp = tmp->left;
-                return tmp;                
-            }
-            avl_node *rightMostNode( void ) const  {
-            
-                avl_node *tmp = root;
-            
-                // if (tmp && tmp->right == NULL)
-                //     return tmp;
-                // if ()
-                while (tmp != NULL && tmp->right != NULL) 
-                    tmp = tmp->right;
-                return tmp;                
             }
             avl()
             {

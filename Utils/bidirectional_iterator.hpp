@@ -70,61 +70,14 @@ namespace ft {
             pair* operator->() const { if (_current) {return _current->data;} return NULL;}
             
             mapiterator& operator--() {
-               node *tmp = _current->parent;
-                _current = tmp->left;
+            
+                _current = root.treePredecessor(_current);
                 return *this;
             }
             mapiterator operator++(int)  {
 
                 _current = root.treeSuccessor(_current);
-                // node *p;
-                
-                // if (_current == nullptr)
-                //     {
-                //     // ++ from end(). get the root of the tree
-                //     // _current = tree->root;
-                    
-                //     // error! ++ requested for an empty tree
-                //     // if (_current == nullptr)
-                //     //     throw UnderflowException { };
-                    
-                //     // move to the smallest value in the tree,
-                //     // which is the first node inorder
-                //         while (_current->left != nullptr) {
-                //             _current = _current->left;
-                //         }
-                //     }
-                //     else if (_current->right != nullptr)
-                //     {
-                //         // successor is the farthest left node of
-                //         // right subtree
-                //         _current = _current->right;
-                        
-                //         while (_current->left != nullptr) {
-                //          _current = _current->left;
-                //         }
-                //     }
-                //     else
-                //     {
-                //         // have already processed the left subtree, and
-                //         // there is no right subtree. move up the tree,
-                //         // looking for a parent for which _current is a left child,
-                //         // stopping if the parent becomes NULL. a non-NULL parent
-                //         // is the successor. if parent is NULL, the original node
-                //         // was the last node inorder, and its successor
-                //         // is the end of the list
-                //         p = _current->parent;
-                //         while (p != nullptr && _current == p->right)
-                //         {
-                //             _current = p;
-                //             p = p->parent;
-                //         }
-                        
-                //         // if we were previously at the right-most node in
-                //         // the tree, _current = nullptr, and the iterator specifies
-                //         // the end of the list
-                //         _current = p;
-                //     }
+                // _save = _current;
                 
                 return *this;
             }
