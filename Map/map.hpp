@@ -79,7 +79,7 @@ namespace ft {
                 // _rp = NULL;
                 for (iterator it = first; it != last; it++) {
 
-                    _tree.insert(*it);
+                    _tree.root = _tree.insert(_tree.root, *it);
                     _size++;
                 }
             }
@@ -167,7 +167,7 @@ namespace ft {
                 iterator it = find(k);
 
                 if (it == end()) {
-                    _tree.insert(make_pair< key_type, mapped_type>(k, mapped_type()));
+                    _tree.root = _tree.insert(_tree.root, make_pair< key_type, mapped_type>(k, mapped_type()));
                     return find(k)->second;
                 }
                 return (*it).second;
@@ -186,7 +186,7 @@ namespace ft {
                 std::cout << (it != end()) << std::endl;
                 if (it != end()) { return pair<iterator, bool>(it, false); }
 
-                _tree.insert(val);
+                _tree.insert(_tree.root, val);
                 // _root.insert(val);
                 _size++;
                 return pair<const_iterator, bool>(begin(), true);
