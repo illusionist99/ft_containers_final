@@ -153,6 +153,7 @@ namespace ft {
 
                         avl_node *n;
                         n = _rebind_alloc.allocate(1);
+                        
                         n->data = _alloc.allocate(1);
                         _alloc.construct(n->data, data);
                         // n->data = data;

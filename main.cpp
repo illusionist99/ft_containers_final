@@ -23,7 +23,7 @@ int main ()
   c.second = 50;
   first['a']=10;
   first['b']=30;
-  // first['c']=50;
+  first['c']=50;
   // first.insert(a);
   // first.insert(b);
   // first.insert(c);

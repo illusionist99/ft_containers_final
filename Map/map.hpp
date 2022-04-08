@@ -186,7 +186,7 @@ namespace ft {
                 std::cout << (it != end()) << std::endl;
                 if (it != end()) { return pair<iterator, bool>(it, false); }
 
-                _tree.insert(_tree.root, val);
+                _tree.root = _tree.insert(_tree.root, val);
                 // _root.insert(val);
                 _size++;
                 return pair<const_iterator, bool>(begin(), true);
