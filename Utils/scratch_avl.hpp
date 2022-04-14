@@ -455,6 +455,8 @@ namespace ft {
             }
             avl_node *treeSuccessor(avl_node *x) {
             
+                if (x == NULL)
+                    return NULL;
                 if (x->right != NULL)
                     return treeMinimum(x->right);
                 avl_node *y = x->parent;

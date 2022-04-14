@@ -26,6 +26,8 @@ int main( void ) {
     // std::cout << std::addressof(p._root->right) << " " << std::addressof(p._root->left) << std::endl;
     p.insert(p, c);
     p.InorderTreeWalk(p._root, "root");
+    // p.TreeDelete(p, p._root->right->right);
     // std::cout << p._root->left->data->first << std::endl;
+    // p.InorderTreeWalk(p._root, "root");
     return 0;
 }

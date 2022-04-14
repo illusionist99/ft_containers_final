@@ -458,7 +458,7 @@ namespace ft {
     template <class T, class Alloc>
     bool operator<  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
 
-        return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     };
 
     template <class T, class Alloc>
@@ -470,7 +470,7 @@ namespace ft {
     template <class T, class Alloc>
     bool operator>  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
  
-        return (lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+        return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
 
     };
 

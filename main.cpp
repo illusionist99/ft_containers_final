@@ -15,18 +15,18 @@ int main ()
 
   ft::pair<char, int> a, b, c;
 
-  a.first = 'a';
-  a.second = 10;
-  b.first = 'b';
-  b.second = 30;
-  c.first = 'c';
-  c.second = 50;
-  first['a']=10;
-  first['b']=30;
-  first['c']=50;
-  // first.insert(a);
-  // first.insert(b);
-  // first.insert(c);
+  // a.first = 'a';
+  // a.second = 10;
+  // b.first = 'b';
+  // b.second = 30;
+  // c.first = 'c';
+  // c.second = 50;
+  // first['a']=10;
+  // first['b']=30;
+  // first['c']=50;
+  first.insert(a);
+  first.insert(b);
+  first.insert(c);
   // first['d']=70;
 
   ft::Map<char,int> second (first.begin(),first.end());

@@ -21,7 +21,8 @@ namespace ft {
     class Compare = std::less<Key>,
     class Alloc = std::allocator<T> >
     class BstTree {
-public:
+    
+    public:
         typedef    BstNode<Key, T> BstNode;
         BstNode *_root;
     
@@ -201,7 +202,7 @@ public:
     {
         if (N == NULL)
             return 0;
-        return N->height;
+        return calheight(N);
     }
         BstNode *rightRotate(BstNode *y)
         {
@@ -248,16 +249,37 @@ public:
             // Return new root
             return y;
         }
+
+        bool    compare(pair<const Key, T> *a, pair<const Key, T> *b) {
+        
+            if (a == NULL && b == NULL)
+                return true;
+            else if (a == NULL || b == NULL) {
+            
+                if (a == NULL && b != NULL) {
+                
+                    return _cmp(b->first, Key());
+                }
+                else
+                    return _cmp(a->first, Key());
+            }
+            return (_cmp(a->first, b->first));
+        }
         void    insert(BstTree  &src, pair<const Key, T> data) {
         
             BstNode *y = nullptr;
             BstNode *x = src._root;
             BstNode *n = _NodeAlloc.allocate(1);
+
             n->data = _PairAlloc.allocate(1);
             _PairAlloc.construct(n->data, data);
             n->left = NULL;
             n->right = NULL;
+            n->parent = NULL;
             n->height = 1;
+
+
+
             while (x != NULL)
             {
                 y = x;
@@ -275,39 +297,42 @@ public:
             else
                 y->right = n;            
             src._root->height = 1 + max(height(src._root->left), height(src._root->right));
-            int balance = getBalance(src._root);
+            int balance =  height(src._root->left) - height(src._root->right);
             std::cout << "Balance " << balance << std::endl;
             // If this src._root becomes unbalanced, then
             // there are 4 cases
         
+            
             // Left Left Case
-            if (balance > 1 && _cmp(n->data->first, src._root->left->data->first))
+            if (balance > 1 && src._root->left && compare(n->data, src._root->left->data))
                 src._root = rightRotate(src._root);
         
             // Right Right Case
-            if (balance < -1 && !_cmp(n->data->first, src._root->right->data->first))
+            if (balance < -1 && !compare(n->data, src._root->right->data))
                 src._root = leftRotate(src._root);
         
             // Left Right Case
-            if (balance > 1 && !_cmp(n->data->first, src._root->left->data->first))
+            if (balance > 1 &&   src._root->left && !compare(n->data, src._root->left->data))
             {
                 src._root->left = leftRotate(src._root->left);
                 src._root = rightRotate(src._root);
             }
         
             // Right Left Case
-            if (balance < -1 && _cmp(n->data->first, src._root->right->data->first))
+            if (balance < -1 && compare(n->data, src._root->right->data))
             {
                 src._root->right = rightRotate(src._root->right);
                 src._root = leftRotate(src._root);
             }
+            // balance =  height(src._root->left) - height(src._root->right);
+            // std::cout << "Balance " << balance << std::endl;
         }
 
-        void    SubTreeShift(BstTree const &src, BstNode *u, BstNode *v) {
+        void    SubTreeShift(BstTree &src, BstNode *u, BstNode *v) {
         
             if (u->parent == NULL)
                 src._root = v;
-            else if ((u == u->parent->left))
+            else if (u == u->parent->left)
                 u->parent->left = v;
             else
                 u->parent->right = v;
@@ -315,7 +340,7 @@ public:
                 v->parent = u->parent;
         }
 
-        void    TreeDelete(BstTree const &src, BstNode *z) {
+        void    TreeDelete(BstTree &src, BstNode *z) {
         
             if (z->left == NULL)
                 SubTreeShift(src, z, z->right);
