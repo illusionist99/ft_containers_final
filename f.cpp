@@ -22,8 +22,8 @@ int main( void ) {
     tree.insert(14);
     tree.insert(15);
 
-    tree.Delete(15);
-    tree.Delete(12);
+    // tree.Delete(12);
+    // tree.Delete(15);
     tree.print2D();
     return 0;
 }

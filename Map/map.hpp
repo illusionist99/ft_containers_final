@@ -4,7 +4,8 @@
 # include "../Utils/pair.hpp"
 # include "../Utils/iterator.hpp"
 # include "../Utils/reverse_iterator.hpp"
-# include "../Utils/avl_tree.hpp"
+// # include "../Utils/avl_tree.hpp"
+# include "../Utils/avlTree.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
 // # include "../Utils/avl.hpp"
 
@@ -12,22 +13,6 @@ namespace ft {
 
 
 
-    // template <class Key, class T, class Compare, class Alloc>
-    // class Map<Key,T,Compare,Alloc>::value_compare
-    // {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
-    //     friend class Map;
-    //     protected:
-    //     Compare comp;
-    //     value_compare (Compare c) : comp(c) {}  // constructed with Map's comparison object
-    //     public:
-    //     typedef bool result_type;
-    //     typedef value_type first_argument_type;
-    //     typedef value_type second_argument_type;
-    //     bool operator() (const value_type& x, const value_type& y) const
-    //     {
-    //         return comp(x.first, y.first);
-    //     }
-    // };
 
     template < class Key,                                     // Map::key_type
     class T,                                                 // Map::mapped_type
@@ -53,19 +38,17 @@ namespace ft {
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
             typedef size_t size_type;
+            size_type _size;
+            Alloc _allocator;
             // typedef node<key_type, mapped_type, key_compare ,allocator_type> node;
 
-            allocator_type  _allocator;
-            key_compare     _keyc;
-            avl<const Key, T, Compare, Alloc> _tree;
-            size_type       _size;
+            avl_tree<const Key, T, Compare, Alloc> _tree;
 
             explicit Map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
-                _allocator = alloc;
-                _keyc = comp;
                 _size = 0;
+                _allocator = alloc;
             }
 
             template <class InputIterator>
@@ -74,13 +57,12 @@ namespace ft {
             const allocator_type& alloc = allocator_type()) {
             // typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type = InputIterator(_tree.root)) {
             
-                _keyc = comp;
-                _allocator = alloc;
                 // _rp = NULL;
+                _size = 0;
                 for (iterator it = first; it != last; it++) {
 
-                    _tree.root = _tree.insert(_tree.root, *it);
-                    _size++;
+                    _tree.insert(*it);
+                    _size += 1;
                 }
             }
 
@@ -93,24 +75,23 @@ namespace ft {
 
             Map& operator= (const Map& x) {
             
-                if (_size > 0)
-                    clear();
+                _size = 0;
                 for (iterator it = x.begin(); it != x.end(); it++) {
 
                     _tree.insert(*it);
-                    _size++;
+                    _size += 1;
                 }
                 return *this;
             }
 
             iterator begin() {
 
-                return iterator(_tree.treeMinimum(_tree.root));
+                return iterator(_tree.root);
             }
 
             const_iterator begin() const {
         
-                return iterator(_tree.treeMinimum(_tree.root));
+                return iterator(_tree.root);
             }
 
             iterator end() {
@@ -167,7 +148,7 @@ namespace ft {
                 iterator it = find(k);
 
                 if (it == end()) {
-                    _tree.root = _tree.insert(_tree.root, make_pair< key_type, mapped_type>(k, mapped_type()));
+                    _tree.insert( make_pair< key_type, mapped_type>(k, mapped_type()));
                     return find(k)->second;
                 }
                 return (*it).second;
@@ -186,8 +167,8 @@ namespace ft {
                 std::cout << (it != end()) << std::endl;
                 if (it != end()) { return pair<iterator, bool>(it, false); }
 
-                _tree.root = _tree.insert(_tree.root, val);
-                // _root.insert(val);
+                // _tree.root = _tree.insert(_tree.root, val);
+                _tree.insert(val);
                 _size++;
                 return pair<const_iterator, bool>(begin(), true);
             }

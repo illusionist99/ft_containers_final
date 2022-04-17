@@ -21,8 +21,8 @@ namespace ft {
     class avl_tree {
     
 
-            typedef node<Key, T> node;
-            node *_root;
+            typedef node< const Key, T> node;
+          
             typedef typename Alloc::template rebind<node>::other rebind_allocator;
             typedef typename Alloc::template rebind<pair<const Key, T> >::other _allocator;
         
@@ -31,18 +31,18 @@ namespace ft {
             Compare _cmp;
 
         public:
-
+            node *root;
             avl_tree() {
 
-                _root = NULL;
+                root = NULL;
             }
-            avl_tree( const avl_tree &obj) {
+            avl_tree( avl_tree &obj) {
             
-                _root = obj._root;
+                root = obj.root;
             }
-            avl_tree &operator=(const avl_tree &obj) {
+            avl_tree &operator=(avl_tree &obj) {
             
-                _root = obj._root;
+                root = obj.root;
                 return *this;
             }
 
@@ -113,7 +113,7 @@ namespace ft {
 
                     return allocateNode(data);
                 }
-                
+                // root->parent = root;
                 if (_cmp(data.first, root->data->first)) {
             
                     root->left = insertNode(root->left, data);
@@ -156,10 +156,53 @@ namespace ft {
                 /* return the (unchanged) node pointer */
                 return root;
             }
+            node *treeMaximum(node *x) const {
+            
+                if (x == NULL)
+                    return NULL;
+                while (x->right != NULL)
+                    x = x->right;
+                return x;
+            }
+            node *treeMinimum(node *x) const {
+            
+                if (x == NULL)
+                    return NULL;
+                while (x->left != NULL)
+                    x = x->left;
+                return x;
+            }
 
+            node *treeSuccessor(node *x) {
+            
+                if (x == NULL)
+                    return NULL;
+                if (x->right != NULL)
+                    return treeMinimum(x->right);
+                node *y = x->parent;
+                while (y != NULL && (x == y->right)) {
+                
+                    x = y;
+                    y = y->parent;
+                }
+                return y;
+            }
+            node *treePredecessor(node *x) {
+
+            
+                if (x->left != NULL)
+                    return treeMaximum(x->left);
+                node *y = x->parent;
+                while (y != NULL && (x = y->left)) {
+                
+                    x = y;
+                    y = y->parent;
+                }
+                return y;
+            }
             void    insert( pair<const Key, T> data ) {
             
-                _root = insertNode(_root, data);
+                root = insertNode(root, data);
             }
 
             node *minValueNode(node *node) {
@@ -176,7 +219,7 @@ namespace ft {
 
             void    Delete(pair<const Key, T> key) {
             
-                _root = deleteNode(_root, key);
+                root = deleteNode(root, key);
             }
             node* deleteNode(node* root, pair<const Key, T> key)
             {
@@ -313,7 +356,7 @@ namespace ft {
             void print2D( void )
             {
                 // Pass initial space count as 0
-                print2DUtil(_root, 0);
+                print2DUtil(root, 0);
             }
 
             ~avl_tree() {

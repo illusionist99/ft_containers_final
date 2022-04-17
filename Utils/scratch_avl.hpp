@@ -460,8 +460,6 @@ namespace ft {
                 if (x->right != NULL)
                     return treeMinimum(x->right);
                 avl_node *y = x->parent;
-                if (!y)
-                    return NULL;
                 while (y != NULL && (x == y->right)) {
                 
                     x = y;

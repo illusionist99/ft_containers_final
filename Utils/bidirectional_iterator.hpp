@@ -2,8 +2,9 @@
 
 # include <iostream>
 # include "pair.hpp"
-# include "scratch_avl.hpp"
+// # include "scratch_avl.hpp"
 # include "iterator.hpp"
+# include "avlTree.hpp"
 
 namespace ft {
 
@@ -28,10 +29,9 @@ namespace ft {
     
             operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<const Key, T, Compare, Alloc>(_current); }
 
-            typedef typename avl<const Key, T, Compare, Alloc>::avl_node node;
-            typedef avl<const Key, T, Compare, Alloc> tree;
+            typedef node< Key, T> node;
             node *_current;
-            tree root;
+            avl_tree<Key, T, Compare, Alloc> tree;
             pair *_safe;
             Alloc _alloc;
             typedef typename Alloc::template rebind<node>::other rebind_allocator;
@@ -39,7 +39,9 @@ namespace ft {
             mapiterator( ) { _current = NULL;}
             mapiterator( node * current ) : _current(current) {
 
-                root.root = current;
+                // root.root = current;
+                tree.root = current;
+
                 if (_current == NULL) {
                     
                     // pair *_safe;
@@ -67,21 +69,19 @@ namespace ft {
             }
 
             pair& operator*() const { if (_current == NULL) {return *_safe;} return *_current->data;}
-            pair* operator->() const { if (_current) {return _current->data;} return NULL;}
+            pair* operator->() const { return _current->data;}
             
             mapiterator& operator--() {
             
-                _current = root.treePredecessor(_current);
+                _current = tree.treePredecessor(_current);
                 return *this;
             }
             mapiterator operator++(int)  {
 
-                _current = root.treeSuccessor(_current);
-                // _save = _current;
-                
+                _current = tree.treeSuccessor(_current);
                 return *this;
             }
-            mapiterator operator--(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->left; return tmp;}
+            // mapiterator operator--(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->left; return tmp;}
             // mapiterator operator+(const mapiterator& rhs) {return mapiterator(_root+rhs._root);}
             bool operator==(const mapiterator& rhs) const {if (_current && rhs._current) {return _current->data == rhs._current->data;} return (_current == rhs._current);}
             bool operator!=(const mapiterator& rhs) const {if (_current && rhs._current) {return _current->data != rhs._current->data;} return (_current != rhs._current);}

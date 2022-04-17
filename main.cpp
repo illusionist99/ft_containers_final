@@ -13,17 +13,23 @@ int main ()
 {
   ft::Map<char,int> first;
 
-  ft::pair<char, int> a, b, c;
+  ft::pair<char, int> a, b, c, d, e;
 
-  // a.first = 'a';
-  // a.second = 10;
-  // b.first = 'b';
-  // b.second = 30;
-  // c.first = 'c';
-  // c.second = 50;
-  // first['a']=10;
-  // first['b']=30;
-  // first['c']=50;
+  a.first = 'b';
+  a.second = 100;
+  b.first = 'a';
+  b.second = 200;
+  c.first = 'c';
+  c.second = 300;
+  d.first = 'g';
+  d.second = 550;
+  e.first = 'k';
+  e.second = '210';
+  // first['b'] = 100;
+  // first['a'] = 200;
+  // first['c'] = 300;
+  first.insert(d);
+  first.insert(e);
   first.insert(a);
   first.insert(b);
   first.insert(c);
@@ -37,7 +43,10 @@ int main ()
 
   bool(*fn_pt)(char,char) = fncomp;
   ft::Map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
-  for (ft::Map<char, int>::iterator it = first.begin(); it != first.end(); it++) { std::cout << it->first << std::endl;}
+  for (ft::Map<char, int>::iterator it = first.begin(); it != first.end(); it++) {
+  
+    std::cout << it->first << std::endl;
+  }
   return 0;
 }
 
