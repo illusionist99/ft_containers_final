@@ -24,7 +24,7 @@ int main ()
   d.first = 'g';
   d.second = 550;
   e.first = 'k';
-  e.second = '210';
+  e.second = 210;
   // first['b'] = 100;
   // first['a'] = 200;
   // first['c'] = 300;
@@ -34,7 +34,7 @@ int main ()
   first.insert(b);
   first.insert(c);
   // first['d']=70;
-
+  first._tree.print2D();
   ft::Map<char,int> second (first.begin(),first.end());
 
   ft::Map<char,int> third (second);

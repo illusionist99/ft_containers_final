@@ -86,12 +86,12 @@ namespace ft {
 
             iterator begin() {
 
-                return iterator(_tree.root);
+                return iterator(_tree.minValueNode(_tree.root));
             }
 
             const_iterator begin() const {
         
-                return iterator(_tree.root);
+                return iterator(_tree.minValueNode(_tree.root));
             }
 
             iterator end() {

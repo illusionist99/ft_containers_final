@@ -60,7 +60,7 @@ namespace ft {
                 n->right = nullptr;
                 n->left = nullptr;
                 n->height = 1;
-                
+                // n->parent = n;
                 return (n);
             }
             int     getBalance(node *n) {
@@ -113,14 +113,16 @@ namespace ft {
 
                     return allocateNode(data);
                 }
-                // root->parent = root;
+                
                 if (_cmp(data.first, root->data->first)) {
             
                     root->left = insertNode(root->left, data);
+                    root->left->parent = root;
                 }
                 else if (!_cmp(data.first, root->data->first)) {
                 
                     root->right = insertNode(root->right, data);
+                    root->right->parent = root;
                 }
                 else
                     return root;
@@ -156,58 +158,16 @@ namespace ft {
                 /* return the (unchanged) node pointer */
                 return root;
             }
-            node *treeMaximum(node *x) const {
-            
-                if (x == NULL)
-                    return NULL;
-                while (x->right != NULL)
-                    x = x->right;
-                return x;
-            }
-            node *treeMinimum(node *x) const {
-            
-                if (x == NULL)
-                    return NULL;
-                while (x->left != NULL)
-                    x = x->left;
-                return x;
-            }
 
-            node *treeSuccessor(node *x) {
-            
-                if (x == NULL)
-                    return NULL;
-                if (x->right != NULL)
-                    return treeMinimum(x->right);
-                node *y = x->parent;
-                while (y != NULL && (x == y->right)) {
-                
-                    x = y;
-                    y = y->parent;
-                }
-                return y;
-            }
-            node *treePredecessor(node *x) {
-
-            
-                if (x->left != NULL)
-                    return treeMaximum(x->left);
-                node *y = x->parent;
-                while (y != NULL && (x = y->left)) {
-                
-                    x = y;
-                    y = y->parent;
-                }
-                return y;
-            }
             void    insert( pair<const Key, T> data ) {
             
                 root = insertNode(root, data);
             }
 
-            node *minValueNode(node *node) {
+            node *minValueNode(node *a)  const {
             
-                // node a = node;
+                node *node = a;
+                if (node != NULL)
                 while (node->left != NULL)
                     node = node->left;
                 return node;
@@ -346,8 +306,8 @@ namespace ft {
                 std::cout << std::endl;
                 for (int i = 1; i < space; i++)
                     std::cout<<" ";
-                std::cout<<root->data->first<<"\n";
-            
+                std::cout<<root->data->first<<" ";
+                std::cout << root->parent << "\n";
                 // Process left child
                 print2DUtil(root->left, space);
             }

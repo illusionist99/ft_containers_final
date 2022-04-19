@@ -8,8 +8,6 @@
 
 namespace ft {
 
-
-
     template < class Key,                           // map::key_type
     class T,                                       // map::mapped_type
     class Compare = std::less<Key>,               // map::key_compare
@@ -29,56 +27,88 @@ namespace ft {
     
             operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<const Key, T, Compare, Alloc>(_current); }
 
-            typedef node< Key, T> node;
+            typedef node<const Key, T> node;
             node *_current;
-            avl_tree<Key, T, Compare, Alloc> tree;
-            pair *_safe;
-            Alloc _alloc;
-            typedef typename Alloc::template rebind<node>::other rebind_allocator;
-            rebind_allocator _alloc_rebind;
+            pair *currentData;
             mapiterator( ) { _current = NULL;}
-            mapiterator( node * current ) : _current(current) {
-
-                // root.root = current;
-                tree.root = current;
-
-                if (_current == NULL) {
-                    
-                    // pair *_safe;
-                    // _current = _alloc_rebind.allocate(1);
-                    // _current->data = _alloc.allocate(1);
-                    // _alloc.construct(_current->data, pair());
-                    // _safe = _alloc.allocate(1);
-                    // node tmp;
-                    // _current = &tmp;
-                } 
+        
+            mapiterator( node * current ) {
+            
+                if (current)
+                    currentData = current->data;
+                _current = current;
             }
             ~mapiterator() {
             
         
             }
+            node *treeMaximum(node *x) const {
+            
+                if (x == NULL)
+                    return NULL;
+                while (x->right != NULL)
+                    x = x->right;
+                return x;
+            }
+            node *treeMinimum(node *x) const {
+            
+                if (x == NULL)
+                    return NULL;
+                while (x->left != NULL)
+                    x = x->left;
+                return x;
+            }
+
+            node *treeSuccessor(node *x) {
+            
+                if (x == NULL)
+                    return NULL;
+                if (x->right != NULL)
+                    return treeMinimum(x->right);
+                node *y = x->parent;
+                while (y != NULL && (x == y->right)) {
+                
+                    x = y;
+                    y = y->parent;
+                }
+                return y;
+            }
+            node *treePredecessor(node *x) {
+
+                if (x->left != NULL)
+                    return treeMaximum(x->left);
+                node *y = x->parent;
+                while (y != NULL && (x = y->left)) {
+                
+                    x = y;
+                    y = y->parent;
+                }
+                return y;
+            }
             mapiterator( const mapiterator& obj ) {
 
                 _current = obj._current;
+                currentData = obj.currentData;
             }
     
             mapiterator &operator=(const mapiterator& obj ) {
 
                 _current = obj._current;
+                currentData = obj.currentData;
                 return *this;
             }
 
-            pair& operator*() const { if (_current == NULL) {return *_safe;} return *_current->data;}
+            pair& operator*() const { if (_current == NULL) {return *currentData;} return *_current->data;}
             pair* operator->() const { return _current->data;}
             
             mapiterator& operator--() {
             
-                _current = tree.treePredecessor(_current);
+                _current = treePredecessor(_current);
                 return *this;
             }
             mapiterator operator++(int)  {
 
-                _current = tree.treeSuccessor(_current);
+                _current = treeSuccessor(_current);
                 return *this;
             }
             // mapiterator operator--(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->left; return tmp;}
