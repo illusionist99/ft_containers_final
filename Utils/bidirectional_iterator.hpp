@@ -99,7 +99,7 @@ namespace ft {
             }
 
             pair& operator*() const { if (_current == NULL) {return *currentData;} return *_current->data;}
-            pair* operator->() const { return _current->data;}
+            pair* operator->() const { if (_current == NULL) {return currentData;} return _current->data;}
             
             mapiterator& operator--() {
             
@@ -109,6 +109,8 @@ namespace ft {
             mapiterator operator++(int)  {
 
                 _current = treeSuccessor(_current);
+                if (_current != NULL)
+                    currentData = _current->data;
                 return *this;
             }
             // mapiterator operator--(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->left; return tmp;}

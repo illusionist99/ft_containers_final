@@ -145,6 +145,7 @@ namespace ft {
                 if (balance > 1  && !_cmp(data.first, root->left->data->first))
                 {
                     root->left = leftRotate(root->left);
+                    root->left->parent = root;
                     return rightRotate(root);
                 }
             
@@ -152,6 +153,7 @@ namespace ft {
                 if (balance < -1  && _cmp(data.first, root->right->data->first))
                 {
                     root->right = rightRotate(root->right);
+                    root->right->parent = root;
                     return leftRotate(root);
                 }
             
