@@ -10,7 +10,7 @@ int main( void ) {
 
 
     ft::pair<const char, int> a('a',10), b('b',30), c('c',50);
-
+    ft::node<const char, int> *root = NULL;
     // a.first = 'a';
     // a.second = 10;
     // b.first = 'b';
@@ -20,13 +20,17 @@ int main( void ) {
     // first['a']=10;
     // first['b']=30;
     // first['c']=50;
-    p.insert(a);
-    // std::cout << p._root->data->first << std::endl;
-    p.insert(b);
+
+        // // std::cout << p._root->data->first << std::endl;
+    root = p.Insert(root, NULL, b);
+    root =  p.Insert(root, NULL, c);
+
+    root = p.Insert(root, NULL, a);
+
+
     // std::cout << std::addressof(p._root->right) << " " << std::addressof(p._root->left) << std::endl;
-    p.insert( c);
     // p.Delete(a);
-    // p.print2D();
+    p.print2D(root);
     //    tree.print2D();
     // p.TreeDelete(p, p._root->right->right);
     // std::cout << p._root->left->data->first << std::endl;

@@ -107,22 +107,25 @@ namespace ft {
                 return y;
             }
 
-            node    *insertNode(node *root, pair<const Key, T> data ) {
+            node    *insertNode(node *root, node *parent, pair<const Key, T> data ) {
             
                 if (root == nullptr) {
 
-                    return allocateNode(data);
+                    root = allocateNode(data);
+                    root->parent = parent;
+                    return root;
                 }
                 
                 if (_cmp(data.first, root->data->first)) {
             
-                    root->left = insertNode(root->left, data);
-                    root->left->parent = root;
+                    root->left = insertNode(root->left, root, data);
+                    // if (root->left->right == NULL and root->left->left == NULL)
+                    //     root->left->parent = root;
                 }
                 else if (!_cmp(data.first, root->data->first)) {
                 
-                    root->right = insertNode(root->right, data);
-                    root->right->parent = root;
+                    root->right = insertNode(root->right, root, data);
+                    // root->right->parent = root;
                 }
                 else
                     return root;
@@ -163,16 +166,16 @@ namespace ft {
 
             void    insert( pair<const Key, T> data ) {
             
-                root = insertNode(root, data);
+                root = insertNode(root, root, data);
             }
 
-            node *minValueNode(node *a)  const {
+            node *minValueNode(node *a) const {
             
-                node *node = a;
-                if (node != NULL)
-                while (node->left != NULL)
-                    node = node->left;
-                return node;
+                // node *node = a;
+                if (a != NULL)
+                    while (a->left != NULL)
+                        a = a->left;
+                return a;
             }
             // Recursive function to delete a node
             // with given key from subtree with

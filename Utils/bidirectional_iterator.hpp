@@ -4,7 +4,7 @@
 # include "pair.hpp"
 // # include "scratch_avl.hpp"
 # include "iterator.hpp"
-# include "avlTree.hpp"
+# include "tree.hpp"
 
 namespace ft {
 
@@ -62,7 +62,7 @@ namespace ft {
             node *treeSuccessor(node *x) {
             
                 if (x == NULL)
-                    return NULL;
+                    return x;
                 if (x->right != NULL)
                     return treeMinimum(x->right);
                 node *y = x->parent;

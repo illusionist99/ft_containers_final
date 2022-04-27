@@ -32,7 +32,9 @@ namespace ft {
         Compare _cmp;
     public: 
 
-        node *root;
+        // node *root;
+        avl() {} 
+            // root = NULL; }
         int max( int a, int b) { return a > b ?  a : b; }
         // Function to print the preorder
         // traversal of the AVL tree
@@ -83,124 +85,125 @@ namespace ft {
         }
     }
     
-    // Function to handle Left Left Case
-    node* LLR(node* root)
-    {
-        // Create a reference to the
-        // left child
-        node* tmpnode = root->left;
-    
-        // Update the left child of the
-        // root to the right child of the
-        // current left child of the root
-        root->left = tmpnode->right;
-    
-        // Update parent pointer of left
-        // child of the root node
-        if (tmpnode->right != NULL)
-            tmpnode->right->par = root;
-    
-        // Update the right child of
-        // tmpnode to root
-        tmpnode->right = root;
-    
-        // Update parent pointer of tmpnode
-        tmpnode->par = root->par;
-    
-        // Update the parent pointer of root
-        root->par = tmpnode;
-    
-        // Update tmpnode as the left or
-        // the right child of its parent
-        // pointer according to its key value
-        if (tmpnode->par != NULL
-            && root->data->first < tmpnode->par->data->first) {
-            tmpnode->par->left = tmpnode;
+        node* LLR(node* root) {
+            // Create a reference to the
+            // left child
+            node* tmpnode = root->left;
+
+            // Update the left child of the
+            // root to the right child of the
+            // current left child of the root
+            root->left = tmpnode->right;
+
+            // Update parent pointer of the
+            // left child of the root node
+            if (tmpnode->right != NULL)
+                tmpnode->right->par = root;
+
+            // Update the right child of
+            // tmpnode to root
+            tmpnode->right = root;
+
+            // Update parent pointer of
+            // the tmpnode
+            tmpnode->par = root->par;
+
+            // Update the parent pointer
+            // of the root
+            root->par = tmpnode;
+
+            // Update tmpnode as the left or the
+            // right child of its parent pointer
+            // according to its key value
+            if (tmpnode->par != NULL
+                && _cmp(root->key, tmpnode->par->key)) {
+                tmpnode->par->left = tmpnode;
+            }
+            else {
+                if (tmpnode->par != NULL)
+                    tmpnode->par->right = tmpnode;
+            }
+
+            // Make tmpnode as the new root
+            root = tmpnode;
+
+            // Update the heights
+            Updateheight(root->left);
+            Updateheight(root->right);
+            Updateheight(root);
+            Updateheight(root->par);
+
+            // Return the root node
+            return root;
         }
-        else {
-            if (tmpnode->par != NULL)
-                tmpnode->par->right = tmpnode;
+
+        // Function to handle Right Right Case
+        node* RRR(node* root) {
+            // Create a reference to the
+            // right child
+            node* tmpnode = root->right;
+
+            // Update the right child of the
+            // root as the left child of the
+            // current right child of the root
+            root->right = tmpnode->left;
+
+            // Update parent pointer of the
+            // right child of the root node
+            if (tmpnode->left != NULL)
+                tmpnode->left->par = root;
+
+            // Update the left child of the
+            // tmpnode to root
+            tmpnode->left = root;
+
+            // Update parent pointer of
+            // the tmpnode
+            tmpnode->par = root->par;
+
+            // Update the parent pointer
+            // of the root
+            root->par = tmpnode;
+
+            // Update tmpnode as the left or
+            // the right child of its parent
+            // pointer according to its key value
+            if (tmpnode->par != NULL
+                && _cmp(root->key, tmpnode->par->key)) {
+                tmpnode->par->left = tmpnode;
+            }
+            else {
+                if (tmpnode->par != NULL)
+                    tmpnode->par->right = tmpnode;
+            }
+
+            // Make tmpnode as the new root
+            root = tmpnode;
+
+            // Update the heights
+            Updateheight(root->left);
+            Updateheight(root->right);
+            Updateheight(root);
+            Updateheight(root->par);
+
+            // Return the root node
+            return root;
         }
-    
-        // Make tmpnode as the new root
-        root = tmpnode;
-    
-        // Update the heights
-        Updateheight(root->left);
-        Updateheight(root->right);
-        Updateheight(root);
-        Updateheight(root->par);
-    
-        // Return the root node
-        return root;
-    }
-    
-    // Function to handle Right Right Case
-    node* RRR(node* root)
-    {
-        // Create a reference to the
-        // right child
-        node* tmpnode = root->right;
-    
-        // Update the right child of the
-        // root as the left child of the
-        // current right child of the root
-        root->right = tmpnode->left;
-    
-        // Update parent pointer of the
-        // right child of the root node
-        if (tmpnode->left != NULL)
-            tmpnode->left->par = root;
-    
-        // Update the left child of the
-        // tmpnode to root
-        tmpnode->left = root;
-    
-        // Update parent pointer of tmpnode
-        tmpnode->par = root->par;
-    
-        // Update the parent pointer of root
-        root->par = tmpnode;
-    
-        // Update tmpnode as the left or
-        // the right child of its parent
-        // pointer according to its key value
-        if (tmpnode->par != NULL
-            && root->data->first < tmpnode->par->data->first) {
-            tmpnode->par->left = tmpnode;
+
+        // Function to handle Left Right Case
+        node* LRR( node* root ) {
+            
+            root->left = RRR(root->left);
+            return LLR(root);
         }
-        else {
-            if (tmpnode->par != NULL)
-                tmpnode->par->right = tmpnode;
+
+        // Function to handle right left case
+        node* RLR( node* root ) {
+        
+            root->right = LLR(root->right);
+            return RRR(root);
         }
-    
-        // Make tmpnode as the new root
-        root = tmpnode;
-    
-        // Update the heights
-        Updateheight(root->left);
-        Updateheight(root->right);
-        Updateheight(root);
-        Updateheight(root->par);
-    
-        // Return the root node
-        return root;
-    }
-    
-    // Function to handle Left Right Case
-    node* LRR(node* root)
-    {
-        root->left = RRR(root->left);
-        return LLR(root);
-    }
-    
-    // Function to handle right left case
-    node* RLR(node* root)
-    {
-        root->right = LLR(root->right);
-        return RRR(root);
-    }
-    
+
     // Function to balance the tree after
     // deletion of a node
     node* Balance(node* root)
@@ -274,10 +277,10 @@ namespace ft {
         return root;
     }
     
-    void insert(pair<const Key, T> key) {
+    // void insert(pair<const Key, T> key) {
 
-        root = Insert(root, root, key);
-    }
+    //     root = Insert(root, root, key);
+    // }
 
     // Function to insert a node in
     // the AVL tree
@@ -287,7 +290,9 @@ namespace ft {
     
             // Create and assign values
             // to a new node
-            root = new node;
+            root = _NodeAlloc.allocate(1);
+            root->data = _PairAlloc.allocate(1);
+            _PairAlloc.construct(root->data, key);
             if (root == NULL)
                 std::cout << "Error in memory" << std::endl;
             else {
@@ -295,14 +300,15 @@ namespace ft {
                 root->left = NULL;
                 root->right = NULL;
                 root->par = parent;
-                root->data = &key;
+                // root->data = &key;
             }
+            // return root;
         }
         else if (!_cmp(root->data->first, key.first)) {
     
             // Recur to the left subtree
             // to insert the node
-            root->left = Insert(root->left,root, key);
+            root->left = Insert(root->left, root, key);
     
             // Store the heights of the
             // left and right subtree

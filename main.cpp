@@ -11,41 +11,29 @@ struct classcomp {
 
 int main ()
 {
-  ft::Map<char,int> first;
+  ft::map<char,int> first;
 
-  ft::pair<char, int> a, b, c, d, e;
+  first['a']=10;
+  std::cout << first['a'] << std::endl;
+  first['b']=30;
+  std::cout << first['b'] << std::endl;
+  first['c']=50;
+  std::cout << first['c'] << std::endl;
+  first['d']=70;
+  std::cout << first['d'] << std::endl;
 
-  a.first = 'b';
-  a.second = 100;
-  b.first = 'a';
-  b.second = 200;
-  c.first = 'c';
-  c.second = 300;
-  d.first = 'g';
-  d.second = 550;
-  e.first = 'k';
-  e.second = 210;
-  // first['b'] = 100;
-  // first['a'] = 200;
-  // first['c'] = 300;
-  first.insert(d);
-  first.insert(e);
-  first.insert(a);
-  first.insert(b);
-  first.insert(c);
-  // first['d']=70;
-  first._tree.print2D();
-  ft::Map<char,int> second (first.begin(),first.end());
+  ft::map<char,int> second (first.begin(),first.end());
 
-  ft::Map<char,int> third (second);
+  ft::map<char,int> third (second);
 
-  ft::Map<char,int,classcomp> fourth;                 // class as Compare
+  ft::map<char,int,classcomp> fourth;                 // class as Compare
 
   bool(*fn_pt)(char,char) = fncomp;
-  ft::Map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
-  for (ft::Map<char, int>::iterator it = first.begin(); it != first.end(); it++) {
+  ft::map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
+
+  for (ft::map<char, int>::iterator it = first.begin(); it != first.end(); it++) {
   
-    std::cout << it->first << std::endl;
+    std::cout << it->first << " ";
   }
   return 0;
 }

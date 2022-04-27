@@ -14,11 +14,11 @@ namespace ft {
 
 
 
-    template < class Key,                                     // Map::key_type
-    class T,                                                 // Map::mapped_type
-    class Compare = std::less<Key>,                         // Map::key_compare
-    class Alloc = std::allocator<pair<const Key,T> > >     // Map::allocator_type
-    class Map {
+    template < class Key,                                     // map::key_type
+    class T,                                                 // map::mapped_type
+    class Compare = std::less<Key>,                         // map::key_compare
+    class Alloc = std::allocator<pair<const Key,T> > >     // map::allocator_type
+    class map {
 
         public:
 
@@ -44,7 +44,7 @@ namespace ft {
 
             avl_tree<const Key, T, Compare, Alloc> _tree;
 
-            explicit Map (const key_compare& comp = key_compare(),
+            explicit map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
                 _size = 0;
@@ -52,7 +52,7 @@ namespace ft {
             }
 
             template <class InputIterator>
-            Map (InputIterator first, InputIterator last,
+            map (InputIterator first, InputIterator last,
             const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             // typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type = InputIterator(_tree.root)) {
@@ -66,14 +66,14 @@ namespace ft {
                 }
             }
 
-            Map (const Map& x) {
+            map (const map& x) {
             
                 *this = x;
             }
 
-            ~Map() { clear(); }
+            ~map() { clear(); }
 
-            Map& operator= (const Map& x) {
+            map& operator= (const map& x) {
             
                 _size = 0;
                 for (iterator it = x.begin(); it != x.end(); it++) {
@@ -134,8 +134,7 @@ namespace ft {
                 return end();
             }
             const_iterator find (const key_type& k) const {
-                if (_size == 0)
-                    return end();
+
                 for (iterator it = begin(); it != end(); it++) {
                     
                     if (*it->first == k)
