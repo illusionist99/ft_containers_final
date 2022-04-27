@@ -2,43 +2,71 @@
 #include <map>
 # include "Map/map.hpp"
 
-bool fncomp (char lhs, char rhs) {return lhs<rhs;}
-
-struct classcomp {
-  bool operator() (const char& lhs, const char& rhs) const
-  {return lhs<rhs;}
-};
 
 int main ()
 {
-  ft::map<char,int> first;
+  ft::map<char,int> mymap;
+  ft::map<char,int>::iterator it;
 
-  first['a']=10;
-  std::cout << first['a'] << std::endl;
-  first['b']=30;
-  std::cout << first['b'] << std::endl;
-  first['c']=50;
-  std::cout << first['c'] << std::endl;
-  first['d']=70;
-  std::cout << first['d'] << std::endl;
+  // insert some values:
+  mymap['a']=10;
+  mymap['b']=20;
+  mymap['c']=30;
+  mymap['d']=40;
+  mymap['e']=50;
+  mymap['f']=60;
 
-  ft::map<char,int> second (first.begin(),first.end());
+  it=mymap.find('b');
+  mymap.erase (it);                   // erasing by iterator
 
-  ft::map<char,int> third (second);
+  mymap.erase ('c');                  // erasing by key
 
-  ft::map<char,int,classcomp> fourth;                 // class as Compare
+  it=mymap.find ('e');
+  mymap.erase ( it, mymap.end() );    // erasing by range
 
-  bool(*fn_pt)(char,char) = fncomp;
-  ft::map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
+  // show content:
+  for (it=mymap.begin(); it!=mymap.end(); ++it)
+    std::cout << it->first << " => " << it->second << '\n';
 
-  for (ft::map<char, int>::iterator it = first.begin(); it != first.end(); it++) {
-  
-    std::cout << it->first << " ";
-  }
   return 0;
 }
+// int main ()
+// {
+//   ft::map<char,int> mymap;
 
-// # include "Vector/vector.hpp"
+//   // first insert function version (single parameter):
+//   mymap.insert ( ft::pair<char,int>('a',100) );
+//   mymap.insert ( ft::pair<char,int>('z',200) );
+
+//   ft::pair<ft::map<char,int>::iterator,bool> ret;
+//   ret = mymap.insert ( ft::pair<char,int>('z',500) );
+//   if (ret.second==false) {
+//     std::cout << "element 'z' already existed";
+//     std::cout << " with a value of " << ret.first->second << '\n';
+//   }
+
+//   // second insert function version (with hint position):
+//   ft::map<char,int>::iterator it = mymap.begin();
+//   mymap.insert (it, ft::pair<char,int>('b',300));  // max efficiency inserting
+//   mymap.insert (it, ft::pair<char,int>('c',400));  // no max efficiency inserting
+
+//   // third insert function version (range insertion):
+//   ft::map<char,int> anothermap;
+//   anothermap.insert(mymap.begin(),mymap.find('c'));
+
+//   // showing contents:
+//   std::cout << "mymap contains:\n";
+//   for (it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+
+//   std::cout << "anothermap contains:\n";
+//   for (it=anothermap.begin(); it!=anothermap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+
+//   return 0;
+// }
+
+
 // # include "Utils/iterator.hpp"
 // # include "Utils/reverse_iterator.hpp"
 // # include "Utils/pair.hpp"
@@ -50,11 +78,11 @@ int main ()
 
 // int main ()
 // {
-//     std::map<int, int > h;
+//     ft::map<int, int > h;
 //     ft::Map<int, int> a;
 
 //     ft::pair<int , int > b,c, d;
-//     std::pair<int , int > b0,c0, d0;
+//     ft::pair<int , int > b0,c0, d0;
 //     c.first = 1;
 //     c.second = 1;
 
@@ -112,7 +140,7 @@ int main ()
 //       // std::cout << ( u == y ) << std::endl;
 //     }
 //     std::cout << std::endl;
-//     for (std::map<int, int>::iterator it = h.begin(); it != h.end(); it++) {
+//     for (ft::map<int, int>::iterator it = h.begin(); it != h.end(); it++) {
     
 //        std::cout  << it->first << " ";
 //     }

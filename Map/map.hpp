@@ -5,7 +5,9 @@
 # include "../Utils/iterator.hpp"
 # include "../Utils/reverse_iterator.hpp"
 // # include "../Utils/avl_tree.hpp"
-# include "../Utils/avlTree.hpp"
+// # include "../Utils/avlTree.hpp"
+# include "../Utils/tree.hpp"
+
 # include "../Utils/bidirectional_iterator.hpp"
 // # include "../Utils/avl.hpp"
 
@@ -17,14 +19,14 @@ namespace ft {
     template < class Key,                                     // map::key_type
     class T,                                                 // map::mapped_type
     class Compare = std::less<Key>,                         // map::key_compare
-    class Alloc = std::allocator<pair<const Key,T> > >     // map::allocator_type
+    class Alloc = std::allocator<pair<Key,T> > >     // map::allocator_type
     class map {
 
         public:
 
             typedef Key key_type;
             typedef T mapped_type;
-            typedef pair<const key_type, mapped_type> value_type;
+            typedef pair<key_type, mapped_type> value_type;
             typedef Compare key_compare;
             // typedef typename Compare value_compare;
             typedef Alloc allocator_type;
@@ -40,14 +42,16 @@ namespace ft {
             typedef size_t size_type;
             size_type _size;
             Alloc _allocator;
-            // typedef node<key_type, mapped_type, key_compare ,allocator_type> node;
+            typedef node<key_type, mapped_type> node;
 
-            avl_tree<const Key, T, Compare, Alloc> _tree;
-
+            node *root;
+            avl<key_type, mapped_type> tree;
+        
             explicit map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
                 _size = 0;
+                root = NULL;
                 _allocator = alloc;
             }
 
@@ -59,9 +63,10 @@ namespace ft {
             
                 // _rp = NULL;
                 _size = 0;
+                root = NULL;
                 for (iterator it = first; it != last; it++) {
 
-                    _tree.insert(*it);
+                    root = tree.Insert(root, NULL, *it);
                     _size += 1;
                 }
             }
@@ -76,9 +81,10 @@ namespace ft {
             map& operator= (const map& x) {
             
                 _size = 0;
+                root = NULL;
                 for (iterator it = x.begin(); it != x.end(); it++) {
 
-                    _tree.insert(*it);
+                    root = tree.Insert(root, NULL, *it);
                     _size += 1;
                 }
                 return *this;
@@ -86,12 +92,12 @@ namespace ft {
 
             iterator begin() {
 
-                return iterator(_tree.minValueNode(_tree.root));
+                return iterator(tree.TreeMinimum(root));
             }
 
             const_iterator begin() const {
         
-                return iterator(_tree.minValueNode(_tree.root));
+                return iterator(tree.TreeMinimum(root));
             }
 
             iterator end() {
@@ -147,7 +153,7 @@ namespace ft {
                 iterator it = find(k);
 
                 if (it == end()) {
-                    _tree.insert( make_pair< key_type, mapped_type>(k, mapped_type()));
+                    root = tree.Insert(root, NULL, make_pair< key_type, mapped_type>(k, mapped_type()));
                     return find(k)->second;
                 }
                 return (*it).second;
@@ -162,28 +168,69 @@ namespace ft {
 
                 iterator it = find(val.first); 
 
-                std::cout << std::addressof(it) << " | " << std::addressof(*end()) << std::endl;
-                std::cout << (it != end()) << std::endl;
+                // std::cout << std::addressof(it) << " | " << std::addressof(*end()) << std::endl;
+                // std::cout << (it != end()) << std::endl;
                 if (it != end()) { return pair<iterator, bool>(it, false); }
 
                 // _tree.root = _tree.insert(_tree.root, val);
-                _tree.insert(val);
+                root = tree.Insert(root, NULL, val);
                 _size++;
-                return pair<const_iterator, bool>(begin(), true);
+                return pair<iterator, bool>(begin(), true);
             }
 
-            // iterator insert (iterator position, const value_type& val) {
+            iterator insert (iterator position, const value_type& val) {
+
+                iterator it = find(val.first); 
+
+                // std::cout << std::addressof(it) << " | " << std::addressof(*end()) << std::endl;
+                // std::cout << (it != end()) << std::endl;
+                if (it != end()) { return it; }
+
+                // _tree.root = _tree.insert(_tree.root, val);
+                root = tree.Insert(root, NULL, val);
+                _size++;
+                return begin();
+            }
+
+            template <class InputIterator>
+            void insert (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type = InputIterator()) {
+
+                
+                for (InputIterator it = first; it != last; it++) {
+                
+                    root = tree.Insert(root , NULL, *it);
+                }
+            }
 
 
-            // }
+            size_type erase (const key_type& k) {
+            
+                root = tree.Delete(root, make_pair<Key, T>(k, T()));
+                _size--;
+                return _size;
+            }
+            void erase (iterator position) {
+            
+                root = tree.Delete(root, *position);
+                _size--;
+            }
 
-            // template <class InputIterator>
-            // void insert (InputIterator first, InputIterator last) {
 
+            void erase (iterator first, iterator last) {
+            
+                // difference_type size = std::distance(first, last);
+                // std::cerr <<  " size is " << size << std::endl;
+                iterator it = first;
+                while (it != last) {
+                
 
-            // }
-
-
+                    erase(it);
+                    it++;
+                    if (it == last)
+                        break ;
+                    _size--;
+                }
+            }
     };
 
 }

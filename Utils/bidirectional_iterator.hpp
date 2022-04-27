@@ -11,38 +11,37 @@ namespace ft {
     template < class Key,                           // map::key_type
     class T,                                       // map::mapped_type
     class Compare = std::less<Key>,               // map::key_compare
-    class Alloc = std::allocator<pair<const Key,T> > >
+    class Alloc = std::allocator<pair<Key,T> > >
     class mapiterator {
 
         public:
 
-            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::difference_type    difference_type;
-            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::value_type         value_type;
-            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::pointer            pointer;
-            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::reference          reference;
-            typedef typename iterator<std::random_access_iterator_tag, pair<const Key, T> >::iterator_category  iterator_category;
+            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::difference_type    difference_type;
+            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::value_type         value_type;
+            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::pointer            pointer;
+            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::reference          reference;
+            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::iterator_category  iterator_category;
             
             
-            typedef pair<const Key, T>              pair;
+            typedef pair< Key, T>              pair;
     
-            operator mapiterator<const Key, T, Compare, Alloc> () const { return mapiterator<const Key, T, Compare, Alloc>(_current); }
+            // operator mapiterator<Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_current); }
 
-            typedef node<const Key, T> node;
+            typedef node< Key, T> node;
             node *_current;
             pair *currentData;
-            mapiterator( ) { _current = NULL;}
+            mapiterator( ) { _current = NULL;currentData = NULL; }
         
             mapiterator( node * current ) {
             
-                if (current)
-                    currentData = current->data;
+                if (current == NULL) { currentData = NULL; } else {currentData = current->data;}
                 _current = current;
             }
             ~mapiterator() {
             
         
             }
-            node *treeMaximum(node *x) const {
+            node *treeMaximum(node *x)  {
             
                 if (x == NULL)
                     return NULL;
@@ -50,7 +49,7 @@ namespace ft {
                     x = x->right;
                 return x;
             }
-            node *treeMinimum(node *x) const {
+            node *treeMinimum(node *x)  {
             
                 if (x == NULL)
                     return NULL;
@@ -104,6 +103,8 @@ namespace ft {
             mapiterator& operator--() {
             
                 _current = treePredecessor(_current);
+                if (_current != NULL)
+                    currentData = _current->data;
                 return *this;
             }
             mapiterator operator++(int)  {
@@ -111,12 +112,24 @@ namespace ft {
                 _current = treeSuccessor(_current);
                 if (_current != NULL)
                     currentData = _current->data;
+                else
+                    currentData = NULL;
+                return *this;
+            }
+
+            mapiterator& operator++() {
+
+                _current = treeSuccessor(_current);
+                if (_current != NULL)
+                    currentData = _current->data;
+                else
+                    currentData = NULL;
                 return *this;
             }
             // mapiterator operator--(int)  {mapiterator tmp(_current);  node *tmpo = _current->parent; _current = tmpo->left; return tmp;}
             // mapiterator operator+(const mapiterator& rhs) {return mapiterator(_root+rhs._root);}
-            bool operator==(const mapiterator& rhs) const {if (_current && rhs._current) {return _current->data == rhs._current->data;} return (_current == rhs._current);}
-            bool operator!=(const mapiterator& rhs) const {if (_current && rhs._current) {return _current->data != rhs._current->data;} return (_current != rhs._current);}
+            bool operator==(const mapiterator& rhs) const {if (_current && rhs._current) {return _current->data == rhs._current->data;} return (currentData == rhs.currentData);}
+            bool operator!=(const mapiterator& rhs) const {if (_current  && rhs._current) {return _current->data != rhs._current->data;} return (currentData != rhs.currentData);}
 
     };
 }

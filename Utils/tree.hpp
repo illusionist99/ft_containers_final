@@ -14,18 +14,18 @@ namespace ft {
         node* left;
         node* right;
         int key;
-        pair<const Key, T> *data;
-        node* par;
+        pair<Key, T> *data;
+        node* parent;
         int height;
     };
 
     template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<Key> >
     class avl {
     
-        typedef node< const Key, T> node;
+        typedef node< Key, T> node;
         
         typedef typename Alloc::template rebind<node>::other rebind_allocator;
-        typedef typename Alloc::template rebind<pair<const Key, T> >::other _allocator;
+        typedef typename Alloc::template rebind<pair<Key, T> >::other _allocator;
     
         rebind_allocator _NodeAlloc;
         _allocator  _PairAlloc;
@@ -44,8 +44,8 @@ namespace ft {
             // with its parent value
             std::cout << "Node: " << root->data->first << ", Parent Node: ";
         
-            if (root->par != NULL)
-                std::cout << root->par->data->first << std::endl;
+            if (root->parent != NULL)
+                std::cout << root->parent->data->first << std::endl;
             else
                 std::cout << "NULL" << std::endl;
         
@@ -98,7 +98,7 @@ namespace ft {
             // Update parent pointer of the
             // left child of the root node
             if (tmpnode->right != NULL)
-                tmpnode->right->par = root;
+                tmpnode->right->parent = root;
 
             // Update the right child of
             // tmpnode to root
@@ -106,22 +106,22 @@ namespace ft {
 
             // Update parent pointer of
             // the tmpnode
-            tmpnode->par = root->par;
+            tmpnode->parent = root->parent;
 
             // Update the parent pointer
             // of the root
-            root->par = tmpnode;
+            root->parent = tmpnode;
 
             // Update tmpnode as the left or the
             // right child of its parent pointer
             // according to its key value
-            if (tmpnode->par != NULL
-                && _cmp(root->key, tmpnode->par->key)) {
-                tmpnode->par->left = tmpnode;
+            if (tmpnode->parent != NULL
+                && _cmp(root->key, tmpnode->parent->key)) {
+                tmpnode->parent->left = tmpnode;
             }
             else {
-                if (tmpnode->par != NULL)
-                    tmpnode->par->right = tmpnode;
+                if (tmpnode->parent != NULL)
+                    tmpnode->parent->right = tmpnode;
             }
 
             // Make tmpnode as the new root
@@ -131,7 +131,7 @@ namespace ft {
             Updateheight(root->left);
             Updateheight(root->right);
             Updateheight(root);
-            Updateheight(root->par);
+            Updateheight(root->parent);
 
             // Return the root node
             return root;
@@ -151,7 +151,7 @@ namespace ft {
             // Update parent pointer of the
             // right child of the root node
             if (tmpnode->left != NULL)
-                tmpnode->left->par = root;
+                tmpnode->left->parent = root;
 
             // Update the left child of the
             // tmpnode to root
@@ -159,22 +159,22 @@ namespace ft {
 
             // Update parent pointer of
             // the tmpnode
-            tmpnode->par = root->par;
+            tmpnode->parent = root->parent;
 
             // Update the parent pointer
             // of the root
-            root->par = tmpnode;
+            root->parent = tmpnode;
 
             // Update tmpnode as the left or
             // the right child of its parent
             // pointer according to its key value
-            if (tmpnode->par != NULL
-                && _cmp(root->key, tmpnode->par->key)) {
-                tmpnode->par->left = tmpnode;
+            if (tmpnode->parent != NULL
+                && _cmp(root->key, tmpnode->parent->key)) {
+                tmpnode->parent->left = tmpnode;
             }
             else {
-                if (tmpnode->par != NULL)
-                    tmpnode->par->right = tmpnode;
+                if (tmpnode->parent != NULL)
+                    tmpnode->parent->right = tmpnode;
             }
 
             // Make tmpnode as the new root
@@ -184,7 +184,7 @@ namespace ft {
             Updateheight(root->left);
             Updateheight(root->right);
             Updateheight(root);
-            Updateheight(root->par);
+            Updateheight(root->parent);
 
             // Return the root node
             return root;
@@ -276,15 +276,21 @@ namespace ft {
         // Return the root node
         return root;
     }
+    node *TreeMinimum(node *root)  {
     
-    // void insert(pair<const Key, T> key) {
+        if (root)
+            while (root->left != NULL)
+                root = root->left;
+        return root;
+    }
+    // void insert(pair<Key, T> key) {
 
     //     root = Insert(root, root, key);
     // }
 
     // Function to insert a node in
     // the AVL tree
-    node* Insert(node* root, node* parent, pair<const Key, T> key)
+    node* Insert(node* root, node* parent, pair<Key, T> key)
     {
         if (root == NULL) {
     
@@ -299,7 +305,7 @@ namespace ft {
                 root->height = 1;
                 root->left = NULL;
                 root->right = NULL;
-                root->par = parent;
+                root->parent = parent;
                 // root->data = &key;
             }
             // return root;
@@ -385,30 +391,30 @@ namespace ft {
     
     // Function to delete a node from
     // the AVL tree
-    node* Delete(node* root, int key)
+    node* Delete(node* root, pair<Key, T> key)
     {
         if (root != NULL) {
     
             // If the node is found
-            if (root->data->first == key) {
+            if (root->data->first == key.first) {
     
                 // Replace root with its
                 // left child
                 if (root->right == NULL && root->left != NULL) {
                     
-                    if (root->par != NULL) {
+                    if (root->parent != NULL) {
                         
-                        if (_cmp(root->par->data->first, root->data->first))
-                            root->par->right = root->left;
+                        if (_cmp(root->parent->data->first, root->data->first))
+                            root->parent->right = root->left;
                         else
-                            root->par->left = root->left;
+                            root->parent->left = root->left;
     
                         // Update the height
                         // of root's parent
-                        Updateheight(root->par);
+                        Updateheight(root->parent);
                     }
     
-                    root->left->par = root->par;
+                    root->left->parent = root->parent;
     
                     // Balance the node
                     // after deletion
@@ -421,19 +427,19 @@ namespace ft {
                 // right child
                 else if (root->left == NULL && root->right != NULL) {
                 
-                    if (root->par != NULL) {
+                    if (root->parent != NULL) {
                     
-                        if (_cmp(root->par->data->first, root->data->first))
-                            root->par->right = root->right;
+                        if (_cmp(root->parent->data->first, root->data->first))
+                            root->parent->right = root->right;
                         else
-                            root->par->left = root->right;
+                            root->parent->left = root->right;
     
                         // Update the height
                         // of the root's parent
-                        Updateheight(root->par);
+                        Updateheight(root->parent);
                     }
     
-                    root->right->par = root->par;
+                    root->right->parent = root->parent;
     
                     // Balance the node after
                     // deletion
@@ -445,15 +451,15 @@ namespace ft {
                 // the current node
                 else if (root->left == NULL && root->right == NULL) {
                     
-                    if (_cmp(root->par->data->first, root->data->first)) {
-                        root->par->right = NULL;
+                    if (_cmp(root->parent->data->first, root->data->first)) {
+                        root->parent->right = NULL;
                     }
                     else {
-                        root->par->left = NULL;
+                        root->parent->left = NULL;
                     }
     
-                    if (root->par != NULL)
-                        Updateheight(root->par);
+                    if (root->parent != NULL)
+                        Updateheight(root->parent);
     
                     root = NULL;
                     return NULL;
@@ -470,10 +476,9 @@ namespace ft {
                         tmpnode = tmpnode->left;
                     }
     
-                    int val = tmpnode->data->first;
+                    Key val = tmpnode->data->first;
     
-                    root->right
-                        = Delete(root->right, tmpnode->data->first);
+                    root->right = Delete(root->right, *tmpnode->data);
     
                     root->data->first = val;
     
@@ -485,7 +490,7 @@ namespace ft {
     
             // Recur to the right subtree to
             // delete the current node
-            else if (_cmp(root->data->first, key)) {
+            else if (_cmp(root->data->first, key.first)) {
 
                 root->right = Delete(root->right, key);
                 root = Balance(root);
@@ -493,7 +498,7 @@ namespace ft {
     
             // Recur into the right subtree
             // to delete the current node
-            else if (!_cmp(root->data->first, key)) {
+            else if (!_cmp(root->data->first, key.first)) {
                 root->left = Delete(root->left, key);
     
                 root = Balance(root);
@@ -532,7 +537,7 @@ namespace ft {
                 for (int i = 1; i < space; i++)
                     std::cout<<" ";
                 std::cout<<root->data->first<<" ";
-                std::cout << root->par << "\n";
+                std::cout << root->parent << "\n";
                 // Process left child
                 print2DUtil(root->left, space);
             }
