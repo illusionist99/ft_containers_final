@@ -463,11 +463,11 @@ namespace ft {
                         tmpnode = tmpnode->left;
                     }
     
-                    Key val = tmpnode->data->first;
+                    pair<Key, T> *val = tmpnode->data;
     
                     root->right = Delete(root->right, *tmpnode->data);
     
-                    root->data->first = val;
+                    root->data = val;
     
                     // Balance the node
                     // after deletion

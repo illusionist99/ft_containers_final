@@ -5,30 +5,66 @@
 
 int main ()
 {
+//   ft::map<char,int> mymap;
+//   ft::map<char,int>::iterator it;
+
+//  // insert some values:
+//   mymap['a']=10;
+//   mymap['b']=20;
+//   mymap['c']=30;
+//   mymap['d']=40;
+//   mymap['e']=50;
+//   mymap['f']=60;
+
+//   it=mymap.find('b');
+//   mymap.erase (it);                   // erasing by iterator
+
+//   mymap.erase ('c');                  // erasing by key
+
+//   it=mymap.find ('e');
+//   mymap.erase ( it, mymap.end() );    // erasing by range
+
+//   // show content:
+//   for (it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
+
+  // ft::map<char,int> mymap;
+  // ft::map<char,int>::iterator it;
+
+  // mymap['a']=50;
+  // mymap['b']=100;
+  // mymap['c']=150;
+  // mymap['d']=200;
+
+  // it = mymap.find('b');
+  // if (it != mymap.end())
+  //   mymap.erase (it);
+
+  // // print content:
+  // std::cout << "elements in mymap:" << '\n';
+  // std::cout << "a => " << mymap.find('a')->second << '\n';
+  // std::cout << "c => " << mymap.find('c')->second << '\n';
+  // std::cout << "d => " << mymap.find('d')->second << '\n';
+  // 
   ft::map<char,int> mymap;
-  ft::map<char,int>::iterator it;
 
- // insert some values:
-  mymap['a']=10;
-  mymap['b']=20;
-  mymap['c']=30;
-  mymap['d']=40;
-  mymap['e']=50;
-  mymap['f']=60;
+  ft::map<char,int>::key_compare mycomp = mymap.key_comp();
 
-  it=mymap.find('b');
-  mymap.erase (it);                   // erasing by iterator
+  mymap['a']=100;
+  mymap['b']=200;
+  mymap['c']=300;
 
-  mymap.erase ('c');                  // erasing by key
+  std::cout << "mymap contains:\n";
 
-  it=mymap.find ('e');
-  mymap.erase ( it, mymap.end() );    // erasing by range
+  // char highest = mymap.end()->first;     // key value of last element
 
-  // show content:
-  for (it=mymap.begin(); it!=mymap.end(); ++it)
+  ft::map<char,int>::iterator it = mymap.begin();
+  do {
     std::cout << it->first << " => " << it->second << '\n';
+  } while ( mycomp((*it++).first, 'c') );
 
-    // std::cout << std::addressof(it) << std::endl;
+  // std::cout << '\n';
+
   return 0;
 }
 // int main ()

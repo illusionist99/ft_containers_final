@@ -14,7 +14,7 @@ namespace ft {
     template < class Key,                                     // map::key_type
     class T,                                                 // map::mapped_type
     class Compare = std::less<Key>,                         // map::key_compare
-    class Alloc = std::allocator<pair<Key,T> > >     // map::allocator_type
+    class Alloc = std::allocator<pair<const Key,T> > >     // map::allocator_type
     class map {
 
         public:
@@ -41,12 +41,13 @@ namespace ft {
 
             node *root;
             avl<key_type, mapped_type> tree;
-        
+            Compare _cmp;
             explicit map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
             
                 _size = 0;
                 root = NULL;
+                _cmp = comp;
                 _allocator = alloc;
             }
 
@@ -121,6 +122,8 @@ namespace ft {
             
                 return (reverse_iterator(begin()));
             }
+
+            allocator_type get_allocator() const { return _allocator;}
             bool empty() const { return _size == 0; }
             size_type size() const { return _size; }
             size_type max_size() const  {return _allocator.max_size(); }
@@ -220,6 +223,11 @@ namespace ft {
                     first++;
                 }
                 for (int i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
+            }
+
+            key_compare key_comp() const {
+            
+                return _cmp;
             }
     };
 

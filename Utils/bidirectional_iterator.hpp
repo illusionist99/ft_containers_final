@@ -60,8 +60,8 @@ namespace ft {
 
             node *treeSuccessor(node *x) {
             
-                // if (x == NULL)
-                //     return x;
+                if (x == NULL)
+                    return x;
                 if (x->right != NULL)
                     return treeMinimum(x->right);
                 node *y = x->parent;
@@ -74,6 +74,8 @@ namespace ft {
             }
             node *treePredecessor(node *x) {
 
+                if (x == NULL)
+                    return x;
                 if (x->left != NULL)
                     return treeMaximum(x->left);
                 node *y = x->parent;
