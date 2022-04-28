@@ -8,7 +8,7 @@ int main ()
   ft::map<char,int> mymap;
   ft::map<char,int>::iterator it;
 
-  // insert some values:
+ // insert some values:
   mymap['a']=10;
   mymap['b']=20;
   mymap['c']=30;
@@ -28,6 +28,7 @@ int main ()
   for (it=mymap.begin(); it!=mymap.end(); ++it)
     std::cout << it->first << " => " << it->second << '\n';
 
+    // std::cout << std::addressof(it) << std::endl;
   return 0;
 }
 // int main ()

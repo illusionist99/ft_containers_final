@@ -60,8 +60,8 @@ namespace ft {
 
             node *treeSuccessor(node *x) {
             
-                if (x == NULL)
-                    return x;
+                // if (x == NULL)
+                //     return x;
                 if (x->right != NULL)
                     return treeMinimum(x->right);
                 node *y = x->parent;
@@ -119,6 +119,7 @@ namespace ft {
 
             mapiterator& operator++() {
 
+                // node * tmp = treeSuccessor(_current);
                 _current = treeSuccessor(_current);
                 if (_current != NULL)
                     currentData = _current->data;

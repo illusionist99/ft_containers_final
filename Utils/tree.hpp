@@ -6,8 +6,6 @@
 namespace ft {
 
 
-
-    // AVL tree node
     template<class Key, class T>
     struct node {
 
@@ -23,7 +21,6 @@ namespace ft {
     class avl {
     
         typedef node< Key, T> node;
-        
         typedef typename Alloc::template rebind<node>::other rebind_allocator;
         typedef typename Alloc::template rebind<pair<Key, T> >::other _allocator;
     
@@ -168,8 +165,7 @@ namespace ft {
             // Update tmpnode as the left or
             // the right child of its parent
             // pointer according to its key value
-            if (tmpnode->parent != NULL
-                && _cmp(root->key, tmpnode->parent->key)) {
+            if (tmpnode->parent != NULL && _cmp(root->key, tmpnode->parent->key)) {
                 tmpnode->parent->left = tmpnode;
             }
             else {
@@ -254,22 +250,16 @@ namespace ft {
                 // left subtree
                 int leftheight1 = 0;
                 int leftheight2 = 0;
+            
                 if (root->left->right != NULL)
                     leftheight2 = root->left->right->height;
     
                 if (root->left->left != NULL)
                     leftheight1 = root->left->left->height;
-    
-                if (leftheight1 > leftheight2) {
-    
-                    // Left Left Case
+                if (leftheight1 > leftheight2)
                     root = LLR(root);
-                }
-                else {
-    
-                    // Left Right Case
+                else
                     root = LRR(root);
-                }
             }
         }
     
@@ -278,18 +268,15 @@ namespace ft {
     }
     node *TreeMinimum(node *root)  {
     
-        if (root)
-            while (root->left != NULL)
-                root = root->left;
-        return root;
+        node *tmp = root;
+            
+        if (tmp)
+
+            while (tmp->left != NULL)
+                tmp = tmp->left;
+        return tmp;
     }
-    // void insert(pair<Key, T> key) {
 
-    //     root = Insert(root, root, key);
-    // }
-
-    // Function to insert a node in
-    // the AVL tree
     node* Insert(node* root, node* parent, pair<Key, T> key)
     {
         if (root == NULL) {
@@ -308,7 +295,7 @@ namespace ft {
                 root->parent = parent;
                 // root->data = &key;
             }
-            // return root;
+            return root;
         }
         else if (!_cmp(root->data->first, key.first)) {
     
@@ -529,17 +516,19 @@ namespace ft {
                 space += 5;
             
                 // Process right child first
-                print2DUtil(root->right, space);
+                if (root->right != NULL)
+                    print2DUtil(root->right, space);
             
                 // Print current node after space
                 // count
                 std::cout << std::endl;
                 for (int i = 1; i < space; i++)
                     std::cout<<" ";
-                std::cout<<root->data->first<<" ";
+                std::cout<< root->data->first<<" ";
                 std::cout << root->parent << "\n";
                 // Process left child
-                print2DUtil(root->left, space);
+                if (root->left != NULL)
+                    print2DUtil(root->left, space);
             }
             
             // Wrapper over print2DUtil()

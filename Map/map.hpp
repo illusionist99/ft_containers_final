@@ -4,16 +4,11 @@
 # include "../Utils/pair.hpp"
 # include "../Utils/iterator.hpp"
 # include "../Utils/reverse_iterator.hpp"
-// # include "../Utils/avl_tree.hpp"
-// # include "../Utils/avlTree.hpp"
 # include "../Utils/tree.hpp"
-
 # include "../Utils/bidirectional_iterator.hpp"
-// # include "../Utils/avl.hpp"
+# include <vector>
 
 namespace ft {
-
-
 
 
     template < class Key,                                     // map::key_type
@@ -26,7 +21,7 @@ namespace ft {
 
             typedef Key key_type;
             typedef T mapped_type;
-            typedef pair<key_type, mapped_type> value_type;
+            typedef pair<const key_type, mapped_type> value_type;
             typedef Compare key_compare;
             // typedef typename Compare value_compare;
             typedef Alloc allocator_type;
@@ -134,7 +129,7 @@ namespace ft {
 
                 for (iterator it = begin(); it != end(); it++) {
                     
-                    if ((*it).first == k)
+                    if (it->first == k)
                         return it;
                 }
                 return end();
@@ -182,11 +177,8 @@ namespace ft {
 
                 iterator it = find(val.first); 
 
-                // std::cout << std::addressof(it) << " | " << std::addressof(*end()) << std::endl;
-                // std::cout << (it != end()) << std::endl;
                 if (it != end()) { return it; }
 
-                // _tree.root = _tree.insert(_tree.root, val);
                 root = tree.Insert(root, NULL, val);
                 _size++;
                 return begin();
@@ -205,12 +197,14 @@ namespace ft {
 
             size_type erase (const key_type& k) {
             
+                // iterator it = find(k);
                 root = tree.Delete(root, make_pair<Key, T>(k, T()));
                 _size--;
                 return _size;
             }
             void erase (iterator position) {
             
+                // if (position != end())
                 root = tree.Delete(root, *position);
                 _size--;
             }
@@ -218,18 +212,14 @@ namespace ft {
 
             void erase (iterator first, iterator last) {
             
-                // difference_type size = std::distance(first, last);
-                // std::cerr <<  " size is " << size << std::endl;
-                iterator it = first;
-                while (it != last) {
-                
+                std::vector<Key> tmp;
 
-                    erase(it);
-                    it++;
-                    if (it == last)
-                        break ;
-                    _size--;
+                while (first != last) {
+
+                    tmp.push_back(first->first);
+                    first++;
                 }
+                for (int i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
             }
     };
 
