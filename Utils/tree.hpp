@@ -11,7 +11,6 @@ namespace ft {
 
         node* left;
         node* right;
-        int key;
         pair<Key, T> *data;
         node* parent;
         int height;
@@ -30,7 +29,12 @@ namespace ft {
     public: 
 
         // node *root;
-        avl() {} 
+        avl(rebind_allocator rebind = rebind_allocator(), _allocator alloc = _allocator(), Compare _c = Compare()) {
+        
+            _NodeAlloc = rebind;
+            _PairAlloc = alloc;
+            _cmp = _c;
+        } 
             // root = NULL; }
         int max( int a, int b) { return a > b ?  a : b; }
         // Function to print the preorder
@@ -112,8 +116,7 @@ namespace ft {
             // Update tmpnode as the left or the
             // right child of its parent pointer
             // according to its key value
-            if (tmpnode->parent != NULL
-                && _cmp(root->key, tmpnode->parent->key)) {
+            if (tmpnode->parent != NULL && _cmp(root->data->first, tmpnode->parent->data->first)) {
                 tmpnode->parent->left = tmpnode;
             }
             else {
@@ -165,7 +168,7 @@ namespace ft {
             // Update tmpnode as the left or
             // the right child of its parent
             // pointer according to its key value
-            if (tmpnode->parent != NULL && _cmp(root->key, tmpnode->parent->key)) {
+            if (tmpnode->parent != NULL && _cmp(root->data->first, tmpnode->parent->data->first)) {
                 tmpnode->parent->left = tmpnode;
             }
             else {
@@ -295,7 +298,7 @@ namespace ft {
                 root->parent = parent;
                 // root->data = &key;
             }
-            return root;
+            // return root;
         }
         else if (!_cmp(root->data->first, key.first)) {
     

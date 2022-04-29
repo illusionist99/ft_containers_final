@@ -3,6 +3,18 @@
 # include "Map/map.hpp"
 
 
+ 
+class A {
+
+  int _a;
+
+  public:
+
+    A() : _a(1337) {}
+    A(int a) : _a(a) {}
+    ~A() {}
+};
+
 int main ()
 {
 //   ft::map<char,int> mymap;
@@ -28,14 +40,29 @@ int main ()
 //   for (it=mymap.begin(); it!=mymap.end(); ++it)
 //     std::cout << it->first << " => " << it->second << '\n';
 
-  // ft::map<char,int> mymap;
-  // ft::map<char,int>::iterator it;
+  ft::map<char,A> mymap;
+  // ft::map<char,A>::iterator it;
+  A a(10);
+  A b(20);
+  A c(30);
 
-  // mymap['a']=50;
-  // mymap['b']=100;
-  // mymap['c']=150;
-  // mymap['d']=200;
 
+  A d(40);
+  A e(50);
+  A f(60);
+
+
+  mymap['a']=a;
+  mymap['b']=b;
+  mymap['c']=c;
+  mymap['d']=d;
+  mymap['e']=e;
+  mymap['f']=f;
+  for (ft::map<char , A >::iterator it = mymap.begin(); it != mymap.end(); it++) {
+  
+    std::cerr << it->first << " ";
+  }
+  mymap.tree.print2D(mymap.root);
   // it = mymap.find('b');
   // if (it != mymap.end())
   //   mymap.erase (it);
@@ -46,22 +73,22 @@ int main ()
   // std::cout << "c => " << mymap.find('c')->second << '\n';
   // std::cout << "d => " << mymap.find('d')->second << '\n';
   // 
-  ft::map<char,int> mymap;
+  // ft::map<char,int> mymap;
 
-  ft::map<char,int>::key_compare mycomp = mymap.key_comp();
+  // ft::map<char,int>::key_compare mycomp = mymap.key_comp();
 
-  mymap['a']=100;
-  mymap['b']=200;
-  mymap['c']=300;
+  // mymap['a']=100;
+  // mymap['b']=200;
+  // mymap['c']=300;
 
-  std::cout << "mymap contains:\n";
+  // std::cout << "mymap contains:\n";
 
-  // char highest = mymap.end()->first;     // key value of last element
+  // // char highest = mymap.end()->first;     // key value of last element
 
-  ft::map<char,int>::iterator it = mymap.begin();
-  do {
-    std::cout << it->first << " => " << it->second << '\n';
-  } while ( mycomp((*it++).first, 'c') );
+  // ft::map<char,int>::iterator it = mymap.begin();
+  // do {
+  //   std::cout << it->first << " => " << it->second << '\n';
+  // } while ( mycomp((*it++).first, 'd') );
 
   // std::cout << '\n';
 

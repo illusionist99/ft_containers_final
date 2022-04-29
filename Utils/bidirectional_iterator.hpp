@@ -24,13 +24,13 @@ namespace ft {
             
             
             typedef pair< Key, T>              pair;
-    
+            typedef node< Key, T> node;
             // operator mapiterator<Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_current); }
 
-            typedef node< Key, T> node;
             node *_current;
             pair *currentData;
-            mapiterator( ) { _current = NULL;currentData = NULL; }
+    
+            mapiterator( ) { _current = NULL; currentData = NULL; }
         
             mapiterator( node * current ) {
             

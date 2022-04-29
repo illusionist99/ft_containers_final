@@ -60,6 +60,8 @@ namespace ft {
                 // _rp = NULL;
                 _size = 0;
                 root = NULL;
+                _cmp = comp;
+                _allocator = alloc;
                 for (iterator it = first; it != last; it++) {
 
                     root = tree.Insert(root, NULL, *it);
