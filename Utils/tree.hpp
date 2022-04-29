@@ -269,7 +269,7 @@ namespace ft {
         // Return the root node
         return root;
     }
-    node *TreeMinimum(node *root)  {
+    node *TreeMinimum(node *root) const  {
     
         node *tmp = root;
             
