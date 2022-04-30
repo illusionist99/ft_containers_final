@@ -1,8 +1,9 @@
 #pragma once
 
 # include <iostream>
-// # include "../Utils/tree.hpp"
+# include "../Utils/tree.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
+# include "../Utils/reverse_map.hpp"
 
 namespace ft {
 
@@ -19,7 +20,15 @@ namespace ft {
             typedef T mapped_type;
             typedef pair<const key_type, mapped_type> value_type;
             typedef Compare key_compare;
-            typedef Compare value_compare;
+            
+            class value_compare : public std::binary_function<value_type, value_type, bool> {
+                protected:
+                    Compare __comp;
+                public:
+                    value_compare( Compare c ) : __comp(c) {}
+                    bool operator()( const value_type& lhs, const value_type& rhs ) const { return this->__comp(lhs.first, rhs.first); }
+            };
+            // typed value_compare;
             typedef Alloc allocator_type;
             typedef value_type& reference;
             typedef const value_type& const_reference;
@@ -27,8 +36,8 @@ namespace ft {
             typedef const value_type* const_pointer;
             typedef mapiterator< Key, T, Compare, Alloc> iterator;
             typedef mapiterator< Key, T, Compare, Alloc> const_iterator;
-            typedef ft::reverse_iterator<iterator> reverse_iterator;
-            typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
+            typedef reverse_map<iterator> reverse_iterator;
+            typedef reverse_map<const_iterator> const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
             typedef size_t size_type;
             size_type _size;
@@ -50,14 +59,13 @@ namespace ft {
             template <class InputIterator>
             Map (InputIterator first, InputIterator last,
             const key_compare& comp = key_compare(),
-            const allocator_type& alloc = allocator_type()) {
-            // typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type = InputIterator(_tree.root)) {
+            const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type = InputIterator()) {
             
                 _size = 0;
                 root = NULL;
                 _cmp = comp;
                 _allocator = alloc;
-                for (iterator it = first; it != last; it++) {
+                for (InputIterator it = first; it != last; it++) {
 
                     root = tree.Insert(root, NULL, *it);
                     _size += 1;
@@ -241,6 +249,10 @@ namespace ft {
             key_compare key_comp() const {
             
                 return _cmp;
+            }
+            value_compare value_comp() const {
+            
+                return value_compare(_cmp);
             }
 
             iterator lower_bound (const key_type& k) {
