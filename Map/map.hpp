@@ -1,12 +1,8 @@
 #pragma once
 
 # include <iostream>
-# include "../Utils/pair.hpp"
-# include "../Utils/iterator.hpp"
-# include "../Utils/reverse_iterator.hpp"
-# include "../Utils/tree.hpp"
+// # include "../Utils/tree.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
-# include <vector>
 
 namespace ft {
 
@@ -108,20 +104,20 @@ namespace ft {
 
             reverse_iterator rbegin() {
 
-                return (reverse_iterator(end()));
+                return (reverse_iterator(tree.TreeMaximum(root)));
             }
             const_reverse_iterator rbegin() const {
 
-                return (reverse_iterator(end()));
+                return (reverse_iterator(tree.TreeMaximum(root)));
             }
 
             reverse_iterator rend() {
             
-                return (reverse_iterator(begin()));
+                return (reverse_iterator(iterator(NULL)));
             }
             const_reverse_iterator rend() const {
             
-                return (reverse_iterator(begin()));
+                return (reverse_iterator(iterator(NULL)));
             }
 
             allocator_type get_allocator() const { return _allocator;}
@@ -161,7 +157,7 @@ namespace ft {
 
                 for (iterator it = begin(); it != end(); it++) {
                     
-                    if (*it->first == k)
+                    if (it->first == k)
                         return it;
                 }
                 return end();
@@ -171,10 +167,10 @@ namespace ft {
                 iterator it = find(k);
 
                 if (it == end()) {
-                    root = tree.Insert(root, NULL, make_pair< key_type, mapped_type>(k, mapped_type()));
+                    root = tree.Insert(root, NULL, ft::make_pair< key_type, mapped_type>(k, mapped_type()));
                     return find(k)->second;
                 }
-                return (*it).second;
+                return it->second;
             }
 
             void clear() {
@@ -218,7 +214,7 @@ namespace ft {
             size_type erase (const key_type& k) {
             
                 // iterator it = find(k);
-                root = tree.Delete(root, make_pair<Key, T>(k, T()));
+                root = tree.Delete(root, ft::make_pair<Key, T>(k, T()));
                 _size--;
                 return _size;
             }
@@ -239,7 +235,7 @@ namespace ft {
                     tmp.push_back(first->first);
                     first++;
                 }
-                for (int i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
+                for (size_type i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
             }
 
             key_compare key_comp() const {

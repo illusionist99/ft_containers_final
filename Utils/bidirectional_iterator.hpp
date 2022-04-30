@@ -4,13 +4,14 @@
 # include "pair.hpp"
 # include "iterator.hpp"
 # include "tree.hpp"
+# include "reverse_map.hpp"
 
 namespace ft {
 
     template < class Key,                           // map::key_type
     class T,                                       // map::mapped_type
     class Compare = std::less<Key>,               // map::key_compare
-    class Alloc = std::allocator<pair<Key,T> > >
+    class Alloc = std::allocator<pair< const Key,T> > >
     class mapiterator {
 
         public:
@@ -78,7 +79,7 @@ namespace ft {
                 if (x->left != NULL)
                     return treeMaximum(x->left);
                 node *y = x->parent;
-                while (y != NULL && (x = y->left)) {
+                while (y != NULL && (x == y->left)) {
                 
                     x = y;
                     y = y->parent;
@@ -122,7 +123,6 @@ namespace ft {
 
             mapiterator& operator++() {
 
-                // node * tmp = treeSuccessor(_current);
                 _current = treeSuccessor(_current);
                 if (_current != NULL)
                     currentData = _current->data;

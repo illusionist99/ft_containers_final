@@ -31,17 +31,23 @@ int main ()
 
   bar['a']=11;
   bar['b']=22;
+
   bar['c']=33;
 
-  foo.swap(bar);
+  for (ft::Map<char,int>::reverse_iterator it = bar.rbegin(); it != bar.rend(); it++) {
+  
+    std::cerr << it->first << std::endl;
+  }
 
-  std::cout << "foo contains:\n";
-  for (ft::Map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
+  // foo.swap(bar);
 
-  std::cout << "bar contains:\n";
-  for (ft::Map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
+  // std::cout << "foo contains:\n";
+  // for (ft::Map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
+  //   std::cout << it->first << " => " << it->second << '\n';
+
+  // std::cout << "bar contains:\n";
+  // for (ft::Map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
+  //   std::cout << it->first << " => " << it->second << '\n';
 
   return 0;
 }

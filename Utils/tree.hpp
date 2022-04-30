@@ -280,6 +280,17 @@ namespace ft {
         return tmp;
     }
 
+    node *TreeMaximum(node *root) const  {
+    
+        node *tmp = root;
+            
+        if (tmp)
+
+            while (tmp->right != NULL)
+                tmp = tmp->right;
+        return tmp;
+    }
+    
     node* Insert(node* root, node* parent, pair<Key, T> key)
     {
         if (root == NULL) {
