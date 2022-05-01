@@ -50,8 +50,8 @@ namespace ft {
             }
 
 
-            reverse_map& operator+= ( difference_type rhs ) { _curr -= rhs; return *this; };
-            reverse_map& operator-= ( difference_type rhs ) { _curr += rhs; return *this; };
+            reverse_map& operator+= ( difference_type rhs ) { while (rhs && (_curr != NULL)) { --_curr; } return *this; };
+            reverse_map& operator-= ( difference_type rhs ) {  while (rhs && (_curr != NULL)) { ++_curr; } return *this; };
 
             reference operator*() const { return *_curr; }
             pointer   operator->() const { return std::addressof(*_curr); }

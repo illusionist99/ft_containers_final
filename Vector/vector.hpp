@@ -444,7 +444,7 @@ namespace ft {
     bool operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
 
         if (lhs._size == rhs._size)
-            return (equal(lhs.begin(), lhs.end(), rhs.begin()));
+            return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
         return false;
     };
 

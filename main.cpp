@@ -33,7 +33,8 @@ int main ()
   bar['b']=22;
 
   bar['c']=33;
-
+  ft::Map<char,int>::iterator a = bar.begin();
+  std::next(a);
   for (ft::Map<char,int>::reverse_iterator it = bar.rbegin(); it != bar.rend(); it++) {
   
     std::cerr << it->first << std::endl;

@@ -101,7 +101,9 @@ namespace ft {
 
             pair& operator*() const { if (_current == NULL) {return *currentData;} return *_current->data;}
             pair* operator->() const { if (_current == NULL) {return currentData;} return _current->data;}
-            
+            mapiterator& operator+= ( difference_type rhs ) { _current += rhs; return *this; };
+            mapiterator& operator-= ( difference_type rhs ) { _current -= rhs; return *this; };
+
             mapiterator& operator--() {
             
                 _current = treePredecessor(_current);

@@ -26,7 +26,7 @@ namespace ft {
                     Compare __comp;
                 public:
                     value_compare( Compare c ) : __comp(c) {}
-                    bool operator()( const value_type& lhs, const value_type& rhs ) const { return this->__comp(lhs.first, rhs.first); }
+                    bool operator()( const value_type& lhs, const value_type& rhs ) const { return __comp(lhs.first, rhs.first); }
             };
             // typed value_compare;
             typedef Alloc allocator_type;
@@ -68,7 +68,7 @@ namespace ft {
                 for (InputIterator it = first; it != last; it++) {
 
                     root = tree.Insert(root, NULL, *it);
-                    _size += 1;
+                    _size++;
                 }
             }
 
@@ -86,7 +86,7 @@ namespace ft {
                 for (iterator it = x.begin(); it != x.end(); it++) {
 
                     root = tree.Insert(root, NULL, *it);
-                    _size += 1;
+                    _size++;
                 }
                 return *this;
             }
@@ -128,19 +128,18 @@ namespace ft {
                 return (reverse_iterator(iterator(NULL)));
             }
 
-            allocator_type get_allocator() const { return _allocator;}
+            allocator_type get_allocator() const { return _allocator; }
             bool empty() const { return _size == 0; }
             size_type size() const { return _size; }
             size_type max_size() const  {return _allocator.max_size(); }
             
-
             pair<const_iterator, const_iterator> equal_range (const key_type& k) const {
             
-                
+                return pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
             }
-            pair<iterator, iterator>             equal_range (const key_type& k) {
+            pair<iterator, iterator> equal_range (const key_type& k) {
             
-                
+                return pair<iterator, iterator>(lower_bound(k), upper_bound(k));
             }
 
             size_type count (const key_type& k) const {
