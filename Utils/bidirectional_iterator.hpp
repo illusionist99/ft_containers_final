@@ -125,12 +125,14 @@ namespace ft {
             }
             mapiterator operator++(int)  {
 
+                mapiterator tmp(*this);
+            
                 _current = treeSuccessor(_current);
                 if (_current != NULL)
                     currentData = _current->data;
                 else
                     currentData = NULL;
-                return *this;
+                return tmp;
             }
 
             mapiterator& operator++() {
@@ -145,19 +147,19 @@ namespace ft {
 
             mapiterator operator--(int)  {
 
-                mapiterator tmp = *this;
-                if (tmp._root != NULL && tmp._current == NULL && tmp.currentData == NULL) {
+                mapiterator tmp(*this);
+                if (_root != NULL && _current == NULL && currentData == NULL) {
                 
-                    tmp._current = treeMaximum(tmp._root);
-                    tmp.currentData = tmp._current->data;
+                    _current = treeMaximum(_root);
+                    currentData = _current->data;
                     return *this;
                 }
-                tmp._current = treePredecessor(tmp._current);
-                if (tmp._current != NULL)
-                    tmp.currentData = tmp._current->data;
+                _current = treePredecessor(_current);
+                if (_current != NULL)
+                    currentData = _current->data;
                 else
                     tmp.currentData = NULL;
-                return *this;
+                return tmp;
             }
             // mapiterator operator+(const mapiterator& rhs) {return mapiterator(_root+rhs._root);}
             bool operator==(const mapiterator& rhs) const {if (_current && rhs._current) {return _current->data == rhs._current->data;} return (currentData == rhs.currentData);}
