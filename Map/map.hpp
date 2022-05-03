@@ -93,39 +93,39 @@ namespace ft {
 
             iterator begin() {
 
-                return iterator(tree.TreeMinimum(root));
+                return iterator(root, tree.TreeMinimum(root));
             }
 
             const_iterator begin() const {
         
-                return iterator(tree.TreeMinimum(root));
+                return iterator(root, tree.TreeMinimum(root));
             }
 
             iterator end() {
 
-                return iterator(NULL);
+                return iterator(root, NULL);
             }
             const_iterator end() const {
 
-                return iterator(NULL);
+                return iterator(root, NULL);
             }
 
             reverse_iterator rbegin() {
 
-                return (reverse_iterator(tree.TreeMaximum(root)));
+                return (reverse_iterator(iterator(root, tree.TreeMaximum(root))));
             }
             const_reverse_iterator rbegin() const {
 
-                return (reverse_iterator(tree.TreeMaximum(root)));
+                return (reverse_iterator(iterator(root, tree.TreeMaximum(root))));
             }
 
             reverse_iterator rend() {
             
-                return (reverse_iterator(iterator(NULL)));
+                return (reverse_iterator(iterator(root, NULL)));
             }
             const_reverse_iterator rend() const {
             
-                return (reverse_iterator(iterator(NULL)));
+                return (reverse_iterator(iterator(root, NULL)));
             }
 
             allocator_type get_allocator() const { return _allocator; }
@@ -153,12 +153,16 @@ namespace ft {
 
             iterator find (const key_type& k) {
 
-                for (iterator it = begin(); it != end(); it++) {
-                    
-                    if (it->first == k)
-                        return it;
-                }
+                node * found = tree.find(root, k);
+                if (found != NULL)
+                    return iterator(root, found);
                 return end();
+                // for (iterator it = begin(); it != end(); it++) {
+                    
+                //     if (it->first == k)
+                //         return it;
+                // }
+                // return end();
             }
             const_iterator find (const key_type& k) const {
 

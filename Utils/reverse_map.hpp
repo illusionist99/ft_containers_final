@@ -27,7 +27,7 @@ namespace ft {
             // }
             reverse_map( ) {
             
-                _curr = NULL;
+                // _curr = NULL;
             }
 
             // reverse_map(Iterator curr) {

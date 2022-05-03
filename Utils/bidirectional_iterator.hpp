@@ -25,17 +25,19 @@ namespace ft {
             
             typedef pair< Key, T> pair;
             typedef node< Key, T> node;
-            // operator mapiterator<Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_current); }
+            operator mapiterator<Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_current); }
 
             node *_current;
             pair *currentData;
-    
-            mapiterator( ) { _current = NULL; currentData = NULL; }
+            node *_root;
         
-            mapiterator( node * current ) {
+            mapiterator( ) { _current = NULL; currentData = NULL; _root = NULL;}
+        
+            mapiterator( node * root, node * current ) {
             
                 if (current == NULL) { currentData = NULL; } else {currentData = current->data;}
                 _current = current;
+                _root = root;
             }
             ~mapiterator() {
             
@@ -106,11 +108,19 @@ namespace ft {
 
             mapiterator& operator--() {
             
+                if (_root != NULL && _current == NULL && currentData == NULL) {
+                
+                    _current = treeMaximum(_root);
+                    currentData = _current->data;
+                    return *this;
+                }
+
                 _current = treePredecessor(_current);
                 if (_current != NULL)
                     currentData = _current->data;
                 else
                     currentData = NULL;
+
                 return *this;
             }
             mapiterator operator++(int)  {
@@ -132,12 +142,21 @@ namespace ft {
                     currentData = NULL;
                 return *this;
             }
+
             mapiterator operator--(int)  {
-                _current = treePredecessor(_current);
-                if (_current != NULL)
-                    currentData = _current->data;
+
+                mapiterator tmp = *this;
+                if (tmp._root != NULL && tmp._current == NULL && tmp.currentData == NULL) {
+                
+                    tmp._current = treeMaximum(tmp._root);
+                    tmp.currentData = tmp._current->data;
+                    return *this;
+                }
+                tmp._current = treePredecessor(tmp._current);
+                if (tmp._current != NULL)
+                    tmp.currentData = tmp._current->data;
                 else
-                    currentData = NULL;
+                    tmp.currentData = NULL;
                 return *this;
             }
             // mapiterator operator+(const mapiterator& rhs) {return mapiterator(_root+rhs._root);}

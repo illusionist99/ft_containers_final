@@ -1,115 +1,193 @@
-#include <iostream>
+ #include <iostream>
 #include <map>
 # include "Map/map.hpp"
+#include <vector>
+#include <iostream>
+#include <iterator>
+#include <utility>
+#include <ctime>
+#include <iomanip>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <random>
 
-
-// int main ()
-// {
-//   ft::Map<char,int> foo,bar;
-//   foo['a']=100;
-//   foo['b']=200;
-//   bar['a']=10;
-//   bar['z']=1000;
-
-//   // foo ({{a,100},{b,200}}) vs bar ({a,10},{z,1000}}):
-//   if (foo==bar) std::cout << "foo and bar are equal\n";
-//   if (foo!=bar) std::cout << "foo and bar are not equal\n";
-//   if (foo< bar) std::cout << "foo is less than bar\n";
-//   if (foo> bar) std::cout << "foo is greater than bar\n";
-//   if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
-//   if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
-
-//   return 0;
-// }
-
-int main ()
+#define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
+#define TIME_FAC 4 // the ft::Map methods can be slower up to std::map methods * TIME_FAC (MAX 20)
+ time_t get_time(void)
 {
-  ft::Map<char,int> foo,bar;
+    struct timeval time_now;
 
-  foo['x']=100;
-  foo['y']=200;
-
-  bar['a']=11;
-  bar['b']=22;
-
-  bar['c']=33;
-  ft::Map<char,int>::iterator a = bar.begin();
-  std::next(a);
-  for (ft::Map<char,int>::reverse_iterator it = bar.rbegin(); it != bar.rend(); it++) {
-  
-    std::cerr << it->first << std::endl;
-  }
-
-  // foo.swap(bar);
-
-  // std::cout << "foo contains:\n";
-  // for (ft::Map<char,int>::iterator it=foo.begin(); it!=foo.end(); ++it)
-  //   std::cout << it->first << " => " << it->second << '\n';
-
-  // std::cout << "bar contains:\n";
-  // for (ft::Map<char,int>::iterator it=bar.begin(); it!=bar.end(); ++it)
-  //   std::cout << it->first << " => " << it->second << '\n';
-
-  return 0;
+    gettimeofday(&time_now, NULL);
+    time_t msecs_time = (time_now.tv_sec * 1e3) + (time_now.tv_usec / 1e3);
+    return (msecs_time);
 }
+int main() {
+/*------------ std::map ---------*/
+    std::map<int, char> m;
+    std::map<int, char>::iterator it, it1;
 
-// int main ()
-// {
-//   ft::Map<char,int> mymap;
-//   ft::Map<char,int>::iterator itlow,itup;
+    ft::Map<int, char> my_m;
+    ft::Map<int, char>::iterator my_it, my_it1, tmp;
 
-//   mymap['a']=20;
-//   mymap['b']=40;
-//   mymap['c']=60;
-//   mymap['d']=80;
-//   mymap['e']=100;
+    for (int i = 0; i < 10; ++i)
+    {
+        my_m.insert(ft::make_pair(i, static_cast<char>(i + 97)));
+        m.insert(std::make_pair(i, static_cast<char>(i + 97)));
+    }
 
-//   itlow=mymap.lower_bound ('b');  // itlow points to b
-//   std::cerr << itlow->first << std::endl;
-//   itup=mymap.upper_bound ('d');   // itup points to e (not d!)
-//   std::cerr << itup->first << std::endl;
-//   // return 0;
-//   mymap.erase(itlow,itup);        // erases [itlow,itup)
+    it = m.begin();
+    it1 = ++(m.begin());
+    my_it = my_m.begin();
+    my_it1 = ++(my_m.begin());
+    /*----------------------------------*/
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " copy constructor "
+              << "] --------------------]\t\t\033[0m";
+    {
+        ft::Map<int, char>::iterator ob(my_it);
+        EQUAL(&(*my_it) == &(*ob));
+    }
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " iterator to const_iterator "
+              << "] --------------------]\t\t\033[0m";
+    {
+        ft::Map<int, char>::const_iterator c_it, c_ob(my_it);
+        c_it = my_it;
+        EQUAL(&(*my_it) == &(*c_it) && (&(*my_it) == &(*c_ob)));
+    }
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " == operator "
+              << "] --------------------]\t\t\033[0m";
+    EQUAL((it == it1) == (my_it == my_it1));
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " != operator "
+              << "] --------------------]\t\t\033[0m";
+    EQUAL((it != it1) == (my_it != my_it1));
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " * operator "
+              << "] --------------------]\t\t\033[0m";
+    EQUAL((((*my_it).second = '6') == '6') && ((*my_it).first == ((*my_m.begin()).first)));
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " -> operator "
+              << "] --------------------]\t\t\033[0m";
+    {
+        /*--------------- std::map-------------------- */
+        std::map<int, std::string> m;
+        ft::Map<int, std::string> my_m;
 
-//   // print content:
-//   for (ft::Map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-//     std::cout << it->first << " => " << it->second << '\n';
+        for (int i = 0; i < 5; ++i)
+        {
+            m.insert(std::make_pair(13, "HELLO"));
+            my_m.insert(ft::make_pair(13, "HELLO"));
+        }
 
-//   return 0;
-// }
+        ft::Map<int, std::string>::iterator my_it = my_m.begin();
+        std::map<int, std::string>::iterator it = m.begin();
+        /*---------------------------------------------- */
+        EQUAL(it->second.length() == my_it->second.length());
+    }
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " ++it operator "
+              << "] --------------------]\t\t\033[0m";
+    {
+        /*---------------------------------- time limit test --------------------------------------------*/
+        {
+            time_t start, end, diff;
 
-//  int main ()
-// {
-//   ft::Map<char,int> mymap;
+            std::map<int, std::string> m;
+            ft::Map<int, std::string> ft_m;
+            for (size_t i = 0; i < 10000; ++i)
+            {
+                m.insert(std::make_pair(i, "value"));
+                ft_m.insert(ft::make_pair(i, "value"));
+            }
+            start = get_time();
+            for (std::map<int, std::string>::iterator it = m.begin(); it != m.end(); ++it)
+                ;
+            end = get_time();
+            diff = end - start;
+            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-//   // first insert function version (single parameter):
-//   mymap.insert ( ft::pair<char,int>('a',100) );
-//   mymap.insert ( ft::pair<char,int>('z',200) );
+            ualarm(diff * 1e3, 0);
+            for (ft::Map<int, std::string>::iterator it = ft_m.begin(); it != ft_m.end(); ++it)
+                ;
+            ualarm(0, 0);
+        }
+        bool cond(false);
+        {
+            int res(0);
+            int myints[] = {12, 82, 37, 64, 15};
+            ft::Map<int, int> m;
+            for (size_t i = 0; i < 5; ++i)
+                m.insert(ft::make_pair(myints[i], i));
+            for (ft::Map<int, int>::iterator it = m.begin(); it != m.end(); ++it)
+                res += it->first;
+            cond = res == 210;
+        }
+        {
+            int res(0), tmp;
+            int myints[] = {12, 82, 37, 64, 15};
+            ft::Map<int, int> m;
+            for (size_t i = 0; i < 5; ++i)
+                m.insert(ft::make_pair(myints[i], i));
+            ft::Map<int, int>::iterator it = m.begin(), eit = --m.end();
+            tmp = eit->first;
+            m.erase(eit);
+            for (; it != m.end(); ++it)
+                res += it->first;
+            cond = cond && (res == (210 - tmp));
+        }
+        ++my_it; // I incremented here to make sure that the object changes
+        EQUAL(*my_it == *my_it1);
+    }
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " --it operator "
+              << "] --------------------]\t\t\033[0m";
+    {
+        /*---------------------------------- time limit test --------------------------------------------*/
+        {
+            time_t start, end, diff;
 
-//   ft::pair<ft::Map<char,int>::iterator,bool> ret;
-//   ret = mymap.insert ( ft::pair<char,int>('z',500) );
-//   if (ret.second==false) {
-//     std::cout << "element 'z' already existed";
-//     std::cout << " with a value of " << ret.first->second << '\n';
-//   }
+            std::map<int, std::string> m;
+            ft::Map<int, std::string> ft_m;
+            for (size_t i = 0; i < 1e6; ++i)
+            {
+                m.insert(std::make_pair(i, "value"));
+                ft_m.insert(ft::make_pair(i, "value"));
+            }
+            start = get_time();
+            std::map<int, std::string>::iterator it = --m.end();
+            for (; it != m.begin(); --it)
+                ;
+            end = get_time();
+            diff = end - start;
+            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-//   // second insert function version (with hint position):
-//   ft::Map<char,int>::iterator it = mymap.begin();
-//   mymap.insert (it, ft::pair<char,int>('b',300));  // max efficiency inserting
-//   mymap.insert (it, ft::pair<char,int>('c',400));  // no max efficiency inserting
-
-//   // third insert function version (range insertion):
-//   ft::Map<char,int> anothermap;
-//   anothermap.insert(mymap.begin(),mymap.find('c'));
-
-//   // showing contents:
-//   std::cout << "mymap contains:\n";
-//   for (it=mymap.begin(); it!=mymap.end(); ++it)
-//     std::cout << it->first << " => " << it->second << '\n';
-
-//   std::cout << "anothermap contains:\n";
-//   for (it=anothermap.begin(); it!=anothermap.end(); ++it)
-//     std::cout << it->first << " => " << it->second << '\n';
-
-//   return 0;
-// }
+            ualarm(diff * 1e3, 0);
+            ft::Map<int, std::string>::iterator ft_it = --ft_m.end();
+            for (; ft_it != ft_m.begin(); --ft_it)
+                ;
+            ualarm(0, 0);
+        }
+        int res(0);
+        {
+            int myints[] = {12, 82, 37, 64, 15};
+            ft::Map<int, int> m;
+            for (size_t i = 0; i < 5; ++i)
+                m.insert(ft::make_pair(myints[i], i));
+            ft::Map<int, int>::iterator it = --m.end();
+            for (;; --it)
+            {
+                if (it == m.begin())
+                {
+                    res += it->first;
+                    break;
+                }
+                res += it->first;
+            }
+        }
+        --my_it; // I decremented here to make sure that the object changes
+        EQUAL(*my_it != *my_it1);
+    }
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " it++ operator "
+              << "] --------------------]\t\t\033[0m";
+    tmp = my_it++;
+    EQUAL(*my_it != *tmp && *my_it == *my_it1);
+    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " it-- operator "
+              << "] --------------------]\t\t\033[0m";
+    tmp = my_it--;
+    EQUAL(*my_it != *tmp && *my_it == *(my_m.begin()));
+    }

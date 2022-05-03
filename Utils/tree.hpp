@@ -279,7 +279,20 @@ namespace ft {
                 tmp = tmp->left;
         return tmp;
     }
-
+    node *find(node *node, Key key) {
+    
+        if (node == nullptr)
+            return nullptr;
+        if (!_cmp(node->data->first, key) && !_cmp(key, node->data->first))
+            return node;
+        else if (!_cmp(node->data->first, key)) {
+            return find(node->left, key);
+        }
+        else if (_cmp(node->data->first, key)) {
+            return find(node->right, key);
+        }
+        return node;
+    }
     node *TreeMaximum(node *root) const  {
     
         node *tmp = root;
