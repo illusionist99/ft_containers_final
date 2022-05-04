@@ -23,75 +23,41 @@
     return (msecs_time);
 }
 int main() {
-/*------------ std::map ---------*/
-    /*------------ std::reverse_iterator ---------*/
-    std::map<int, char> m;
-    for (int i = 0; i < 1e2; i++)
-        m.insert(std::make_pair(i, 'A'));
+ std::map<int, std::string> m1;
+        ft::Map<int, std::string> ft_m1;
 
-    std::reverse_iterator<std::map<int, char>::iterator> rit(m.end()), rit_1(--m.end());
+        for (size_t i = 0; i < 10; i++)
+        {
+            m1.insert(std::make_pair(i, "string2"));
+            ft_m1.insert(ft::make_pair(i, "string2"));
+        }
 
-    ft::reverse_iterator<std::map<int, char>::iterator> my_rit(m.end()), my_rit1(--m.end());
-    /*----------------------------------*/
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " copy constructor "
-              << "] --------------------]\t\t\033[0m";
-    {
-        ft::reverse_iterator<std::map<int, char>::iterator> ob(my_rit);
-        EQUAL(*my_rit == *ob);
-    }
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " riterator to const_riterator "
-              << "] --------------------]\t\t\033[0m";
-    {
-        ft::Map<int, char> my_m;
-        for (int i = 0; i < 1e2; i++)
-            my_m.insert(ft::make_pair(i, 'A'));
+        std::map<int, std::string> const m2(m1.rbegin(), m1.rend());
+        ft::Map<int, std::string> const ft_m2(ft_m1.rbegin(), ft_m1.rend());
 
-        ft::Map<int, char>::reverse_iterator my_rit2(my_m.end());
-        ft::Map<int, char>::const_reverse_iterator c_it, c_ob(my_m.end());
-        c_it = my_rit2;
-        EQUAL(my_rit2->first == c_it->first && my_rit2->first == c_ob->first);
-    }
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " base function "
-              << "] --------------------]\t\t\033[0m";
-    EQUAL((rit->first == (rit_1.base()->first)) && (my_rit->first == my_rit1.base()->first));
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " == operator "
-              << "] --------------------]\t\t\033[0m";
-    EQUAL((rit == rit_1) == (my_rit == my_rit1));
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " != operator "
-              << "] --------------------]\t\t\033[0m";
-    EQUAL((rit != rit_1) == (my_rit != my_rit1));
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " -> operator "
-              << "] --------------------]\t\t\033[0m";
-    EQUAL(((my_rit->first == (--m.end())->first) && ((my_rit->first) == ((--m.end())->first))) && ((rit->first == (--m.end())->first) && ((rit->first) == ((--m.end())->first))));
+        /*-----------------------------------------------------*/
+        /*------------------ ft::Maps ---------------------*/
+        /*----------------------------------------------------*/
+        /*------------------ strings to store the results ----*/
+        std::string res, ft_res, c_res, c_ft_res;
+        /*----------------------------------------------------*/
+        for (std::map<int, std::string>::reverse_iterator it = m1.rbegin(); it != m1.rend(); ++it) // fill res from m1
+            res += it->second;
+        for (std::map<int, std::string>::const_reverse_iterator rit = m2.rbegin(); rit != m2.rend(); ++rit) // fill c_res from const m1
+            c_res += rit->second;
 
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " * operator "
-              << "] --------------------]\t\t\033[0m";
-    EQUAL((((*my_rit).first == (*(--m.end())).first) && (((*my_rit).first) == ((*(--m.end())).first))) && (((*rit).first == (*(--m.end())).first) && ((*(rit)).first) == ((*(--m.end())).first)));
-
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " ++rit operator "
-              << "] --------------------]\t\t\033[0m";
-    ++my_rit; // I incremented here to make sure that the object changes
-    ++rit;
-    EQUAL(&(*my_rit) == &(*my_rit1)) && (&(*rit) == &(*rit_1));
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " --rit operator "
-              << "] --------------------]\t\t\033[0m";
-    --my_rit; // I incremented here to make sure that the object changes
-    --rit;
-    EQUAL((my_rit->first == (--my_rit1)->first) && (rit->first == (--rit_1)->first));
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " rit++ operator "
-              << "] --------------------]\t\t\033[0m";
-    {
-        std::reverse_iterator<std::map<int, char>::iterator> tmp(rit++);
-        ft::reverse_iterator<std::map<int, char>::iterator> my_tmp(my_rit++);
-        EQUAL(tmp->first == (--rit)->first && my_tmp->first == (--my_rit)->first);
-    }
-    std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " rit-- operator "
-              << "] --------------------]\t\t\033[0m";
-    {
-        rit++;
-        my_rit++;
-        std::reverse_iterator<std::map<int, char>::iterator> tmp(rit--);
-        ft::reverse_iterator<std::map<int, char>::iterator> my_tmp(my_rit--);
-        EQUAL(tmp->first == (++rit)->first && my_tmp->first == (++my_rit)->first);
-    }
+        for (ft::Map<int, std::string>::reverse_iterator it = ft_m1.rbegin(); it != ft_m1.rend(); ++it) // fill ft_res from ft_m1
+            ft_res += it->second;
+        for (ft::Map<int, std::string>::const_reverse_iterator rit = ft_m2.rbegin(); rit != ft_m2.rend(); ++rit) // fill c_ft_res from const ft_m1
+            c_ft_res += rit->second;
+        int arr[] = {12, 82, 37, 64, 15};
+        ft::Map<int, int> end_test;
+        for(size_t i = 0; i < 5; ++i)
+            end_test.insert(ft::make_pair(arr[i], i));
+        ft::Map<int, int>::reverse_iterator rit = end_test.rend();
+        rit--;
+        std::cout << (res == ft_res) << std::endl;
+        std::cout << (c_res == c_ft_res) << std::endl;
+        std::cout << rit->first << " " <<  (rit->first == 12) << std::endl;
+        // EQUAL(res == ft_res &&  && );
 }

@@ -279,7 +279,7 @@ namespace ft {
                 tmp = tmp->left;
         return tmp;
     }
-    node *find(node *node, Key key) {
+    node *find(node *node, Key key) const {
     
         if (node == nullptr)
             return nullptr;

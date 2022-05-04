@@ -112,20 +112,20 @@ namespace ft {
 
             reverse_iterator rbegin() {
 
-                return (reverse_iterator(iterator(root, tree.TreeMaximum(root))));
+                return (reverse_iterator(end()));
             }
-            const_reverse_iterator rbegin() const {
+            const_reverse_iterator rbegin() const { 
 
-                return (reverse_iterator(iterator(root, tree.TreeMaximum(root))));
+                return (reverse_iterator(end()));
             }
 
             reverse_iterator rend() {
             
-                return (reverse_iterator(iterator(root, NULL)));
+                return (reverse_iterator(begin()));
             }
             const_reverse_iterator rend() const {
             
-                return (reverse_iterator(iterator(root, NULL)));
+                return (reverse_iterator(iterator(begin())));
             }
 
             allocator_type get_allocator() const { return _allocator; }
@@ -157,20 +157,12 @@ namespace ft {
                 if (found != NULL)
                     return iterator(root, found);
                 return end();
-                // for (iterator it = begin(); it != end(); it++) {
-                    
-                //     if (it->first == k)
-                //         return it;
-                // }
-                // return end();
             }
             const_iterator find (const key_type& k) const {
 
-                for (iterator it = begin(); it != end(); it++) {
-                    
-                    if (it->first == k)
-                        return it;
-                }
+                node * found = tree.find(root, k);
+                if (found != NULL)
+                    return iterator(root, found);
                 return end();
             }
             mapped_type& operator[] (const key_type& k) {
@@ -179,6 +171,7 @@ namespace ft {
 
                 if (it == end()) {
                     root = tree.Insert(root, NULL, ft::make_pair<  const key_type, mapped_type>(k, mapped_type()));
+                    _size++;
                     return find(k)->second;
                 }
                 return it->second;
@@ -218,6 +211,7 @@ namespace ft {
                 for (InputIterator it = first; it != last; it++) {
                 
                     root = tree.Insert(root , NULL, *it);
+                    _size++;
                 }
             }
 
