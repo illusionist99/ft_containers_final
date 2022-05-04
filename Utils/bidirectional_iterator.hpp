@@ -133,6 +133,12 @@ namespace ft {
         
             mapiterator operator++(int)  {
 
+                if (_root != NULL && _current == NULL && currentData == NULL) {
+                
+                    _current = treeMinimum(_root);
+                    currentData = _current->data;
+                    return *this;
+                }
                 mapiterator tmp(*this);
             
                 _current = treeSuccessor(_current);
@@ -145,6 +151,13 @@ namespace ft {
 
             mapiterator& operator++() {
 
+
+                if (_root != NULL && _current == NULL && currentData == NULL) {
+                
+                    _current = treeMinimum(_root);
+                    currentData = _current->data;
+                    return *this;
+                }
                 _current = treeSuccessor(_current);
                 if (_current != NULL)
                     currentData = _current->data;

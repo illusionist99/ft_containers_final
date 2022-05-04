@@ -475,7 +475,8 @@ namespace ft {
                     if (root->parent != NULL)
                         Updateheight(root->parent);
     
-                    root = NULL;
+                    // root = NULL;
+                    _NodeAlloc.destroy(root);
                     return NULL;
                 }
     
@@ -526,9 +527,9 @@ namespace ft {
     
         // Handle the case when the key to be
         // deleted could not be found
-        else {
-            std::cout << "Key to be deleted " << "could not be found\n";
-        }
+        // else {
+        //     // std::cout << "Key to be deleted " << "could not be found\n";
+        // }
     
         // Return the root node
         return root;

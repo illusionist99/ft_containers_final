@@ -29,6 +29,11 @@ namespace ft {
                 --tmp;
                 _iter = tmp;
             }
+
+            // reverse_iterator &operator=(const reverse_iterator & obj) {
+            
+            //     _iter = obj;
+            // }
             template <class Iter>
             reverse_iterator( const reverse_iterator<Iter>& obj ) {
             
