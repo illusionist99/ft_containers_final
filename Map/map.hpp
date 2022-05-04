@@ -3,7 +3,7 @@
 # include <iostream>
 # include "../Utils/tree.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
-# include "../Utils/reverse_map.hpp"
+# include "../Utils/reverse_iterator_map.hpp"
 
 namespace ft {
 
@@ -11,7 +11,7 @@ namespace ft {
     template < class Key,                                     // Map::key_type
     class T,                                                 // Map::mapped_type
     class Compare = std::less<Key>,                         // Map::key_compare
-    class Alloc = std::allocator<pair<const Key,T> > >     // Map::allocator_type
+    class Alloc = std::allocator<pair<Key,T> > >     // Map::allocator_type
     class Map {
 
         public:
@@ -36,8 +36,8 @@ namespace ft {
             typedef const value_type* const_pointer;
             typedef mapiterator< Key, T, Compare, Alloc> iterator;
             typedef mapiterator< Key, T, Compare, Alloc> const_iterator;
-            typedef reverse_map<iterator> reverse_iterator;
-            typedef reverse_map<const_iterator> const_reverse_iterator;
+            typedef ft::reverse_iterator<iterator> reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
             typedef size_t size_type;
             size_type _size;

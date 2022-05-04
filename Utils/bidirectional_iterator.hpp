@@ -11,7 +11,7 @@ namespace ft {
     template < class Key,                           // map::key_type
     class T,                                       // map::mapped_type
     class Compare = std::less<Key>,               // map::key_compare
-    class Alloc = std::allocator<pair< const Key,T> > >
+    class Alloc = std::allocator<pair<Key,T> > >
     class mapiterator {
 
         public:
@@ -22,26 +22,26 @@ namespace ft {
             typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::reference          reference;
             typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::iterator_category  iterator_category;
             
-            
+            Alloc _allocator;
             typedef pair< Key, T> pair;
             typedef node< Key, T> node;
-            operator mapiterator<Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_current); }
+            operator mapiterator<Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_root, _current); }
 
             node *_current;
             pair *currentData;
             node *_root;
         
-            mapiterator( ) { _current = NULL; currentData = NULL; _root = NULL;}
+            mapiterator( ) { _current = NULL; currentData = _allocator.allocate(1); /*_allocator.construct(currentData, pair(Key(), T()));*/ _root = NULL; }
         
             mapiterator( node * root, node * current ) {
             
-                if (current == NULL) { currentData = NULL; } else {currentData = current->data;}
+                if (current == NULL) { currentData = _allocator.allocate(1); /*_allocator.construct(currentData, pair(Key(), T()));*/ } else {currentData = current->data;}
                 _current = current;
                 _root = root;
             }
             ~mapiterator() {
             
-        
+                _allocator.destroy(currentData);
             }
             node *treeMaximum(node *x)  {
             
@@ -101,8 +101,10 @@ namespace ft {
                 return *this;
             }
 
-            pair& operator*() const { if (_current == NULL) {return *currentData;} return *_current->data;}
-            pair* operator->() const { if (_current == NULL) {return currentData;} return _current->data;}
+            pair& operator*() { if (_current == NULL) {return *(currentData);} return *_current->data;}
+            pair* operator->() { if (_current == NULL) {return currentData;} return _current->data;}
+        
+
             mapiterator& operator+= ( difference_type rhs ) { _current += rhs; return *this; };
             mapiterator& operator-= ( difference_type rhs ) { _current -= rhs; return *this; };
 
@@ -123,6 +125,7 @@ namespace ft {
 
                 return *this;
             }
+        
             mapiterator operator++(int)  {
 
                 mapiterator tmp(*this);
@@ -161,9 +164,8 @@ namespace ft {
                     tmp.currentData = NULL;
                 return tmp;
             }
-            // mapiterator operator+(const mapiterator& rhs) {return mapiterator(_root+rhs._root);}
+
             bool operator==(const mapiterator& rhs) const {if (_current && rhs._current) {return _current->data == rhs._current->data;} return (currentData == rhs.currentData);}
             bool operator!=(const mapiterator& rhs) const {if (_current  && rhs._current) {return _current->data != rhs._current->data;} return (currentData != rhs.currentData);}
-
     };
 }
