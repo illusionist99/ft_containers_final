@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "__hash_table": "cpp",
+        "__node_handle": "cpp",
+        "__tree": "cpp",
+        "map": "cpp",
+        "unordered_map": "cpp"
     }
 }

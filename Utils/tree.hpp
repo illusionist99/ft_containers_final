@@ -11,7 +11,7 @@ namespace ft {
 
         node* left;
         node* right;
-        pair<Key, T> *data;
+        pair< const Key, T> *data;
         node* parent;
         int height;
     };
@@ -21,7 +21,7 @@ namespace ft {
     
         typedef node< Key, T> node;
         typedef typename Alloc::template rebind<node>::other rebind_allocator;
-        typedef typename Alloc::template rebind<pair<Key, T> >::other _allocator;
+        typedef typename Alloc::template rebind<pair< const Key, T> >::other _allocator;
     
         rebind_allocator _NodeAlloc;
         _allocator  _PairAlloc;
@@ -304,7 +304,7 @@ namespace ft {
         return tmp;
     }
     
-    node* Insert(node* root, node* parent, pair<Key, T> key)
+    node* Insert(node* root, node* parent, pair< const Key, T> key)
     {
         if (root == NULL) {
     
@@ -405,7 +405,7 @@ namespace ft {
     
     // Function to delete a node from
     // the AVL tree
-    node* Delete(node* root, pair<Key, T> key)
+    node* Delete(node* root, pair< const Key, T> key)
     {
         if (root != NULL) {
     
@@ -490,7 +490,7 @@ namespace ft {
                         tmpnode = tmpnode->left;
                     }
     
-                    pair<Key, T> *val = tmpnode->data;
+                    pair<const Key, T> *val = tmpnode->data;
     
                     root->right = Delete(root->right, *tmpnode->data);
     

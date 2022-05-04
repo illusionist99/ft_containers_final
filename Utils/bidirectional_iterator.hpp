@@ -4,44 +4,45 @@
 # include "pair.hpp"
 # include "iterator.hpp"
 # include "tree.hpp"
-// # include "reverse_map.hpp"
 
 namespace ft {
 
     template < class Key,                           // map::key_type
     class T,                                       // map::mapped_type
     class Compare = std::less<Key>,               // map::key_compare
-    class Alloc = std::allocator<pair<Key,T> > >
+    class Alloc = std::allocator<pair< const Key,T> > >
     class mapiterator {
 
         public:
 
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::difference_type    difference_type;
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::value_type         value_type;
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::pointer            pointer;
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::reference          reference;
-            typedef typename iterator<std::random_access_iterator_tag, pair<Key, T> >::iterator_category  iterator_category;
+            typedef typename iterator<std::random_access_iterator_tag, pair< const Key, T> >::difference_type    difference_type;
+            typedef typename iterator<std::random_access_iterator_tag, pair< const Key, T> >::value_type         value_type;
+            typedef typename iterator<std::random_access_iterator_tag, pair< const Key, T> >::pointer            pointer;
+            typedef typename iterator<std::random_access_iterator_tag, pair< const Key, T> >::reference          reference;
+            typedef typename iterator<std::random_access_iterator_tag, pair< const Key, T> >::iterator_category  iterator_category;
             
             Alloc _allocator;
-            typedef pair< Key, T> pair;
+            typedef pair< const Key, T> pair;
             typedef node< Key, T> node;
             operator mapiterator<Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_root, _current); }
 
             node *_current;
             pair *currentData;
+            pair *_safe;
             node *_root;
         
-            mapiterator( ) { _current = NULL; currentData = _allocator.allocate(1); /*_allocator.construct(currentData, pair(Key(), T()));*/ _root = NULL; }
+            mapiterator( ) { _current = NULL; currentData = NULL; _safe = _allocator.allocate(1); _allocator.construct(_safe, pair(Key(), T())); _root = NULL; }
         
             mapiterator( node * root, node * current ) {
             
-                if (current == NULL) { currentData = _allocator.allocate(1); /*_allocator.construct(currentData, pair(Key(), T()));*/ } else {currentData = current->data;}
+                _safe = _allocator.allocate(1); _allocator.construct(_safe, pair(Key(), T()));
+                if (current == NULL) { currentData = NULL; } else {currentData = current->data;}
                 _current = current;
                 _root = root;
             }
             ~mapiterator() {
             
-                _allocator.destroy(currentData);
+                _allocator.destroy(_safe);
             }
             node *treeMaximum(node *x)  {
             
@@ -92,17 +93,21 @@ namespace ft {
 
                 _current = obj._current;
                 currentData = obj.currentData;
+                _root = obj._root;
+                _safe = obj._safe;
             }
     
             mapiterator &operator=(const mapiterator& obj ) {
 
                 _current = obj._current;
                 currentData = obj.currentData;
+                _root = obj._root;
+                _safe = obj._safe;
                 return *this;
             }
 
-            pair& operator*() { if (_current == NULL) {return *(currentData);} return *_current->data;}
-            pair* operator->() { if (_current == NULL) {return currentData;} return _current->data;}
+            pair& operator*() const { if (_current == NULL) {return *(_safe);} return *_current->data;}
+            pair* operator->() const { if (_current == NULL) {return _safe;} return _current->data;}
         
 
             mapiterator& operator+= ( difference_type rhs ) { _current += rhs; return *this; };
