@@ -293,6 +293,77 @@ namespace ft {
         }
         return node;
     }
+
+    node *lowerBound(node *root, const Key &k) const {
+    
+        if (root == NULL)
+            return NULL;
+        if (!_cmp(root->data->first, k))
+            return root;
+        else if (!_cmp(root->left->data->first, k))
+            return lowerBound(root->left, k);
+        else if (!_cmp(root->right->data->first, k))
+            return lowerBound(root->right, k);
+
+        return root;
+    }
+
+    node *treeMaximum(node *x) const  {
+    
+        if (x == NULL)
+            return NULL;
+        while (x->right != NULL)
+            x = x->right;
+        return x;
+    }
+    node *treeMinimum(node *x) const {
+    
+        if (x == NULL)
+            return NULL;
+        while (x->left != NULL)
+            x = x->left;
+        return x;
+    }
+
+    node *treeSuccessor(node *x)  const {
+    
+        if (x == NULL)
+            return x;
+        if (x->right != NULL)
+            return treeMinimum(x->right);
+        node *y = x->parent;
+        while (y != NULL && (x == y->right)) {
+        
+            x = y;
+            y = y->parent;
+        }
+        return y;
+    }
+    node *treePredecessor(node *x) const  {
+
+        if (x == NULL)
+            return x;
+        if (x->left != NULL)
+            return treeMaximum(x->left);
+        node *y = x->parent;
+        while (y != NULL && (x == y->left)) {
+        
+            x = y;
+            y = y->parent;
+        }
+        return y;
+    }
+    node *upperBound(node *root, const Key &k) const  {
+
+
+        while ((root = treeSuccessor(root))) {
+        
+            if ( !_cmp(root->data->first, k) && k != root->data->first )
+                return root;
+        }
+        return root;
+    }
+
     node *TreeMaximum(node *root) const  {
     
         node *tmp = root;

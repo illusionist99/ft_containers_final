@@ -254,46 +254,30 @@ namespace ft {
 
             iterator lower_bound (const key_type& k) {
 
-                iterator it = find(k)--;
-                for ( ; it != end() ; ++it ) {
-                
-                    if (!_cmp(it->first, k))
-                        return it;
-                }
-                return end();
+                return iterator(root, tree.lowerBound(root, k));
             }
 
             const_iterator lower_bound (const key_type& k) const {
 
-                for ( iterator it = begin() ; it != end() ; ++it ) {
-                
-                    if (!_cmp(it->first, k))
-                        return it;
-                }
-                return end();
+                return const_iterator(root, tree.lowerBound(root, k));
             }
             iterator upper_bound (const key_type& k) {
             
-                for ( iterator it = begin() ; it != end() ; ++it ) {
-                
-                    if (_cmp(k, it->first))
-                        return it;
-                }
-                return end();
+                return iterator(root, tree.upperBound(root, k));
             }
 
             const_iterator upper_bound (const key_type& k) const {
             
-                for ( iterator it = begin() ; it != end() ; ++it ) {
-                
-                    if (_cmp(k, it->first))
-                        return it;
-                }
-                return end();
+                return const_iterator(root, tree.upperBound(root, k));
             }
+        
             void swap (Map& x) {
             
                 std::swap(root, x.root);
+                std::swap(_size, x._size);
+                std::swap(_allocator, x._allocator);
+                std::swap(_cmp, x._cmp);
+                
             }
         };
 
@@ -339,5 +323,7 @@ namespace ft {
         
             std::swap(x.root, y.root);
             std::swap(x._size, y._size);
+            std::swap(x._allocator, y._allocator);
+            std::swap(x._cmp, y._cmp);
         }
 }

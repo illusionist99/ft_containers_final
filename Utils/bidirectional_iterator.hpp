@@ -44,7 +44,7 @@ namespace ft {
             
                 _allocator.destroy(_safe);
             }
-            node *treeMaximum(node *x)  {
+            node *treeMaximum(node *x) const  {
             
                 if (x == NULL)
                     return NULL;
