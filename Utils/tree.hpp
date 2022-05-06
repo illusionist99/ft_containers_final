@@ -465,10 +465,10 @@ namespace ft {
                 // the current node
                 else if (root->left == NULL && root->right == NULL) {
                     
-                    if (_cmp(root->parent->data->first, root->data->first)) {
+                    if (root->parent && _cmp(root->parent->data->first, root->data->first)) {
                         root->parent->right = NULL;
                     }
-                    else {
+                    else  if (root->parent != NULL) {
                         root->parent->left = NULL;
                     }
     

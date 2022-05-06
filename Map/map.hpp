@@ -254,7 +254,8 @@ namespace ft {
 
             iterator lower_bound (const key_type& k) {
 
-                for ( iterator it = begin() ; it != end() ; ++it ) {
+                iterator it = find(k)--;
+                for ( ; it != end() ; ++it ) {
                 
                     if (!_cmp(it->first, k))
                         return it;
