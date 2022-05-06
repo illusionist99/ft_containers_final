@@ -110,8 +110,8 @@ namespace ft {
             pair* operator->() const { if (_current == NULL) {return _safe;} return _current->data;}
         
 
-            mapiterator& operator+= ( difference_type rhs ) { while (--rhs > 0) _current++; return *this; };
-            mapiterator& operator-= ( difference_type rhs ) { while (--rhs > 0) _current--; return *this; };
+            mapiterator& operator+= ( difference_type rhs ) { for  (difference_type it = rhs; it >= 1; it--) { (*this)++;} return *this; };
+            mapiterator& operator-= ( difference_type rhs ) { for  (difference_type it = rhs; it >= 1; it--) { (*this)--;} return *this; };
 
             mapiterator& operator--() {
             

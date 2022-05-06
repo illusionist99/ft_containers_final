@@ -325,23 +325,129 @@ time_t get_time(void)
 
 int main ()
 {
-  ft::Map<char,int> mymap;
-  ft::Map<char,int>::iterator itlow,itup;
+//   ft::Map<char,int> mymap;
+//   ft::Map<char,int>::iterator itlow,itup;
 
-  mymap['a']=20;
-  mymap['b']=40;
-  mymap['c']=60;
-  mymap['d']=80;
-  mymap['e']=100;
+//   mymap['a']=20;
+//   mymap['b']=40;
+//   mymap['c']=60;
+//   mymap['d']=80;
+//   mymap['e']=100;
 
-  itlow=mymap.lower_bound ('b');  // itlow points to b
-  itup=mymap.upper_bound ('d');   // itup points to e (not d!)
-    std::cout << itlow->first << " "  << itup->first << std::endl;
-  mymap.erase(itlow,itup);        // erases [itlow,itup)
+//   itlow=mymap.lower_bound ('b');  // itlow points to b
+//   itup=mymap.upper_bound ('d');   // itup points to e (not d!)
+//     std::cout << itlow->first << " "  << itup->first << std::endl;
+//   mymap.erase(itlow,itup);        // erases [itlow,itup)
 
-  // print content:
-  for (ft::Map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
+//   // print content:
+//   for (ft::Map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+//     std::cout << it->first << " => " << it->second << '\n';
 
-  return 0;
+//   return 0;
+    bool cond = false;
+    std::map<char, int> foo, bar;
+    ft::Map<char, int> ft_foo, ft_bar;
+
+    foo['x'] = 100;
+    foo['y'] = 200;
+
+    ft_foo['x'] = 100;
+    ft_foo['y'] = 200;
+
+    cond = foo.size() == ft_foo.size() && bar.size() == ft_bar.size();
+
+    bar['a'] = 11;
+    bar['b'] = 22;
+    bar['c'] = 33;
+
+    ft_bar['a'] = 11;
+    ft_bar['b'] = 22;
+    ft_bar['c'] = 33;
+
+    cond = cond && foo.size() == ft_foo.size() && bar.size() == ft_bar.size() && compareMaps(foo.begin(), foo.end(), ft_foo.begin(), ft_foo.end()) && compareMaps(bar.begin(), bar.end(), ft_bar.begin(), ft_bar.end());
+    std::cout << "------------------------------------------\n";
+    std::cout << (foo.size() == ft_foo.size()) << std::endl;
+    std::cout << ( bar.size() == ft_bar.size()) << std::endl;
+    std::cout << (compareMaps(foo.begin(), foo.end(), ft_foo.begin(), ft_foo.end())) << std::endl;
+    std::cout << (compareMaps(bar.begin(), bar.end(), ft_bar.begin(), ft_bar.end())) << std::endl;
+    std::cout << "------------------------------------------\n";
+    foo.swap(bar);
+    ft_foo.swap(ft_bar);
+
+    cond = cond && foo.size() == ft_foo.size() && bar.size() == ft_bar.size() && compareMaps(foo.begin(), foo.end(), ft_foo.begin(), ft_foo.end()) && compareMaps(bar.begin(), bar.end(), ft_bar.begin(), ft_bar.end());
+    std::cout << "------------------------------------------\n";
+    std::cout << (foo.size() == ft_foo.size()) << std::endl;
+    std::cout << ( bar.size() == ft_bar.size()) << std::endl;
+    std::cout << (compareMaps(foo.begin(), foo.end(), ft_foo.begin(), ft_foo.end())) << std::endl;
+    std::cout << (compareMaps(bar.begin(), bar.end(), ft_bar.begin(), ft_bar.end())) << std::endl;
+    std::cout << "------------------------------------------\n";
+    std::map<std::string, std::string, std::greater<std::string> > m1, m2;
+    ft::Map<std::string, std::string, std::greater<std::string> > ft_m1, ft_m2;
+
+    m1["γ"] = "gamma";
+    m1["β"] = "beta";
+    m1["α"] = "alpha";
+    m1["γ"] = "gamma";
+
+    m2["ε"] = "eplsilon";
+    m2["δ"] = "delta";
+    m2["ε"] = "epsilon";
+
+    ft_m1["γ"] = "gamma";
+    ft_m1["β"] = "beta";
+    ft_m1["α"] = "alpha";
+    ft_m1["γ"] = "gamma";
+
+    ft_m2["ε"] = "eplsilon";
+    ft_m2["δ"] = "delta";
+    ft_m2["ε"] = "epsilon";
+
+    const std::pair<std::string, std::string> &ref = *(m1.begin());
+    const std::map<std::string, std::string, std::greater<std::string> >::iterator iter = std::next(m1.begin());
+    const ft::pair<std::string, std::string> &ft_ref = *(ft_m1.begin());
+    const ft::Map<std::string, std::string, std::greater<std::string> >::iterator ft_iter = std::next(ft_m1.begin());
+
+    // std::cout << "──────── before swap ────────\n"
+    //           << "m1: " << m1 << "m2: " << m2 << "ref: " << ref
+    //           << "\niter: " << *iter << '\n';
+    std::cout << "----00----\n";
+    std::cout << ref.first << std::endl;
+    std::cout << ref.second << std::endl;
+    std::cout << iter->first << std::endl;
+    std::cout << iter->second << std::endl;
+    std::cout << "----00----\n";
+    std::cout << ft_ref.first << std::endl;
+    std::cout << ft_ref.second << std::endl;
+    std::cout << ft_iter->first << std::endl;
+    std::cout << ft_iter->second << std::endl;
+    std::cout << "----00----\n";
+
+
+    std::cout << "------------------------------------------\n";
+    std::cout << (ref.first == ft_ref.first) << std::endl;
+    std::cout << (ref.second == ft_ref.second) << std::endl;
+    std::cout << (iter->second == ft_iter->second) << std::endl;
+    std::cout << (iter->first == ft_iter->first) << std::endl;
+    std::cout << (m1.size() == ft_m1.size()) << std::endl;
+    std::cout << (m2.size() && ft_m2.size()) << std::endl;
+    std::cout << "------------------------------------------\n";
+
+    // cond = cond &&  &&  &&  && iter->first == ft_iter->first && m1.size() == ft_m1.size() && m2.size() && ft_m2.size();
+
+    m1.swap(m2);
+    ft_m1.swap(ft_m2);
+
+    // _---------------_ << ──────── after swap ──────── >> _---------------_
+    std::cout << "------------------------------------------\n";
+    std::cout << (ref.first == ft_ref.first) << std::endl;
+    std::cout << (ref.second == ft_ref.second) << std::endl;
+    std::cout << (iter->second == ft_iter->second) << std::endl;
+    std::cout << (iter->first == ft_iter->first) << std::endl;
+    std::cout << (m1.size() == ft_m1.size()) << std::endl;
+    std::cout << (m2.size() && ft_m2.size()) << std::endl;
+    std::cout << "------------------------------------------\n";
+
+    // EQUAL(cond);
+
+
 }

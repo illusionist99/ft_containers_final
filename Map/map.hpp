@@ -45,7 +45,8 @@ namespace ft {
             typedef node<key_type, mapped_type> node;
 
             node *root;
-            avl<key_type, mapped_type> tree;
+            avl<key_type, mapped_type, key_compare, Alloc> tree;
+        
             Compare _cmp;
             explicit Map (const key_compare& comp = key_compare(),
             const allocator_type& alloc = allocator_type()) {
@@ -277,7 +278,6 @@ namespace ft {
                 std::swap(_size, x._size);
                 std::swap(_allocator, x._allocator);
                 std::swap(_cmp, x._cmp);
-                
             }
         };
 
