@@ -220,28 +220,38 @@ namespace ft {
             size_type erase (const key_type& k) {
             
                 // iterator it = find(k);
-                root = tree.Delete(root, ft::make_pair<Key, T>(k, T()));
-                _size--;
-                return _size;
+                if (_size > 0) {
+                    root = tree.Delete(root, ft::make_pair<Key, T>(k, T()));
+                    _size -= 1;
+                    return 1;
+                }
+                return 0;
             }
             void erase (iterator position) {
             
                 // if (position != end())
-                root = tree.Delete(root, *position);
-                _size--;
+                if (_size > 0) {
+                    
+                    root = tree.Delete(root, *position);
+                    _size -= 1;
+                }
             }
+
 
 
             void erase (iterator first, iterator last) {
             
-                std::vector<Key> tmp;
 
-                while (first != last) {
+                if (_size > 0) {
+                    std::vector<Key> tmp;
 
-                    tmp.push_back(first->first);
-                    first++;
+                    while (first != last) {
+
+                        tmp.push_back(first->first);
+                        first++;
+                    }
+                    for (size_type i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
                 }
-                for (size_type i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
             }
 
             key_compare key_comp() const {
