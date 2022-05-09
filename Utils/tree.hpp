@@ -476,7 +476,7 @@ namespace ft {
     
     // Function to delete a node from
     // the AVL tree
-    node* Delete(node* root, pair< const Key, T> key)
+    node* Delete(node* root, pair< const Key, T> key, int *found)
     {
         if (root != NULL) {
     
@@ -546,7 +546,8 @@ namespace ft {
                     if (root->parent != NULL)
                         Updateheight(root->parent);
     
-                    // root = NULL;
+                    _PairAlloc.destroy(root->data);
+                    root->data = NULL;
                     _NodeAlloc.destroy(root);
                     return NULL;
                 }
@@ -564,7 +565,7 @@ namespace ft {
     
                     pair<const Key, T> *val = tmpnode->data;
     
-                    root->right = Delete(root->right, *tmpnode->data);
+                    root->right = Delete(root->right, *tmpnode->data, found);
     
                     root->data = val;
     
@@ -578,14 +579,14 @@ namespace ft {
             // delete the current node
             else if (_cmp(root->data->first, key.first)) {
 
-                root->right = Delete(root->right, key);
+                root->right = Delete(root->right, key, found);
                 root = Balance(root);
             }
     
             // Recur into the right subtree
             // to delete the current node
             else if (!_cmp(root->data->first, key.first)) {
-                root->left = Delete(root->left, key);
+                root->left = Delete(root->left, key, found);
     
                 root = Balance(root);
             }
@@ -595,7 +596,9 @@ namespace ft {
                 Updateheight(root);
             }
         }
-    
+        else {
+            *found = 0;
+        }
         // Handle the case when the key to be
         // deleted could not be found
         // else {

@@ -163,7 +163,7 @@ namespace ft {
 
                 node * found = tree.find(root, k);
                 if (found != NULL)
-                    return iterator(root, found);
+                    return const_iterator(root, found);
                 return end();
             }
             mapped_type& operator[] (const key_type& k) {
@@ -219,20 +219,18 @@ namespace ft {
 
             size_type erase (const key_type& k) {
             
-                // iterator it = find(k);
-                if (_size > 0) {
-                    root = tree.Delete(root, ft::make_pair<Key, T>(k, T()));
+                int found = 1;
+                root = tree.Delete(root, ft::make_pair<Key, T>(k, T()), &found);
+                if (_size > 0)
                     _size -= 1;
-                    return 1;
-                }
-                return 0;
+                return found;
+
             }
             void erase (iterator position) {
             
-                // if (position != end())
-                if (_size > 0) {
-                    
-                    root = tree.Delete(root, *position);
+                int found = 1;
+                if (position != end())  {
+                    root = tree.Delete(root, *position, &found);
                     _size -= 1;
                 }
             }
@@ -242,16 +240,14 @@ namespace ft {
             void erase (iterator first, iterator last) {
             
 
-                if (_size > 0) {
-                    std::vector<Key> tmp;
+                std::vector<Key> tmp;
 
-                    while (first != last) {
+                while (first != last) {
 
-                        tmp.push_back(first->first);
-                        first++;
-                    }
-                    for (size_type i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
+                    tmp.push_back(first->first);
+                    first++;
                 }
+                for (size_type i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
             }
 
             key_compare key_comp() const {

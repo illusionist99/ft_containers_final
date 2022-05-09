@@ -170,13 +170,13 @@ time_t get_time(void)
 //         std::mt19937 generator(randDev());
 //         std::uniform_int_distribution<int> distr(0, 1e8);
 
-//         for (size_t i = 0; i < 1e6; i++)
+//         for (size_t i = 0; i < 10; i++)
 //         {
 //             m3.insert(std::make_pair(i, "string1"));
 //             ft_m3.insert(ft::make_pair(i, "string1"));
 //         }
 
-//         for (size_t i = 0; i < 1e6; ++i)
+//         for (size_t i = 0; i < 10; ++i)
 //         {
 //             int n = distr(generator);
 //             int ret1 = m3.erase(n);
@@ -347,8 +347,10 @@ int main ()
         m['e'] = 50;
         m['f'] = 60;
 
-        cond = m.size() == ft_m.size() && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
+        cond = (m.size() == ft_m.size() && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end()));
 
+        std::cout << " Bool is " << cond << std::endl;
+        std::cout << m.size()  << "  " <<  ft_m.size() << std::endl;
         std::cout << "========000============\n";
         std::cout << (m.size() == ft_m.size()) << std::endl;
         std::cout << (compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end())) << std::endl;
@@ -359,6 +361,8 @@ int main ()
 
         cond = cond && (it->first == ft_it->first) && (it->second == ft_it->second);
         
+
+        std::cout << " Bool is " << cond << std::endl;
         std::cout << "========111============\n";
         std::cout << (it->first == ft_it->first) << std::endl;
         std::cout << (it->second == ft_it->second) << std::endl;
@@ -367,6 +371,7 @@ int main ()
         ft_m.erase(ft_it); // erasing by iterator
 
         cond = cond && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
+        std::cout << " Bool is " << cond << std::endl;
         std::cout << "========222============\n";
         std::cout << (compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end())) << std::endl;
         std::cout << "========222============\n";
@@ -374,7 +379,7 @@ int main ()
         int ft_ret = ft_m.erase('c'); // erasing by key
 
         cond = cond && ret == ft_ret && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
-
+        std::cout << " Bool is " << cond << std::endl;
         std::cout << "========333============\n";
         std::cout << (compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end())) << std::endl;
         std::cout << (ret == ft_ret)  <<" " <<  ret << " " << ft_ret << std::endl;
@@ -384,7 +389,7 @@ int main ()
         ft_it = ft_m.find('e');
 
         cond = cond && (it->first == ft_it->first) && (it->second == ft_it->second) && m.size() == ft_m.size();
-
+        std::cout << " Bool is " << cond << std::endl;
 
         std::cout << "========444============\n";
         std::cout << (it->first == ft_it->first) << std::endl;
@@ -420,18 +425,21 @@ int main ()
         m2.erase(m2.begin());
         ft_m2.erase(ft_m2.begin());
 
-        cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
-
         std::cout << "====================\n";
         std::cout << (m2.size() == ft_m2.size()) << std::endl;
         std::cout << (compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end())) << std::endl;
         std::cout << "====================\n";
+        
+        cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
+
         m2.erase(it2->first);
         ft_m2.erase(ft_it2->first);
         std::cout << "====================\n";
+        std::cout << " Bool is " << cond << std::endl;
+        
         cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
+        std::cout << " Bool is " << cond << std::endl;
         std::cout << "====================\n";
-
         std::cout << (m2.size() == ft_m2.size()) << std::endl;
         std::cout << (compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end())) << std::endl;
 
@@ -443,13 +451,13 @@ int main ()
         std::mt19937 generator(randDev());
         std::uniform_int_distribution<int> distr(0, 1e8);
 
-        for (size_t i = 0; i < 1e6; i++)
+        for (size_t i = 0; i < 10; i++)
         {
             m3.insert(std::make_pair(i, "string1"));
             ft_m3.insert(ft::make_pair(i, "string1"));
         }
 
-        for (size_t i = 0; i < 1e6; ++i)
+        for (size_t i = 0; i < 10; ++i)
         {
             int n = distr(generator);
             int ret1 = m3.erase(n);
@@ -461,7 +469,7 @@ int main ()
                 break;
             }
         }
-
+        std::cout << m3.empty() << "     ft empty "  << ft_m3.empty() << std::endl;
         if (!m3.empty())
         {
             m3.erase(m3.begin(), m3.end());
@@ -473,12 +481,15 @@ int main ()
             ft_m3.erase(ft_m3.begin(), ft_m3.end());
         }
 
+        std::cout << " after deleting " << m3.empty() << "     ft empty "  << ft_m3.empty() << std::endl;
+
+        std::cout <<  " Bool is " << cond << std::endl;
         std::cout << "====================\n";
         std::cout << (m3.size() == ft_m3.size()) << std::endl;
         std::cout << (compareMaps(m3.begin(), m3.end(), ft_m3.begin(), ft_m3.end())) << std::endl;
         std::cout << "====================\n";
         // std::cout << () << std::endl;
         cond = cond && (m3.size() == ft_m3.size() && compareMaps(m3.begin(), m3.end(), ft_m3.begin(), ft_m3.end()));
-        
+        std::cout << " Bool is " << cond << std::endl;
         EQUAL(cond);
 }
