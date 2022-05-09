@@ -31,18 +31,28 @@ namespace ft {
             pair *_safe;
             node *_root;
         
-            mapiterator( ) { _current = NULL; currentData = NULL; _safe = _allocator.allocate(1); _allocator.construct(_safe, pair(Key(), T())); _root = NULL; }
+            mapiterator( ) {
+                
+                _current = NULL; currentData = NULL;
+                _safe = _allocator.allocate(1);
+                _allocator.construct(_safe, pair(Key(), T()));
+                _root = NULL;
+            }
         
             mapiterator( node * root, node * current ) {
             
-                _safe = _allocator.allocate(1); _allocator.construct(_safe, pair(Key(), T()));
+                _safe = _allocator.allocate(1);
+                _allocator.construct(_safe, pair(Key(), T()));
                 if (current == NULL) { currentData = NULL; } else {currentData = current->data;}
                 _current = current;
                 _root = root;
             }
             ~mapiterator() {
             
-                _allocator.destroy(_safe);
+                // if (_safe != NULL) {
+                //     _allocator.destroy(_safe);
+                //     _allocator.deallocate(_safe, 1);
+                // }
             }
             node *treeMaximum(node *x) const  {
             
@@ -94,7 +104,9 @@ namespace ft {
                 _current = obj._current;
                 currentData = obj.currentData;
                 _root = obj._root;
-                _safe = obj._safe;
+                _safe = _allocator.allocate(1);
+                _allocator.construct(_safe, *obj._safe);
+                // _safe = obj._safe;
             }
     
             mapiterator &operator=(const mapiterator& obj ) {

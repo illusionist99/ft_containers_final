@@ -160,5 +160,5 @@ namespace ft {
             bool operator<=(const myiterator& rhs) const {return _pointer <= rhs._pointer;}
 
     };
-//    <T>::difference_type operator+( myiterator<T> const &lhs, myiterator<T> const &rhs)  {return  (*lhs._pointer+*rhs._pointer);}
+
 };

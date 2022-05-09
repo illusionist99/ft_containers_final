@@ -78,7 +78,7 @@ namespace ft {
                 *this = x;
             }
 
-            ~Map() { clear(); }
+            ~Map() { }
 
             Map& operator= (const Map& x) {
             
@@ -242,10 +242,10 @@ namespace ft {
 
                 std::vector<Key> tmp;
 
-                while (first != last) {
+                for (iterator it = first; it != last; it++) {
 
                     tmp.push_back(first->first);
-                    first++;
+                    // first++;
                 }
                 for (size_type i = 0; i < tmp.size(); i++) { erase(tmp[i]); }
             }

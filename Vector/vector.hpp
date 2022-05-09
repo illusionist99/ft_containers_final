@@ -84,6 +84,10 @@ namespace ft {
             
             ~Vector() {
             
+                if (_c != NULL)  {
+                
+                    _allocator.deallocate(_c, _capacity);
+                }
             }
             
             Vector& operator= (Vector const &x) {
@@ -185,7 +189,6 @@ namespace ft {
             
                 if (n > _capacity) {
 
-                    // std::cout << "reserved\n";
 
                     pointer new_data = _allocator.allocate(n);
                     
@@ -283,7 +286,6 @@ namespace ft {
                 
                     _allocator.destroy(_c + i);
                 }
-                // _allocator.deallocate(_c, _capacity);
                 _size = 0;
                 // _capacity = 0;
                 // _c = NULL;

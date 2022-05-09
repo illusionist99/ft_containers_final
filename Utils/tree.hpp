@@ -2,6 +2,7 @@
 
 # include <iostream>
 # include "pair.hpp"
+# include <vector>
 
 namespace ft {
 
@@ -11,7 +12,7 @@ namespace ft {
 
         node* left;
         node* right;
-        pair< const Key, T> *data;
+        pair<const Key, T> *data;
         node* parent;
         int height;
     };
@@ -20,12 +21,16 @@ namespace ft {
     class avl {
     
         typedef node< Key, T> node;
+        typedef pair< const Key, T > pair;
         typedef typename Alloc::template rebind<node>::other rebind_allocator;
-        typedef typename Alloc::template rebind<pair< const Key, T> >::other _allocator;
+        typedef typename Alloc::template rebind<pair>::other _allocator;
     
         rebind_allocator _NodeAlloc;
         _allocator  _PairAlloc;
         Compare _cmp;
+
+        std::vector<node *> nodeaddress;
+        std::vector<pair *> pairaddress;
     public: 
 
         // node *root;
@@ -34,7 +39,20 @@ namespace ft {
             _NodeAlloc = rebind;
             _PairAlloc = alloc;
             _cmp = _c;
-        } 
+        }
+        ~avl() {
+        
+            for (typename std::vector<pair *>::iterator it = pairaddress.begin(); it != pairaddress.end(); it++) {
+            
+                _PairAlloc.destroy(*it);
+                _PairAlloc.deallocate(*it, 1);
+            }
+            for (typename std::vector<node *>::iterator it = nodeaddress.begin(); it != nodeaddress.end(); it++) {
+            
+                _NodeAlloc.destroy(*it);
+                _NodeAlloc.deallocate(*it, 1);
+            }
+        }
             // root = NULL; }
         int max( int a, int b) { return a > b ?  a : b; }
         // Function to print the preorder
@@ -274,7 +292,6 @@ namespace ft {
         node *tmp = root;
             
         if (tmp)
-
             while (tmp->left != NULL)
                 tmp = tmp->left;
         return tmp;
@@ -384,15 +401,18 @@ namespace ft {
         return tmp;
     }
     
-    node* Insert(node* root, node* parent, pair< const Key, T> key)
+    node* Insert(node* root, node* parent, pair key)
     {
         if (root == NULL) {
     
             // Create and assign values
             // to a new node
+
             root = _NodeAlloc.allocate(1);
             root->data = _PairAlloc.allocate(1);
             _PairAlloc.construct(root->data, key);
+            nodeaddress.push_back(root);
+            pairaddress.push_back(root->data);
             if (root == NULL)
                 std::cout << "Error in memory" << std::endl;
             else {
@@ -485,7 +505,7 @@ namespace ft {
     
     // Function to delete a node from
     // the AVL tree
-    node* Delete(node* root, pair< const Key, T> key, int *found)
+    node* Delete(node* root, pair key, int *found)
     {
         if (root != NULL) {
     
@@ -507,7 +527,6 @@ namespace ft {
                         // of root's parent
                         Updateheight(root->parent);
                     }
-    
                     root->left->parent = root->parent;
     
                     // Balance the node
@@ -551,13 +570,14 @@ namespace ft {
                     else  if (root->parent != NULL) {
                         root->parent->left = NULL;
                     }
-    
+                
                     if (root->parent != NULL)
                         Updateheight(root->parent);
-    
-                    _PairAlloc.destroy(root->data);
-                    root->data = NULL;
-                    _NodeAlloc.destroy(root);
+                
+                    // _PairAlloc.destroy(root->parent->data);
+                    // _NodeAlloc.destroy(root->parent);
+                    // root->parent->data = NULL;
+                    // root->parent = NULL;
                     return NULL;
                 }
     
@@ -566,18 +586,18 @@ namespace ft {
                 // successor and then
                 // recursively call Delete()
                 else {
-                    node* tmpnode = root;
-                    tmpnode = tmpnode->right;
+                    node* tmpnode;
+                    tmpnode = root->right;
                     while (tmpnode->left != NULL) {
                         tmpnode = tmpnode->left;
                     }
     
-                    pair<const Key, T> *val = tmpnode->data;
+                    pair  *val = tmpnode->data;
     
                     root->right = Delete(root->right, *tmpnode->data, found);
     
                     root->data = val;
-    
+
                     // Balance the node
                     // after deletion
                     root = Balance(root);
@@ -608,13 +628,6 @@ namespace ft {
         else {
             *found = 0;
         }
-        // Handle the case when the key to be
-        // deleted could not be found
-        // else {
-        //     // std::cout << "Key to be deleted " << "could not be found\n";
-        // }
-    
-        // Return the root node
         return root;
     }
         void print2DUtil(node *root, int space)
