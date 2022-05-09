@@ -296,16 +296,19 @@ namespace ft {
 
     node *lowerBound(node *root, const Key &k) const {
     
-        if (root == NULL)
-            return NULL;
-        if (!_cmp(root->data->first, k))
-            return root;
-        else if (!_cmp(root->left->data->first, k))
-            return lowerBound(root->left, k);
-        else if (!_cmp(root->right->data->first, k))
-            return lowerBound(root->right, k);
-
-        return root;
+        node * result = NULL;
+    
+        while (root != nullptr)
+        {
+            if (!_cmp(root->data->first, k))
+            {
+                result = root;
+                root = root->left;
+            }
+            else
+                root = root->right;
+        }
+        return result;
     }
 
     node *treeMaximum(node *x) const  {
@@ -355,13 +358,19 @@ namespace ft {
     }
     node *upperBound(node *root, const Key &k) const  {
 
-
-        while ((root = treeSuccessor(root))) {
-        
-            if ( !_cmp(root->data->first, k) && k != root->data->first )
-                return root;
+        node * result = nullptr;
+    
+        while (root != nullptr)
+        {
+            if (_cmp(k, root->data->first))
+            {
+                result = root;
+                root = root->left;
+            }
+            else
+                root = root->right;
         }
-        return root;
+        return result;
     }
 
     node *TreeMaximum(node *root) const  {
