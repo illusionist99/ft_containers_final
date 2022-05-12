@@ -30,10 +30,12 @@ namespace ft {
                 _iter = tmp;
             }
 
-            // reverse_iterator &operator=(const reverse_iterator & obj) {
+            reverse_iterator &operator=(const reverse_iterator & obj) {
             
-            //     _iter = obj;
-            // }
+                _iter = obj._iter;
+                return *this;
+
+            }
             template <class Iter>
             reverse_iterator( const reverse_iterator<Iter>& obj ) {
             

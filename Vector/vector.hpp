@@ -322,6 +322,11 @@ namespace ft {
 
             void push_back (const value_type& val) {
             
+                if (_c == NULL) {
+                
+                    _c = _allocator.allocate(1);
+                    _capacity = 1;
+                }
                 if (_size + 1 > _capacity) {
                     reserve((_capacity == 0 ? (float)1/2 : _capacity ) * 2);
                 }
