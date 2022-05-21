@@ -71,43 +71,26 @@ namespace ft {
 
             Vector (const Vector& x) {
             
-                _size = x.size();
-                _capacity = x.capacity();
-                _allocator = x.get_allocator();
-                _c = _allocator.allocate(_capacity);
-                for (size_type i = 0; i < _size; i++) {
-                
-                    _allocator.construct(_c + i, x[i]);
-                }
+                *this = x;
 
             }
             
             ~Vector() {
             
-                if (_c != NULL)  {
+                for (size_type i = 0; i < _size; i++) {
                 
-                    _allocator.deallocate(_c, _capacity);
+                    _allocator.destroy(_c + i);
                 }
+                _allocator.deallocate(_c, _capacity);
             }
             
             Vector& operator= (Vector const &x) {
             
-                if (_size != 0) {
-
-                    for (size_type i = 0; i < _size; i++) {
-                    
-                        _allocator.destroy(_c + i);
-                    }
-
-                    _size = 0;
-                    _allocator.deallocate(_c, _capacity);
-                    _capacity = 0;
-                }
-                if (_size == 0) {
+                if (this != &x) {
                 
-                    _size = x.size();
-                    _capacity = x.capacity();
-                    _c = _allocator.allocate(_capacity);
+                    _capacity = x._capacity;
+                    _size = x._size;
+                    _c = _allocator.allocate(x._capacity);
                     for (size_type i = 0; i < _size; i++) {
                     
                         _allocator.construct(_c + i, x[i]);
@@ -169,18 +152,15 @@ namespace ft {
 
             void resize (size_type n, value_type val = value_type()) {
              
-                if (n > _capacity)
-                    reserve(n); 
-                if (n < _size) {
-                
-                    while (_size - n >= 1)
-                        pop_back();
-
+                if (n < _size) 
+                {
+                    for (size_type i = _size; i > n; _size--)
+                        _alloc.destroy(_c + _size);
                 }
-                else {
-                
-                    while (n - _size >= 1)
-                        push_back(val);
+                if (n >= _size) {
+                    reserve(n);
+                    for (size_type i = _size; _size < n; _size++)
+                        _alloc.construct(_c + _size, val);
                 }
             }
             size_type capacity() const { return _capacity; }
@@ -197,7 +177,7 @@ namespace ft {
                         _allocator.construct(new_data + i, _c[i]);
                     }
                     _capacity = n;
-                    std::swap(_c, new_data); 
+                    std::swap(new_data, _c); 
                     for (size_type i = 0; i < _size; i++) {
                     
                         _allocator.destroy(new_data + i);
@@ -341,25 +321,25 @@ namespace ft {
             iterator insert (iterator position, const value_type& val) {
 
               
-                difference_type pos = position - begin();
+                difference_type pos = std::distance(begin(), position);
                 
                 if (_size == 0)
                     reserve(1);
                 else if (_size + 1 > _capacity)
                     reserve(_capacity * 2);
-                for (size_t i = pos + 1; i <= _size; i++) {
+                for (difference_type i = _size - 1; i > pos; i--) {
                 
-                    std::swap(_c[pos], _c[i]);
+                    _allocator.construct(_c + i + 1, _c[i]);
                 }
                 _allocator.construct(_c + pos, val);
                 _size++; 
-                return begin() + pos;
+                return iterator(_c + pos);
             };
 
             void insert (iterator position, size_type n, const value_type& val) {
 
-                difference_type pos = position - begin();
-                
+                difference_type	pos = std::distance(begin(), position);
+
                 if (_size == 0)
                     reserve(n);
                 else if ( n + _size > _capacity) {
@@ -369,13 +349,13 @@ namespace ft {
                     else
                         reserve((_capacity) * 2);
                 }
-                for (size_t i = pos; i < pos + n; i++) {
+                for (difference_type i = _size - 1; i >= pos; i--) {
                 
                     _allocator.construct(_c + i + n, _c[i]);
                 }
-                for (size_t i = pos; i < pos + n;i++) {
+                for (size_t i = 0; i < n;i++) {
                 
-                    _allocator.construct(_c + i, val);
+                    _allocator.construct(_c + pos++, val);
                     _size++;
                 }
                 
@@ -386,24 +366,25 @@ namespace ft {
             typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type = InputIterator()) {
 
                 difference_type pos = position - begin();
-                unsigned long diff = last - first;
+                difference_type diff = last - first;
 
+                size_t n = diff;
                 if (_size == 0)
-                    reserve(diff);
-                else if ( diff + _size > _capacity) {
+                    reserve(n);
+                else if ( n + _size > _capacity) {
                 
-                    if (diff > _size)
-                        reserve((diff + _size) );
+                    if (n > _size)
+                        reserve((n + _size) );
                     else
                         reserve((_capacity) * 2);
                 }
-                for (size_t i = pos - 1; i < pos + diff; i++) {
+                for (difference_type i = _size - 1; i >= pos; i--) {
                 
-                    _allocator.construct(_c + i + diff, _c[i]);
+                    _allocator.construct(_c + i + n, _c[i]);
                 }
-                for (size_t i = pos; i < pos + diff;i++) {
+                for (size_t i = 0; i < n;i++) {
                 
-                    _allocator.construct(_c + i, *(first++));
+                    _allocator.construct(_c + pos++, val);
                     _size++;
                 }
             }
@@ -419,18 +400,23 @@ namespace ft {
 
             iterator erase (iterator position) {
 
-                size_type pos = std::distance(begin(), position);
+                difference_type pos = std::distance(begin(), position);
 
                 _allocator.destroy(_c + pos);
-                for  ( size_t i = pos; i < _size - 1; i++) {
-                
-                    _c[i] = _c[i + 1];
-                }
                 _size--;
-                return begin() + pos;
+                return iterator(_c + pos);
             }
 
             iterator erase (iterator first, iterator last) {
+
+                // size_type distance = std::distance(begin(), first);
+                // size_type n = std::distance(first, last);
+                // for (size_type i = distance; i < n; i++)
+                //     _alloc.destroy(&_c[i]);
+                // this->_size -= n;
+                // for (size_type i = distance; i < this->_size; i++)
+                //    _c[i] = _c[n++];
+                // return (iterator(_c + distance));
 
                 iterator pos(first);
                 int i = 0;
