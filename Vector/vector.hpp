@@ -72,7 +72,6 @@ namespace ft {
             Vector (const Vector& x) {
             
                 *this = x;
-
             }
             
             ~Vector() {
@@ -152,15 +151,17 @@ namespace ft {
 
             void resize (size_type n, value_type val = value_type()) {
              
-                if (n < _size) 
-                {
-                    for (size_type i = _size; i > n; _size--)
-                        _alloc.destroy(_c + _size);
+                if (n > _capacity)
+                    reserve(n); 
+                if (n < _size) {
+
+                    while (_size - n >= 1)
+                        pop_back();
                 }
-                if (n >= _size) {
-                    reserve(n);
-                    for (size_type i = _size; _size < n; _size++)
-                        _alloc.construct(_c + _size, val);
+                else {
+
+                    while (n - _size >= 1)
+                        push_back(val);
                 }
             }
             size_type capacity() const { return _capacity; }
@@ -310,7 +311,7 @@ namespace ft {
                 if (_size + 1 > _capacity) {
                     reserve((_capacity == 0 ? (float)1/2 : _capacity ) * 2);
                 }
-                _c[_size] = val;
+                _allocator.construct(_c + _size, val);
                 _size++;
             }
             allocator_type get_allocator() const {
@@ -384,7 +385,7 @@ namespace ft {
                 }
                 for (size_t i = 0; i < n;i++) {
                 
-                    _allocator.construct(_c + pos++, val);
+                    _allocator.construct(_c + pos++, *first++);
                     _size++;
                 }
             }
@@ -412,7 +413,7 @@ namespace ft {
                 // size_type distance = std::distance(begin(), first);
                 // size_type n = std::distance(first, last);
                 // for (size_type i = distance; i < n; i++)
-                //     _alloc.destroy(&_c[i]);
+                //     _allocator.destroy(&_c[i]);
                 // this->_size -= n;
                 // for (size_type i = distance; i < this->_size; i++)
                 //    _c[i] = _c[n++];
