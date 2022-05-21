@@ -205,7 +205,7 @@ namespace ft {
             }
             reference at (size_type n) {
 
-                if (n >=0 && n < _size) 
+                if (n >= 0 && n < _size) 
                     return _c[n];
                 else 
                     throw std::out_of_range(""); 
@@ -268,6 +268,7 @@ namespace ft {
                     _allocator.destroy(_c + i);
                 }
                 _size = 0;
+                // _allocator.deallocate(_c, _capacity);
                 // _capacity = 0;
                 // _c = NULL;
             }
@@ -410,25 +411,16 @@ namespace ft {
 
             iterator erase (iterator first, iterator last) {
 
-                // size_type distance = std::distance(begin(), first);
-                // size_type n = std::distance(first, last);
-                // for (size_type i = distance; i < n; i++)
-                //     _allocator.destroy(&_c[i]);
-                // this->_size -= n;
-                // for (size_type i = distance; i < this->_size; i++)
-                //    _c[i] = _c[n++];
-                // return (iterator(_c + distance));
 
                 iterator pos(first);
-                int i = 0;
+                // int i = 0;
                 while (last != end())
                 {
                     *first = *last;
                     first++;
                     last++;
                 }
-                for (;first != last;first++)
-                    i++;
+                difference_type i = std::distance(first, last);
                 _size -= i;
                 return (pos);
             }

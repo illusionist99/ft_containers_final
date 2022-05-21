@@ -33,7 +33,6 @@ namespace ft {
         std::vector<pair *> pairaddress;
     public: 
 
-        // node *root;
         avl(rebind_allocator rebind = rebind_allocator(), _allocator alloc = _allocator(), Compare _c = Compare()) {
         
             _NodeAlloc = rebind;

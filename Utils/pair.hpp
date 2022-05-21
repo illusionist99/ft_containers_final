@@ -26,7 +26,6 @@ namespace ft {
             template<class U, class V>
             pair (const pair<U,V>& pr) : first(pr.first), second(pr.second) {
             
-                // *this = pr;
             }
 
   

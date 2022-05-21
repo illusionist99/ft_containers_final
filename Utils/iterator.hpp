@@ -131,7 +131,7 @@ namespace ft {
                 *this = obj;
             }
             
-            ~myiterator( void ) {}
+            ~myiterator( void ) { }
             myiterator& operator+=(difference_type rhs)  {_pointer += rhs; return *this;}
             myiterator& operator-=(difference_type rhs)  {_pointer -= rhs; return *this;}
             T& operator*() const {return *_pointer;}

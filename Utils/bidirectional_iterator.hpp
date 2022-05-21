@@ -50,8 +50,8 @@ namespace ft {
             ~mapiterator() {
             
                 // if (_safe != NULL) {
-                //     _allocator.destroy(_safe);
-                //     _allocator.deallocate(_safe, 1);
+                _allocator.destroy(_safe);
+                _allocator.deallocate(_safe, 1);
                 // }
             }
             node *treeMaximum(node *x) const  {
@@ -106,7 +106,7 @@ namespace ft {
                 _root = obj._root;
                 _safe = _allocator.allocate(1);
                 _allocator.construct(_safe, *obj._safe);
-                // _safe = obj._safe;
+
             }
     
             mapiterator &operator=(const mapiterator& obj ) {
@@ -114,7 +114,8 @@ namespace ft {
                 _current = obj._current;
                 currentData = obj.currentData;
                 _root = obj._root;
-                _safe = obj._safe;
+                _safe = _allocator.allocate(1);
+                _allocator.construct(_safe, *obj._safe);
                 return *this;
             }
 
