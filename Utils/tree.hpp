@@ -41,16 +41,16 @@ namespace ft {
         }
         ~avl() {
         
-            for (typename std::vector<pair *>::iterator it = pairaddress.begin(); it != pairaddress.end(); it++) {
+            // for (typename std::vector<pair *>::iterator it = pairaddress.begin(); it != pairaddress.end(); it++) {
             
-                _PairAlloc.destroy(*it);
-                _PairAlloc.deallocate(*it, 1);
-            }
-            for (typename std::vector<node *>::iterator it = nodeaddress.begin(); it != nodeaddress.end(); it++) {
+            //     _PairAlloc.destroy(*it);
+            //     _PairAlloc.deallocate(*it, 1);
+            // }
+            // for (typename std::vector<node *>::iterator it = nodeaddress.begin(); it != nodeaddress.end(); it++) {
             
-                _NodeAlloc.destroy(*it);
-                _NodeAlloc.deallocate(*it, 1);
-            }
+            //     _NodeAlloc.destroy(*it);
+            //     _NodeAlloc.deallocate(*it, 1);
+            // }
         }
             // root = NULL; }
         int max( int a, int b) { return a > b ?  a : b; }
@@ -628,6 +628,22 @@ namespace ft {
             *found = 0;
         }
         return root;
+    }
+
+    void    DeleteAll(node * root) {
+    
+        if (root != NULL) {
+        
+            DeleteAll(root->right);
+            DeleteAll(root->left);
+
+            _PairAlloc.destroy(root->data);
+            _PairAlloc.deallocate(root->data, 1);
+            _NodeAlloc.destroy(root);
+            _NodeAlloc.deallocate(root, 1);
+            // root->data = NULL;
+            root = NULL;
+        }
     }
         void print2DUtil(node *root, int space)
             {

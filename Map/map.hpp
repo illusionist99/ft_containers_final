@@ -4,6 +4,7 @@
 # include "../Utils/tree.hpp"
 # include "../Utils/bidirectional_iterator.hpp"
 # include "../Utils/reverse_iterator.hpp"
+# include "../Vector/vector.hpp"
 
 namespace ft {
 
@@ -78,7 +79,7 @@ namespace ft {
                 *this = x;
             }
 
-            ~Map() {  }
+            ~Map() { tree.DeleteAll(root);  }
 
             Map& operator= (const Map& x) {
             
@@ -240,7 +241,7 @@ namespace ft {
             void erase (iterator first, iterator last) {
             
 
-                std::vector<Key> tmp;
+                Vector<Key> tmp;
 
                 for (iterator it = first; it != last; it++) {
 

@@ -71,6 +71,10 @@ namespace ft {
 
             Vector (const Vector& x) {
             
+                _capacity = 0;
+                _size = 0;
+                _c = NULL;
+                // _allocator = x.get_allocator();
                 *this = x;
             }
             
@@ -87,9 +91,13 @@ namespace ft {
             
                 if (this != &x) {
                 
-                    _capacity = x._capacity;
+                    if (_capacity < x._capacity) {
+                        resize(x._capacity);
+                        _capacity = x._capacity;
+                    }
                     _size = x._size;
-                    _c = _allocator.allocate(x._capacity);
+                    // clear();
+                    // _c = _allocator.allocate(x._capacity);
                     for (size_type i = 0; i < _size; i++) {
                     
                         _allocator.construct(_c + i, x[i]);
@@ -151,8 +159,13 @@ namespace ft {
 
             void resize (size_type n, value_type val = value_type()) {
              
-                if (n > _capacity)
-                    reserve(n); 
+                if (n > _capacity) {
+                 
+                    if (n > _capacity * 2)
+                        reserve(n);
+                    else
+                        reserve(_capacity * 2);
+                }
                 if (n < _size) {
 
                     while (_size - n >= 1)
@@ -190,18 +203,14 @@ namespace ft {
     
             reference operator[] (size_type n) {
 
-                if (n >= 0 && n < _size)
-                    return _c[n];
-                else 
-                    throw std::out_of_range("");               
+
+                return _c[n];
             }
 
             const_reference operator[] (size_type n) const {
 
-                if (n >= 0 && n < _size)
-                    return _c[n];
-                else 
-                    throw std::out_of_range("");  
+                return _c[n];
+
             }
             reference at (size_type n) {
 
@@ -230,19 +239,13 @@ namespace ft {
             }
             reference back() {
 
-                if ((_size - 1) >= 0)
-                    return _c[_size - 1];
-                else 
-                    throw std::out_of_range("");
+                return _c[_size - 1];
             }
 
 
             const_reference back() const {
 
-                if ((_size - 1) >= 0)
-                    return _c[_size - 1];
-                else 
-                    throw std::out_of_range("");
+                return _c[_size - 1];
             }
 
 
@@ -357,7 +360,7 @@ namespace ft {
                 }
                 for (size_t i = 0; i < n;i++) {
                 
-                    _allocator.construct(_c + pos++, val);
+                    _allocator.construct(_c + pos + i, val);
                     _size++;
                 }
                 
@@ -402,11 +405,7 @@ namespace ft {
 
             iterator erase (iterator position) {
 
-                difference_type pos = std::distance(begin(), position);
-
-                _allocator.destroy(_c + pos);
-                _size--;
-                return iterator(_c + pos);
+                return erase(position, position + 1);
             }
 
             iterator erase (iterator first, iterator last) {
