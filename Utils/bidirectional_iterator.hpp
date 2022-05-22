@@ -24,7 +24,7 @@ namespace ft {
             Alloc _allocator;
             typedef pair< const Key, T> pair;
             typedef node< Key, T> node;
-            operator mapiterator<Key, T, Compare, Alloc> () const { return mapiterator<Key, T, Compare, Alloc>(_root, _current); }
+            operator mapiterator<Key, T> () const { return mapiterator<Key, T> (); }
 
             node *_current;
             pair *currentData;
@@ -106,7 +106,6 @@ namespace ft {
                 _root = obj._root;
                 _safe = _allocator.allocate(1);
                 _allocator.construct(_safe, *obj._safe);
-
             }
     
             mapiterator &operator=(const mapiterator& obj ) {

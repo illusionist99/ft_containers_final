@@ -35,8 +35,8 @@ namespace ft {
             typedef const value_type& const_reference;
             typedef value_type* pointer;
             typedef const value_type* const_pointer;
-            typedef mapiterator< Key, T, Compare, Alloc> iterator;
-            typedef mapiterator< Key, T, Compare, Alloc> const_iterator;
+            typedef mapiterator< Key, T, key_compare, Alloc> iterator;
+            typedef mapiterator< Key, T, key_compare, Alloc> const_iterator;
             typedef ft::reverse_iterator<iterator> reverse_iterator;
             typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
             typedef typename iterator_traits<iterator>::difference_type difference_type;
@@ -76,19 +76,29 @@ namespace ft {
 
             Map (const Map& x) {
             
+                root = NULL;
+                _size = 0;
                 *this = x;
+                // _cmp = x._cmp;
+                // _allocator = x._allocator;
             }
 
-            ~Map() { tree.DeleteAll(root);  }
+            ~Map() { 
+               root = tree.DeleteAll(root);
+            }
 
             Map& operator= (const Map& x) {
             
-                _size = 0;
-                root = NULL;
-                for (iterator it = x.begin(); it != x.end(); it++) {
+                if (this != &x) {
+              
+                    tree.DeleteAll(root);
+                    root = NULL;
+                    _size = 0;
+                    for (iterator it = x.begin(); it != x.end(); it++) {
 
-                    root = tree.Insert(root, NULL, *it);
-                    _size++;
+                        root = tree.Insert(root, NULL, *it);
+                        _size++;
+                    }
                 }
                 return *this;
             }
@@ -182,6 +192,7 @@ namespace ft {
             void clear() {
             
                 _size = 0;
+                // root = NULL;
             }
 
             pair<iterator,bool> insert (const value_type& val) {
@@ -259,7 +270,8 @@ namespace ft {
             
                 return value_compare(_cmp);
             }
-
+            mapped_type& at (const key_type& k) { iterator it = find(k);  return it->second; }
+            const mapped_type& at (const key_type& k) const { iterator it = find(k);  return it->second; }
             iterator lower_bound (const key_type& k) {
 
                 return iterator(root, tree.lowerBound(root, k));
