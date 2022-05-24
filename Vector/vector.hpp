@@ -79,12 +79,15 @@ namespace ft {
             }
             
             ~Vector() {
-            
-                for (size_type i = 0; i < _size; i++) {
-                
-                    _allocator.destroy(_c + i);
+                if (_capacity > 0)
+                {
+                    for (size_type i = 0; i < _size; i++) {
+                    
+                        _allocator.destroy(_c + i);
+                    }
+                    if (_capacity > 0)
+                        _allocator.deallocate(_c, _capacity);
                 }
-                _allocator.deallocate(_c, _capacity);
             }
             
             Vector& operator= (Vector const &x) {
@@ -185,6 +188,7 @@ namespace ft {
 
 
                     pointer new_data = _allocator.allocate(n);
+                    
                     
                     for (size_type i = 0; i < _size; i++) {
                     
@@ -330,7 +334,7 @@ namespace ft {
                 
                 if (_size == 0)
                     reserve(1);
-                else if (_size + 1 > _capacity)
+                else if (_size + 1 >= _capacity)
                     reserve(_capacity * 2);
                 for (difference_type i = _size - 1; i > pos; i--) {
                 
@@ -347,7 +351,7 @@ namespace ft {
 
                 if (_size == 0)
                     reserve(n);
-                else if ( n + _size > _capacity) {
+                else if ( n + _size >= _capacity) {
                 
                     if (n > _size)
                         reserve((n + _size) );
@@ -370,33 +374,58 @@ namespace ft {
             void insert (iterator position, InputIterator first, InputIterator last, 
             typename ft::enable_if<!ft::is_integral<InputIterator>::value,InputIterator >::type = InputIterator()) {
 
-                difference_type pos = position - begin();
-                difference_type diff = last - first;
-
-                size_t n = diff;
-                if (_size == 0)
-                    reserve(n);
-                else if ( n + _size > _capacity) {
-                
-                    if (n > _size)
-                        reserve((n + _size) );
-                    else
-                        reserve((_capacity) * 2);
-                }
-                // for (difference_type i = _size - 1; i >= pos; i--) {
-                n = 0;
-                while(first != last)
-                {
-                    push_back(*first++);
-                    n++;
-                }
-                T tmp;
-                for (size_type i = 0; i < n; i++)
-                {
-                    tmp = _c[pos + i];
-                    _c[pos + i] = _c[_size - n + i];
-                    _c[_size - n + i] = tmp;
-                }
+				size_type j = std::distance(begin(), position);
+				size_type n =  std::distance(first, last);
+				if (_capacity == 0)
+				{
+					if (_c != NULL)
+						_allocator.deallocate(_c, _capacity);
+					_c = _allocator.allocate(n);
+					for (size_type i = 0; i < n; i++)
+						_allocator.construct(&_c[i], *(first + i));
+					_capacity = n;
+				}
+				else if (_capacity < _size + n)
+				{
+					T *tmp = NULL;
+					size_type oldcapacity = _capacity;
+					if (_capacity * 2 < _size + n)
+					{
+						tmp = _allocator.allocate(_size + n);
+						_capacity = _size + n;
+					}
+					else
+					{
+						tmp = _allocator.allocate(_capacity * 2);
+						_capacity *= 2;
+					}
+					size_type h = 0;
+					for (size_type i = 0; i < _size; i++)
+					{
+						if (iterator(_c + i) == position)
+						{
+							for (size_type k = 0; k < n; k++)
+								_allocator.construct(&tmp[h++], *first++);
+						}
+						_allocator.construct(&tmp[h++], _c[i]);
+					}
+					_allocator.deallocate(_c, oldcapacity);
+					std::swap(_c, tmp);
+				}
+				else if (_capacity >= _size + n)
+				{
+					for (int h = _size - 1 ; h >= (int)j; h--)
+					{
+						_allocator.construct(&_c[h + n], _c[h]);
+					}
+					size_type z = n;
+					while (z--)
+					{
+						_allocator.construct(&_c[j], *first++);
+						j++;
+					}
+				}
+				_size += n;
             }
 
             void swap (Vector<T>& x) {

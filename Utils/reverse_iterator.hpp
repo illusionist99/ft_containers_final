@@ -50,7 +50,7 @@ namespace ft {
             reverse_iterator& operator-= ( difference_type rhs ) { _iter += rhs; return *this; };
 
             reference operator*() const { return *_iter; }
-            pointer   operator->() const { return std::__addressof(*_iter); }
+            pointer   operator->() const { return std::addressof(*_iter); }
 
             reference operator[]( difference_type rhs ) const { return base()[-rhs-1]; }
 

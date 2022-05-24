@@ -11,72 +11,134 @@
 
 void testVector() {
 
-/*------------------ std::vectors ---------------------*/
-        std::vector<std::string> v;
-        /*------------------ std::vectors ---------------------*/
-        ft::Vector<std::string> ft_v;
-        /*
-         * Strings to store the results
+/*
+         * strings to store the resutls
          */
-        std::string s1, s2, s3, ft_s1, ft_s2, ft_s3;
+        std::string str, ft_str;
         /*
-         * Var to store the size and the capacity
+         * var to store the size and the capacity
          */
-        size_t z1, z2, z3, ft_z1, ft_z2, ft_z3;
-        size_t c1, c2, c3, ft_c1, ft_c2, ft_c3;
-        ft::Vector<std::string>::iterator ft_it;
-        // test for an empty vector
-        v.push_back("hello");
-        ft_v.push_back("hello");
-        ft_it = ft_v.begin();
-        ft_it->length();
+        ft::Vector<std::string>::size_type s, ft_s;
+        ft::Vector<std::string>::size_type c, ft_c;
+        /*
+         * bool to store the comparison
+         */
+        bool cond;
 
-        z1 = v.size();
-        c1 = v.capacity();
-        ft_z1 = ft_v.size();
-        ft_c1 = ft_v.capacity();
-        for (size_t i = 0; i < v.size(); ++i)
-            s1 += v.at(i);
+        /*------------------------------- test 1: empty vector ----------------------------------------*/
+        // insert at the begin
+        {
+            std::vector<std::string> v1(300, "string");
+            std::vector<std::string> v;
+            ft::Vector<std::string> ft_v;
+            v.insert(v.begin(), v1.begin(), v1.end());
+            ft_v.insert(ft_v.begin(), v1.begin(), v1.end());
+            ft_v.begin()->length();
 
-        for (size_t i = 0; i < ft_v.size(); ++i)
-            ft_s1 += ft_v.at(i);
-        /*---------------------------------------------*/
-        // test for a vector with capacity >= size + the new element
-        v.reserve(30);
-        ft_v.reserve(30);
-        v.push_back("string");
-        ft_v.push_back("string");
-        v.push_back("string");
-        ft_v.push_back("string");
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = ((str == ft_str) && (s == ft_s) && (c == ft_c));
+        }
+        // insert at the end
+        {
+            std::vector<std::string> v;
+            ft::Vector<std::string> v1(300, "string");
+            ft::Vector<std::string> ft_v;
 
-        z2 = v.size();
-        c2 = v.capacity();
-        ft_z2 = ft_v.size();
-        ft_c2 = ft_v.capacity();
-        for (size_t i = 0; i < v.size(); ++i)
-            s2 += v.at(i);
+            v.insert(v.end(), v1.begin(), v1.end());
+            ft_v.insert(ft_v.end(), v1.begin(), v1.end());
+            ft_v.begin()->length();
 
-        for (size_t i = 0; i < ft_v.size(); ++i)
-            ft_s2 += ft_v.at(i);
-        /*---------------------------------------------------------*/
-        // test for a vector with capactiy < size + the new element
-        for (size_t i = 0; i < 100; ++i)
-            v.push_back("string");
+            str.clear();
+            ft_str.clear();
 
-        for (size_t i = 0; i < 100; ++i)
-            ft_v.push_back("string");
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c));
+        }
+        /*---------------------------------------------------------------------------------------------------*/
+        /*------------------------------- test 2: the vector capacity >= size + n ----------------------------------------*/
+        {
+            std::vector<std::string> v1(70, "hello");
+            std::vector<std::string> v(20, "string");
+            ft::Vector<std::string> ft_v(20, "string");
+            ft::Vector<std::string>::iterator valid_it;
 
-        z3 = v.size();
-        c3 = v.capacity();
-        ft_z3 = ft_v.size();
-        ft_c3 = ft_v.capacity();
-        for (size_t i = 0; i < v.size(); ++i)
-            s3 += v.at(i);
+            v.reserve(100);
+            ft_v.reserve(100);
+            valid_it = ft_v.begin();
+            v.insert(v.begin() + 15, v1.begin(), v1.end());
+            ft_v.insert(ft_v.begin() + 15, v1.begin(), v1.end());
 
-        for (size_t i = 0; i < ft_v.size(); ++i)
-            ft_s3 += ft_v.at(i);
+            str.clear();
+            ft_str.clear();
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c) && (&(*valid_it) == &(*ft_v.begin())));
+        }
+        /*---------------------------------------------------------------------------------------------------*/
+        /*------------------------------- test 3: the vector capacity < size + n && n > size ----------------------------------------*/
+        {
+            ft::Vector<std::string> v1(100, "hello");
+            std::vector<std::string> v(20, "string");
+            ft::Vector<std::string> ft_v(20, "string");
 
-        // EQUAL((s1 == ft_s1 && z1 == ft_z1 && c1 == ft_c1) && (s2 == ft_s2 && z2 == ft_z2 && c2 == ft_c2) && (s3 == ft_s3 && z3 == ft_z3 && c3 == ft_c3));
+            v.insert(v.begin() + 10, v1.begin(), v1.end());
+            ft_v.insert(ft_v.begin() + 10, v1.begin(), v1.end());
+
+            str.clear();
+            ft_str.clear();
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c));
+        }
+        /*---------------------------------------------------------------------------------------------------*/
+        /*------------------------------- test 4: the vector capacity < size + n && n <= size ----------------------------------------*/
+        {
+            std::vector<std::string> v1(15, "hello");
+            std::vector<std::string> v(20, "string");
+            ft::Vector<std::string> ft_v(20, "string");
+
+            v.insert(v.begin() + 10, v1.begin(), v1.end());
+            ft_v.insert(ft_v.begin() + 10, v1.begin(), v1.end());
+
+            str.clear();
+            ft_str.clear();
+            s = v.size();
+            ft_s = ft_v.size();
+            c = v.capacity();
+            ft_c = ft_v.capacity();
+            for (size_t i = 0; i < v.size(); ++i)
+                str += v[i];
+            for (size_t i = 0; i < ft_v.size(); ++i)
+                ft_str += ft_v[i];
+            cond = (cond && (str == ft_str) && (s == ft_s) && (c == ft_c));
+        }
+    std::cout<< cond <<std::endl;
 }
 
 int main( void ) {
