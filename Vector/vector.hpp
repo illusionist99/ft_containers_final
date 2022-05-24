@@ -383,14 +383,19 @@ namespace ft {
                     else
                         reserve((_capacity) * 2);
                 }
-                for (difference_type i = _size - 1; i >= pos; i--) {
-                
-                    _allocator.construct(_c + i + n, _c[i]);
+                // for (difference_type i = _size - 1; i >= pos; i--) {
+                n = 0;
+                while(first != last)
+                {
+                    push_back(*first++);
+                    n++;
                 }
-                for (size_t i = 0; i < n;i++) {
-                
-                    _allocator.construct(_c + pos++, *first++);
-                    _size++;
+                T tmp;
+                for (size_type i = 0; i < n; i++)
+                {
+                    tmp = _c[pos + i];
+                    _c[pos + i] = _c[_size - n + i];
+                    _c[_size - n + i] = tmp;
                 }
             }
 
